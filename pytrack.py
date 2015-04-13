@@ -5,7 +5,7 @@ import sys
 import os
 
 #default_track_version = './trackc++-release'
-default_track_version = 'trackc++'
+default_track_version = 'trackcpp'
 
 if len(sys.argv) == 1:
 	subprocess.call([default_track_version])
