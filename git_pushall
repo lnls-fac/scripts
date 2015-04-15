@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# git push all repositories
+# $FACCODE should be sourced from ~/.bashrc -> scripts/bashrc 
+
+cd $FACCODE/collective_effects && git push
+cd $FACCODE/fieldmaptrack && git push
+cd $FACCODE/job_manager && git push
+cd $FACCODE/lnls && git push
+cd $FACCODE/mathphys && git push
+cd $FACCODE/MatlabMiddleLayer && git push
+cd $FACCODE/pyaccel && git push
+cd $FACCODE/scripts && git push
+cd $FACCODE/sirius && git push
+cd $FACCODE/sirius_wiki && git push
+cd $FACCODE/tools && git push
+cd $FACCODE/trackcpp && git push
+cd $FACCODE/tracy_sirius && git push
+cd $FACCODE/va && git push
