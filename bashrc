@@ -53,3 +53,7 @@ complete -W "--jobs --status --user --description --signal --priority --possible
 complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"                                                            updatewiki
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py
 complete -W "--input-file"                                                                                                              fma_rawfield.py
+
+# Completions for SIRIUS PVs
+complete -W "`pvs_si.py`" caget
+
