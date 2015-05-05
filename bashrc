@@ -17,18 +17,6 @@ export FACLIBS=$FACROOT/lib
 # PYTHON
 export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE:$FACCODE/tools:$FACLIBS/python
 
-# FAC SCRIPTS
-export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
-export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
-
-#ELEGANT AND OAG CONFIGS:
-
-export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
-
-export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
-
-export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
-
 # arquivo de definições para o rpn do elegant
 export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
 
@@ -36,6 +24,24 @@ export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
 export HOST_ARCH=linux-x86_64
 export EPICS_HOST_ARCH=linux-x86_64
 export OAG_TOP_DIR=/usr/local/epics_oag
+export EPICS_BASE=/usr/local/epics/R3.14.12.4/base
+
+# FAC SCRIPTS
+export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
+export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
+
+# EPICS
+export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
+
+#ELEGANT AND OAG CONFIGS:
+
+export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
+export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
+export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
+
+# LIBRARIES
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
 
 #completion for the JobManager functions
 complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
