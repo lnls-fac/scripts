@@ -43,7 +43,7 @@ export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/us
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
 
-#completion for the JobManager functions
+# COMPLETIONS FOR JOBMANAGER FUNCTIONS
 complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
 complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
 complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
@@ -54,6 +54,7 @@ complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"    
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py
 complete -W "--input-file"                                                                                                              fma_rawfield.py
 
-# Completions for SIRIUS PVs
-complete -W "`pvs_si.py`" caget
+# COMPLETIONS FOR SIRIUS PVS
+PREFIX=""
+source $FACCODE/scripts/pvs_prefix.sh $PREFIX
 
