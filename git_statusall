@@ -3,17 +3,17 @@
 # git status all repositories
 # $FACCODE should be sourced from ~/.bashrc -> scripts/bashrc 
 
-cd $FACCODE/collective_effects && git status
-cd $FACCODE/fieldmaptrack && git status
-cd $FACCODE/job_manager && git status
-cd $FACCODE/lnls && git status
-cd $FACCODE/mathphys && git status
-cd $FACCODE/MatlabMiddleLayer && git status
-cd $FACCODE/pyaccel && git status
-cd $FACCODE/scripts && git status
-cd $FACCODE/sirius && git status
-cd $FACCODE/sirius_wiki && git status
-cd $FACCODE/tools && git status
-cd $FACCODE/trackcpp && git status
-cd $FACCODE/tracy_sirius && git status
-cd $FACCODE/va && git status
+echo ""; echo ""; echo "repo collective_effects"; cd $FACCODE/collective_effects && git status
+echo ""; echo ""; echo "repo fielmaptrack"; cd $FACCODE/fieldmaptrack && git status
+echo ""; echo ""; echo "repo job_manager"; cd $FACCODE/job_manager && git status
+echo ""; echo ""; echo "repo lnls"; cd $FACCODE/lnls && git status
+echo ""; echo ""; echo "repo mathphys"; cd $FACCODE/mathphys && git status
+echo ""; echo ""; echo "repo MatlabMiddleLayer"; cd $FACCODE/MatlabMiddleLayer && git status
+echo ""; echo ""; echo "repo pyaccel"; cd $FACCODE/pyaccel && git status
+echo ""; echo ""; echo "repo scripts"; cd $FACCODE/scripts && git status
+echo ""; echo ""; echo "repo sirius"; cd $FACCODE/sirius && git status
+echo ""; echo ""; echo "repo sirius_wiki"; cd $FACCODE/sirius_wiki && git status
+echo ""; echo ""; echo "repo tools"; cd $FACCODE/tools && git status
+echo ""; echo ""; echo "repo trackcpp"; cd $FACCODE/trackcpp && git status
+echo ""; echo ""; echo "repo tracy_sirius"; cd $FACCODE/tracy_sirius && git status
+echo ""; echo ""; echo "repo va"; cd $FACCODE/va && git status
