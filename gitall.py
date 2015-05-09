@@ -4,7 +4,7 @@ import sys
 import os
 import lnls
 #import git
-#from termcolor import colored
+from termcolor import colored
 import subprocess
 
 git_functions = ('pull','push','status','diff','clone')
@@ -44,7 +44,7 @@ def run_git(func):
     fnames = os.listdir(lnls.folder_code)
     for fname in fnames:
         repo_folder = os.path.join(lnls.folder_code, fname)
-        print('processing ' + func + ' <'+fname+'>...')
+        print('processing ' + func + colored(' <'+fname+'>','yellow')+'...')
         cmd = 'cd ' + repo_folder + '; git ' + func
         text = subprocess.call([cmd], shell=True, stdout=sys.stdout)
         print('...ok')
