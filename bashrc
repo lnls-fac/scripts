@@ -24,7 +24,7 @@ export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
 export HOST_ARCH=linux-x86_64
 export EPICS_HOST_ARCH=linux-x86_64
 export OAG_TOP_DIR=/usr/local/epics_oag
-export EPICS_BASE=/usr/local/epics/R3.14.12.4/base
+export EPICS_BASE=/usr/local/epics/R3.14/base
 
 # FAC SCRIPTS
 export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
@@ -57,4 +57,3 @@ complete -W "--input-file"                                                      
 # COMPLETIONS FOR SIRIUS PVS
 PREFIX=""
 source $FACCODE/scripts/pvs_prefix.sh $PREFIX
-
