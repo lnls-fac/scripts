@@ -55,5 +55,12 @@ complete -W "help clean edit run summary rawfield trajectory multipoles model su
 complete -W "--input-file"                                                                                                              fma_rawfield.py
 
 # COMPLETIONS FOR SIRIUS PVS
-PREFIX=""
-source $FACCODE/scripts/pvs_prefix.sh $PREFIX
+#PREFIX=""
+#source $FACCODE/scripts/pvs_prefix.sh $PREFIX
+
+# USEFUL ALIAS
+alias gocode='cd $FACCODE'
+alias godata='cd $FACDATA'
+alias gova='cd $FACCODE/va'
+alias goscripts='cd $FACCODE/scripts'
+
