@@ -33,12 +33,12 @@ export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 # EPICS
 export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export EV4_BASE=/usr/local/epics/4.4.0
-export PVDATABASE=$(EV4_BASE)/pvDatabaseCPP
-export PVASRV=$(EV4_BASE)/pvaSrv
-export PVACCESS=$(EV4_BASE)/pvAccessCPP
-export NORMATIVETYPES=$(EV4_BASE)/normativeTypesCPP
-export PVDATA=$(EV4_BASE)/pvDataCPP
-export PVCOMMON=$(EV4_BASE)/pvCommonCPP
+export PVDATABASE=$EV4_BASE/pvDatabaseCPP
+export PVASRV=$EV4_BASE/pvaSrv
+export PVACCESS=$EV4_BASE/pvAccessCPP
+export NORMATIVETYPES=$EV4_BASE/normativeTypesCPP
+export PVDATA=$EV4_BASE/pvDataCPP
+export PVCOMMON=$EV4_BASE/pvCommonCPP
 
 #ELEGANT AND OAG CONFIGS:
 
