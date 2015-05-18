@@ -31,7 +31,7 @@ export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
 export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 
 # EPICS
-export EV4_BASE=/usr/local/epics/4.4.0
+export EV4_BASE=/usr/local/epics/v4
 export PVDATABASE=$EV4_BASE/pvDatabaseCPP
 export PVASRV=$EV4_BASE/pvaSrv
 export PVACCESS=$EV4_BASE/pvAccessCPP
