@@ -44,6 +44,7 @@ def run_git(func):
     fnames = os.listdir(lnls.folder_code)
     for fname in fnames:
         repo_folder = os.path.join(lnls.folder_code, fname)
+        if not os.path.exists(os.path.join(repo_folder,'.git')): continue
         print('processing ' + func + colored(' <'+fname+'>','yellow')+'...')
         cmd = 'cd ' + repo_folder + '; git ' + func
         text = subprocess.call([cmd], shell=True, stdout=sys.stdout)
