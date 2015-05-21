@@ -73,7 +73,7 @@ alias gova='cd $FACCODE/va'
 alias goscripts='cd $FACCODE/scripts'
 alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
 alias gopyaccel='cd $FACCODE/pyaccel'
-alias gocalc='cd $FACDATA/sirius/si/beam_dynamics/calc/v07/c05'
+alias gocalcs='cd $FACDATA/sirius/si/beam_dynamics/calcs/v07/c05'
 alias gooficial='cd $FACDAT/sirius/si/beam_dynamics/oficial/v07/c05'
 
 
