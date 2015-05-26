@@ -15,7 +15,7 @@ export FACDATA=$FACROOT/data
 export FACLIBS=$FACROOT/lib
 
 # PYTHON
-export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE/tools:$FACLIBS/python
+export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE/tools:$FACLIBS/python:$FACCODE
 
 # arquivo de definições para o rpn do elegant
 export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
@@ -75,6 +75,3 @@ alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
 alias gopyaccel='cd $FACCODE/pyaccel'
 alias gocalcs='cd $FACDATA/sirius/si/beam_dynamics/calcs/v07/c05'
 alias gooficial='cd $FACDAT/sirius/si/beam_dynamics/oficial/v07/c05'
-
-
-
