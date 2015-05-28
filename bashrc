@@ -62,9 +62,9 @@ complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"    
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py
 complete -W "--input-file"                                                                                                              fma_rawfield.py
 
-# COMPLETIONS FOR SIRIUS PVS
-#PREFIX=""
-#source $FACCODE/scripts/pvs_prefix.sh $PREFIX
+# COMPLETIONS FOR VA
+
+complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  va
 
 # USEFULL ALIAS
 alias gocode='cd $FACCODE'
