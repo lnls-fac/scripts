@@ -74,6 +74,8 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 # USEFULL ALIAS
 alias gocode='cd $FACCODE'
 alias godata='cd $FACDATA'
+alias golnls='cd $FACCODE/lnls'
+alias gotrackcpp='cd $FACCODE/trackcpp'
 alias gova='cd $FACCODE/va'
 alias goscripts='cd $FACCODE/scripts'
 alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
