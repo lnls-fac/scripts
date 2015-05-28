@@ -10,12 +10,17 @@ else
     echo "FACROOT not defined!"
 fi
 
-export FACCODE=$FACROOT/code
-export FACDATA=$FACROOT/data
-export FACLIBS=$FACROOT/lib
+FACPATHS=~/.fac_paths
+if [ -f $FACPATHS ] ; then
+    source $FACPATHS
+else
+    export FACCODE=$FACROOT/code
+    export FACDATA=$FACROOT/data
+    export FACLIBS=$FACROOT/lib
+fi
 
 # PYTHON
-export PYTHONPATH=$FACCODE/job_manager/src:$FACCODE/tools:$FACLIBS/python:$FACCODE
+export PYTHONPATH=$PYTHONPATH:$FACLIBS/python:$FACCODE/job_manager/src:$FACCODE/tools:$FACCODE
 
 # arquivo de definições para o rpn do elegant
 export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
