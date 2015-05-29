@@ -6,7 +6,7 @@ BASEDIR=/home/virtualbox
 WIKIDIR=fac-wiki
 DISKNAME=fac-wiki.vdi
 USERNAME=`whoami`
-CLEANSCRIPT=wiki_clean_backup
+CLEANSCRIPT=wiki-clean-backup
 NBACKUPS=5
 
 DATE=$(date +%Y%m%d)
