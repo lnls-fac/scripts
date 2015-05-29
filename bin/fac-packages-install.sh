@@ -4,7 +4,7 @@ if [ -z $FACCODE ]; then
   FACCODE=/home/fac_files/code
 fi
 
-packages_setup="mathphys lnls fieldmaptrack pyaccel sirius va job_manager"
+packages_setup="mathphys lnls fieldmaptrack pyaccel sirius va"
 packages_makefile="scripts/bin scripts/etc scripts/experiments scripts/fieldmap_analysis trackcpp trackcpp/python_package"
 
 function print_installing {
@@ -21,7 +21,7 @@ function install_packages_makefile {
   do
     print_installing $package
     cd $FACCODE"/"$package
-    sudo make $install_type
+    make $install_type
   done
 }
 
@@ -32,9 +32,9 @@ function install_packages_setup {
     print_installing $package
     cd $FACCODE"/"$package
     if [ $install_type == "install" ]; then
-      sudo ./setup.py $install_type -f
+      ./setup.py $install_type -f
     else
-      sudo ./setup.py $install_type
+      ./setup.py $install_type
     fi
   done
 }
