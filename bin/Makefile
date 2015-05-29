@@ -24,7 +24,7 @@ SCRIPTS = $(GENERALSCRIPTS)\
 		  $(WIKISCRIPTS)
 
 install: $(SCRIPTS)
-	install $(SCRIPTS) $(DEST_DIR)
+	cp -f $(SCRIPTS) $(DEST_DIR)
 
 uninstall:
 	cd $(DEST_DIR); rm -rf $(SCRIPTS); cd -
