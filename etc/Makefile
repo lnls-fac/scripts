@@ -8,4 +8,4 @@ GENERALSCRIPTS = \
 SCRIPTS = $(GENERALSCRIPTS)\
 
 install: $(SCRIPTS)
-	install $(SCRIPTS) $(DEST_DIR)
+	install -m 0644 $(SCRIPTS) $(DEST_DIR)
