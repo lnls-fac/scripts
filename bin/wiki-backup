@@ -1,17 +1,36 @@
 #!/bin/bash
+#
+# Run with -b to bypass confirmation
 
-# Number of recent backups to keep
+# Check if -b was passed; if not, prompt user for confirmation
+if [ $# -gt 0 ] ; then
+    if [ $1 = "-b" ] then
+        echo "Confirmation bypassed."
+    else
+        echo "Invalid option."
+        exit
+    fi
+else
+    read -p "Are you sure you want to create a new backup? (yes/[no]) "
+    if [ ! -z $REPLY ] && [ $REPLY = "yes" ] ; then
+        echo "Backup confirmed."
+    else
+        echo "Backup aborted."
+        exit
+    fi
+fi
+
 BACKUPDEST=lnls209-linux
 BASEDIR=/home/virtualbox
 WIKIDIR=fac-wiki
 DISKNAME=fac-wiki.vdi
 USERNAME=`whoami`
 CLEANSCRIPT=wiki-clean-backup
-NBACKUPS=5
+NBACKUPS=5 # Number of recent backups to keep
 
 DATE=$(date +%Y%m%d)
 FILE=fac-wiki-backup-$DATE.tar.gz
 cd $BASEDIR
 md5sum $BASEDIR/$WIKIDIR/$DISKNAME | /usr/sbin/sendmail $USERNAME
 tar cz ./$WIKIDIR | ssh $BACKUPDEST "cat > /home/backup/$WIKIDIR/$FILE"
-ssh $BACKUPDEST "/home/fac_files/code/scripts/$CLEANSCRIPT $WIKIDIR $NBACKUPS"
+ssh $BACKUPDEST "$CLEANSCRIPT -d $WIKIDIR $NBACKUPS"
