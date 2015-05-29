@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ -z "$PYTHONPATH_ORIG" ] ; then
-    export PYTHONPATH_ORIG=$PYTHONPATH
-    export PYTHONPATH=$PYTHONPATH:$FACCODE/lnls
-    export PYTHONPATH=$PYTHONPATH:$FACCODE/mathphys
-    export PS1_ORIG="$PS1"
-    export PS1="\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\u@\h:\w (lnls-dev) \$ "
-fi

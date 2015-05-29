@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ ! -z "$PYTHONPATH_ORIG" ] ; then
-    export PYTHONPATH="$PYTHONPATH_ORIG"
-    export PS1="$PS1_ORIG"
-    unset PYTHONPATH_ORIG
-    unset PS1_ORIG
-fi
