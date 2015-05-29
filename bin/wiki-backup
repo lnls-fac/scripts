@@ -11,7 +11,7 @@ if [ $# -gt 0 ] ; then
         exit
     fi
 else
-    read -p "Are you sure you want to create a new backup? (yes/[no]) "
+    read -p "Are you sure you want to create a new backup (yes/[no])? "
     if [ ! -z $REPLY ] && [ $REPLY = "yes" ] ; then
         echo "Backup confirmed."
     else
