@@ -1,41 +1,51 @@
-# ---------------------------
-# PATHS
-# ---------------------------
+# Paths
+# =====
+#
+# First, look for a file named .fac_root_path in user home directory. If file
+# exists, source it; if FACROOT is not defined after sourcing, use the 
+# default value (Linux).
+#
+# If that file does not exist, check whether there is a /home directory. In
+# case it is found, use default value for FACROOT.
+#
+# Finally, check whether a /Users directory exists. If it is found, use
+# /Users/fac_files as FACROOT (Mac OS X).
+#
+# If none of the above is true, print a message, and FACROOT is left
+# undefined.
+FACROOTPATH=~/.fac_root_path
+FACROOTDEFAULT=/home/fac_files
 
-if [ -d /home ] ; then
-    export FACROOT=/home/fac_files
+if [ -f $FACROOTPATH ] ; then
+    source $FACROOTPATH
+    if [ -z $FACROOT ] ; then
+        export FACROOT=$FACROOTDEFAULT
+    fi
+elif [ -d /home ] ; then
+    export FACROOT=$FACROOTDEFAULT
 elif [ -d /Users ] ; then
     export FACROOT=/Users/fac_files
 else
     echo "FACROOT not defined!"
 fi
 
-FACPATHS=~/.fac_paths
-if [ -f $FACPATHS ] ; then
-    source $FACPATHS
-else
-    export FACCODE=$FACROOT/code
-    export FACDATA=$FACROOT/data
-    export FACLIBS=$FACROOT/lib
-fi
+export FACCODE=$FACROOT/code
+export FACDATA=$FACROOT/data
 
-# PYTHON
-export PYTHONPATH=$PYTHONPATH:$FACLIBS/python:$FACCODE/job_manager/src:$FACCODE/tools:$FACCODE
+# Python
+# ======
+export PYTHONPATH=$PYTHONPATH:$FACCODE/job_manager/src:$FACCODE/tools
 
-# arquivo de definições para o rpn do elegant
-export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
-
-#Variaveis necessarias para rodar elegant e afins (entre eles o geneticOptimizer)
-export HOST_ARCH=linux-x86_64
-export EPICS_HOST_ARCH=linux-x86_64
-export OAG_TOP_DIR=/usr/local/epics_oag
-export EPICS_BASE=/usr/local/epics/R3.14/base
-
-# FAC SCRIPTS
-export PATH=$PATH:$FACCODE/scripts:$FACCODE/job_manager/apps:$FACROOT/bin
+# FAC scripts
+# ===========
+export PATH=$PATH:$FACCODE/job_manager/apps
 export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 
 # EPICS
+# =====
+export EPICS_BASE=/usr/local/epics/R3.14/base
+export EPICS_HOST_ARCH=linux-x86_64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
 export EV4_BASE=/usr/local/epics/v4
 export PVDATABASE=$EV4_BASE/pvDatabaseCPP
 export PVASRV=$EV4_BASE/pvaSrv
@@ -46,17 +56,23 @@ export PVCOMMON=$EV4_BASE/pvCommonCPP
 export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
 
-#ELEGANT AND OAG CONFIGS:
+# Definitions for elegant rpn
+# ===========================
+export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
 
+# Elegant and related software (including geneticOptimizer)
+# =========================================================
+export HOST_ARCH=linux-x86_64
+export OAG_TOP_DIR=/usr/local/epics_oag
+
+# Elegant and OAG configs
+# =======================
 export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
 export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
 export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
 
-# LIBRARIES
-
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
-
-# COMPLETIONS FOR JOBMANAGER FUNCTIONS
+# Completion for JobManager functions
+# ===================================
 complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
 complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
 complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
@@ -67,11 +83,12 @@ complete -W "--just-print --si --bo --tb --ts --li --help --list-all --sort"    
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma_analysis.py
 complete -W "--input-file"                                                                                                              fma_rawfield.py
 
-# COMPLETIONS FOR VA
-
+# Completion for VA
+# =================
 complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  va
 
-# USEFULL ALIAS
+# Aliases
+# =======
 alias gocode='cd $FACCODE'
 alias godata='cd $FACDATA'
 alias golnls='cd $FACCODE/lnls'

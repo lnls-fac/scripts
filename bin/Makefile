@@ -24,10 +24,10 @@ SCRIPTS = $(GENERALSCRIPTS)\
 		  $(WIKISCRIPTS)
 
 install: $(SCRIPTS)
-	install $(SCRIPTS) $(DEST_DIR)
+	cp -f $(SCRIPTS) $(DEST_DIR)
 
 develop: $(SCRIPTS)
-	ln -srf $(SCRIPTS) $(DEST_DIR)
+	cp -sf $(SCRIPTS) $(DEST_DIR)
 
 fac: $(FACSCRIPTS)
 	install $(FACSCRIPTS) $(DEST_DIR)
