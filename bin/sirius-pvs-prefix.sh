@@ -2,7 +2,7 @@
 # completions for epics commands are implemented.
 
 PREFIX=$1
-ALLPVS="`pvs_li.py $PREFIX` `pvs_bo.py $PREFIX` `pvs_si.py $PREFIX` `pvs_ti.py $PREFIX`"
+ALLPVS="`sirius-pvs-li.py $PREFIX` `sirius-pvs-bo.py $PREFIX` `sirius-pvs-si.py $PREFIX` `sirius-pvs-ti.py $PREFIX`"
 complete -W "$ALLPVS" caget
 complete -W "$ALLPVS" camonitor
 complete -W "$ALLPVS" caput

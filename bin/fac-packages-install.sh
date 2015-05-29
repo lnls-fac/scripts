@@ -4,16 +4,16 @@ packages="mathphys lnls fieldmaptrack sirius trackcpp/python_package"
 
 function python_packages {
   local install_type=$1
-
   for package in ${packages[@]}
   do
-    echo "installing" $package "..."
+    >&2 echo "installing" $package "..."
     cd $FACCODE"/"$package
-    sudo ./setup.py install_type -f > /dev/null
+    sudo ./setup.py install_type -f
   done
 }
 
 function trackcpp_package {
+  >&2 echo "installing trackcpp..."
   cd $FACCODE"/"trackcpp
   make
   sudo make install
