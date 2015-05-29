@@ -26,6 +26,9 @@ SCRIPTS = $(GENERALSCRIPTS)\
 install: $(SCRIPTS)
 	install $(SCRIPTS) $(DEST_DIR)
 
+develop: $(SCRIPTS)
+	ln -srf $(SCRIPTS) $(DEST_DIR)
+
 fac: $(FACSCRIPTS)
 	install $(FACSCRIPTS) $(DEST_DIR)
 
