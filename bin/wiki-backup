@@ -4,7 +4,7 @@
 
 # Check if -b was passed; if not, prompt user for confirmation
 if [ $# -gt 0 ] ; then
-    if [ $1 = "-b" ] then
+    if [ $1 = "-b" ] ; then
         echo "Confirmation bypassed."
     else
         echo "Invalid option."
