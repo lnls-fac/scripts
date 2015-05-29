@@ -1,6 +1,10 @@
 #!/bin/bash
 
-packages_setup="mathphys lnls fieldmaptrack pyaccel job_manager"
+if [ -z $FACCODE ]; then
+  FACCODE=/home/fac_files/code
+fi
+
+packages_setup="mathphys lnls fieldmaptrack pyaccel sirius va job_manager"
 packages_makefile="scripts/bin scripts/etc scripts/experiments scripts/fieldmap_analysis trackcpp trackcpp/python_package"
 
 function print_installing {
@@ -27,27 +31,24 @@ function install_packages_setup {
   do
     print_installing $package
     cd $FACCODE"/"$package
-    sudo ./setup.py $install_type -f
+    if [ $install_type == "install" ]; then
+      sudo ./setup.py $install_type -f
+    else
+      sudo ./setup.py $install_type
+    fi
   done
-}
-
-function trackcpp_package {
-  echo "installing trackcpp..."
-  cd $FACCODE"/"trackcpp
-  make
-  sudo make install
 }
 
 if [ $# == 0 ]; then
   install_packages_makefile install
   install_packages_setup install
-elif [ $# == 1]; then
+elif [ $# == 1 ]; then
   if [ $1 == "install" ]; then
-    trackcpp_package
-    python_packages install
+    install_packages_makefile install
+    install_packages_setup install
   elif [ $1 == "develop" ]; then
-    trackcpp_package
-    python_packages develop
+    install_packages_makefile develop
+    install_packages_setup develop
   fi
 else
   echo $0": invalid arguments!"

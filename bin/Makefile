@@ -26,7 +26,10 @@ SCRIPTS = $(GENERALSCRIPTS)\
 install: $(SCRIPTS)
 	install $(SCRIPTS) $(DEST_DIR)
 
-develop: $(SCRIPTS)
+uninstall:
+	cd $(DEST_DIR); rm -rf $(SCRIPTS); cd -
+
+develop: $(SCRIPTS) uninstall
 	ln -srf $(SCRIPTS) $(DEST_DIR)
 
 fac: $(FACSCRIPTS)
