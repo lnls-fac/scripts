@@ -55,7 +55,7 @@ function dir_boot {
 
 function start_module {
     if [ $1 == "vaca" ]; then
-      start_instance vaca 38000 $FACCODE/scripts/vaca.py VA-
+      start_instance vaca 38000 $FACCODE/scripts/experiments/sirius_vaca.py VA-
     elif [ $1 == "si_current" ]; then
       cd $(dir_boot si_current); start_instance si_current 38001 $(dir_app si_current) $(dir_boot si_current)"/st.cmd"
     elif [ $1 == "si_lifetime" ]; then
@@ -67,7 +67,7 @@ function start_module {
     elif [ $1 == "si_tune" ]; then
       cd $(dir_boot si_tune); start_instance si_tune 38005 $(dir_app si_tune) $(dir_boot si_tune)"/st.cmd"
     elif [ $1 == "topup" ]; then
-      start_instance topup 38100 $FACCODE/va/experiments/topup.py
+      start_instance topup 38100 $FACCODE/scripts/experiments/sirius_topup.py
     elif [ $1 == "viocs" ]; then
       start_viocs
     else
