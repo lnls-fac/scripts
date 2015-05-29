@@ -1,3 +1,0 @@
-#!/bin/bash
-
-$FACCODE/sirius_wiki/updatewiki.py "$@"

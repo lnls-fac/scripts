@@ -16,10 +16,7 @@ FACSCRIPTS = $(shell ls fac-*)
 
 SIRIUSSCRIPTS= $(shell ls sirius-*)
 
-WIKISCRIPTS = \
-		updatewiki\
-		wiki_backup\
-		wiki_clean_backup\
+WIKISCRIPTS = $(shell ls wiki-*)
 
 SCRIPTS = $(GENERALSCRIPTS)\
 		  $(FACSCRIPTS)\
