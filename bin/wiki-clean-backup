@@ -4,7 +4,7 @@ ARG=$1
 NBACKUPS=$2
 
 if [ -z "$ARG" ] || [ -z "$NBACKUPS" ] ; then
-    echo "Not enough arguments; aborting."
+    echo "$0: not enough arguments; aborting."
     exit
 fi
 
@@ -12,8 +12,8 @@ cd /home/backup/$ARG
 NFILES=$(ls -1 | wc -l)
 
 if [ $NFILES -gt $NBACKUPS ] ; then
-    echo "Removing $NBACKUPS oldest backup(s)."
+    echo "$0: removing $NBACKUPS oldest backup(s)."
     rm $(ls -1 | head -n 1)
 else
-    echo "Must leave at least one backup; aborting."
+    echo "$0: not removing backups."
 fi
