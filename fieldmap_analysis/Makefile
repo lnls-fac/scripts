@@ -8,8 +8,8 @@ SCRIPTS = $(FMASCRIPTS)
 install: $(SCRIPTS)
 	install $(SCRIPTS) $(DEST_DIR)
 
-clean:
+uninstall:
 	cd $(DEST_DIR); rm -rf $(SCRIPTS); cd -
 
-develop: $(SCRIPTS) clean
+develop: $(SCRIPTS) uninstall
 	ln -srf $(SCRIPTS) $(DEST_DIR)

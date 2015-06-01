@@ -3,6 +3,7 @@
 if [ -z $FACCODE ]; then
   FACCODE=/home/fac_files/code
 fi
+PYTHON3LIB=/usr/local/lib/python3.4/dist-packages
 
 packages_setup="mathphys lnls fieldmaptrack pyaccel sirius va"
 packages_makefile="scripts/bin scripts/etc scripts/experiments scripts/fieldmap_analysis trackcpp trackcpp/python_package"
@@ -33,8 +34,11 @@ function install_packages_setup {
     cd $FACCODE"/"$package
     if [ $install_type == "install" ]; then
       ./setup.py $install_type -f
-    else
+    elif [ $install_type == "develop" ]; then
       ./setup.py $install_type
+    elif [ $install_type == "uninstall" ]; then
+      cd $PYTHON3LIB
+      rm -rf $package*i
     fi
   done
 }
@@ -49,6 +53,9 @@ elif [ $# == 1 ]; then
   elif [ $1 == "develop" ]; then
     install_packages_makefile develop
     install_packages_setup develop
+  elif [ $1 == "uninstall" ]; then
+    install_packages_makefile uninstall
+    install_packages_setup uninstall
   fi
 else
   echo $0": invalid arguments!"
