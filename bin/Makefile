@@ -10,7 +10,7 @@ GENERALSCRIPTS = \
 		run_in_clients.sh\
 		savestate_vbox.sh\
 		start_vbox.sh\
-		update_ip_on_workstation.sh\
+		update_ip_on_workstation.sh
 
 FACSCRIPTS = $(shell ls fac-*)
 
@@ -23,13 +23,15 @@ SCRIPTS = $(GENERALSCRIPTS)\
 		  $(SIRIUSSCRIPTS)\
 		  $(WIKISCRIPTS)
 
-install: $(SCRIPTS)
-	cp -f $(SCRIPTS) $(DEST_DIR)
+FULLSCRIPTS = $(addprefix $(DEST_DIR)/, $(SCRIPTS))
+
+install: uninstall $(SCRIPTS)
+	cp $(SCRIPTS) $(DEST_DIR)
 
 uninstall:
-	cd $(DEST_DIR); rm -rf $(SCRIPTS); cd -
+	-rm -rf $(FULLSCRIPTS)
 
-develop: $(SCRIPTS) uninstall
+develop: uninstall $(SCRIPTS)
 	ln -srf $(SCRIPTS) $(DEST_DIR)
 
 fac: $(FACSCRIPTS)

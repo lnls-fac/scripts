@@ -2,15 +2,17 @@
 DEST_DIR = /usr/local/etc
 
 GENERALSCRIPTS = \
-		fac-bashrc\
+		fac-bashrc
 
-SCRIPTS = $(GENERALSCRIPTS)\
+SCRIPTS = $(GENERALSCRIPTS)
 
-install: $(SCRIPTS)
-	cp -f $(SCRIPTS) $(DEST_DIR)
+FULLSCRIPTS = $(addprefix $(DEST_DIR)/, $(SCRIPTS))
+
+install: uninstall $(SCRIPTS)
+	cp $(SCRIPTS) $(DEST_DIR)
 
 uninstall:
-	cd $(DEST_DIR); rm -rf $(SCRIPTS); cd -
+	-rm -rf $(FULLSCRIPTS)
 
-develop: $(SCRIPTS) uninstall
+develop: uninstall $(SCRIPTS)
 	ln -srf $(SCRIPTS) $(DEST_DIR)
