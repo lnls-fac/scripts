@@ -1,0 +1,24 @@
+README - scripts
+================
+
+Scripts for automating administrative tasks, configuration, and experiments.
+The contents of the directories are explained below.
+
+For installation instructions, read INSTALL.
+
+
+bin/
+
+Scripts to be run. Comprise administrative tasks, compilation, conversion,
+and PV name completion.
+
+
+etc/
+
+Currently contains only fac-bashrc; this script should be sourced in user
+.bashrc for setting default environment variables.
+
+
+experiments/
+
+Experiment automation.

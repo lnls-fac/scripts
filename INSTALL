@@ -1,0 +1,26 @@
+INSTALL - scripts
+=================
+
+Each directory contains a makefile with at least two targets. 'install' copies
+the files themselves, while 'develop' will install a symbolic link to the local
+version of the files. The installation directory can be selected by passing a
+value to the DEST_DIR variable. The default installation locations and
+additional targets available can be found in the makefiles. The instructions
+provided below assume the 'install' target, but may also be used for the other
+targets.
+
+
+INSTALLATION
+============
+
+1. Go to the directory containing scripts to be installed (e.g. bin):
+
+    cd bin
+
+2. Run
+
+    make install [DEST_DIR=<directory>]
+
+substituting <directory> with the destination directory. If DEST_DIR is not
+passed, the files will be installed to a default location; this may require
+running the command as superuser.
