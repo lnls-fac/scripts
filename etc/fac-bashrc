@@ -84,7 +84,7 @@ complete -W "--input-file"                                                      
 
 # Completion for VA
 # =================
-complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va.py
+complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
 
 # Aliases
 # =======
