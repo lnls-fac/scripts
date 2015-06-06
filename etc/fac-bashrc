@@ -1,32 +1,13 @@
 # Paths
 # =====
-#
-# First, look for a file named .fac_root_path in user home directory. If file
-# exists, source it; if FACROOT is not defined after sourcing, use the 
-# default value (Linux).
-#
-# If that file does not exist, check whether there is a /home directory. In
-# case it is found, use default value for FACROOT.
-#
-# Finally, check whether a /Users directory exists. If it is found, use
-# /Users/fac_files as FACROOT (Mac OS X).
-#
-# If none of the above is true, print a message, and FACROOT is left
-# undefined.
-FACROOTPATH=~/.fac_root_path
-FACROOTDEFAULT=/home/fac_files
-
-if [ -f $FACROOTPATH ] ; then
-    source $FACROOTPATH
-    if [ -z $FACROOT ] ; then
-        export FACROOT=$FACROOTDEFAULT
+if [ -z $FACROOT ] ; then
+    if [ -d /home ] ; then
+        export FACROOT=/home/fac_files
+    elif [ -d /Users ] ; then
+        export FACROOT=/Users/fac_files
+    else
+        echo "FACROOT not defined!"
     fi
-elif [ -d /home ] ; then
-    export FACROOT=$FACROOTDEFAULT
-elif [ -d /Users ] ; then
-    export FACROOT=/Users/fac_files
-else
-    echo "FACROOT not defined!"
 fi
 
 export FACCODE=$FACROOT/code
@@ -43,10 +24,19 @@ export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 
 # EPICS
 # =====
-export EPICS_BASE=/usr/local/epics/R3.14/base
-export EPICS_HOST_ARCH=linux-x86_64
+if [ -z $EPICS_BASE ] ; then
+    export EPICS_BASE=/usr/local/epics/R3.14/base
+fi
+
+if [ -z $EPICS_HOST_ARCH ] ; then
+    export EPICS_HOST_ARCH=linux-x86_64
+fi
+
+if [ -z $EV4_BASE ] ; then
+    export EV4_BASE=/usr/local/epics/v4
+fi
+
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
-export EV4_BASE=/usr/local/epics/v4
 export PVDATABASE=$EV4_BASE/pvDatabaseCPP
 export PVASRV=$EV4_BASE/pvaSrv
 export PVACCESS=$EV4_BASE/pvAccessCPP
