@@ -14,9 +14,10 @@ _RAMP_CYCLE_FREQ   = 2.0       # [Hz]
 
 max_current = _TOPUP_CURRENT
 min_current = _TOPUP_CURRENT * (1.0 - _MAX_CURRENT_DECAY/100.0)
+cycle_interval = 1.0/_RAMP_CYCLE_FREQ
 
 # pvs that control injection process
-si_current = epics.pv.PV('VA-SIDI-CURRENT')
+si_current = epics.pv.PV('SIDI-CURRENT')
 ti_cycle   = epics.pv.PV('VA-TI-CYCLE')
 
 si_current.wait_for_connection()
@@ -28,14 +29,22 @@ def signal_handler(signum, frame):
         timer1.stop()
     sys.exit()
 
+def cycle():
+    """Cycle injection"""
+    t0 = time.time()
+    ti_cycle.put(1)
+    t1 = time.time()
+    while t1 < t0 + cycle_interval:
+        time.sleep(time.time()-t0)
+        t1 = time.time()
+
 def check_inject():
     global is_injecting
     if is_injecting: return
     while si_current.get() < min_current:
         is_injecting = True
         while si_current.get() < max_current:
-            ti_cycle.put(1)
-            time.sleep(1.0/_RAMP_CYCLE_FREQ)   # cycle intercal
+            cycle()
     is_injecting = False
 
 
