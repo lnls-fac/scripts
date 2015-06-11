@@ -35,7 +35,7 @@ def cycle():
     ti_cycle.put(1)
     t1 = time.time()
     while t1 < t0 + cycle_interval:
-        time.sleep(time.time()-t0)
+        time.sleep(cycle_interval-(t1-t0))
         t1 = time.time()
 
 def check_inject():
