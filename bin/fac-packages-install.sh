@@ -6,7 +6,7 @@ fi
 PYTHON3LIB=/usr/local/lib/python3.4/dist-packages
 
 packages_setup="mathphys lnls fieldmaptrack pyaccel sirius va"
-packages_makefile="scripts/bin scripts/etc scripts/experiments scripts/fieldmap_analysis trackcpp trackcpp/python_package"
+packages_makefile="scripts/bin scripts/etc scripts/experiments trackcpp trackcpp/python_package"
 
 function print_installing {
   COLOR='\033[0;33m'
