@@ -26,6 +26,7 @@ def run_git_clone():
                  'pyaccel',
                  'scripts',
                  'sirius',
+                 'sirius_parameters',
                  'sirius_wiki',
                  'tools',
                  'trackcpp',
