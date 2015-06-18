@@ -17,7 +17,7 @@ min_current = _TOPUP_CURRENT * (1.0 - _MAX_CURRENT_DECAY/100.0)
 cycle_interval = 1.0/_RAMP_CYCLE_FREQ
 
 # pvs that control injection process
-si_current = epics.pv.PV('SIDI-CURRENT')
+si_current = epics.pv.PV('VA-SIDI-CURRENT')
 ti_cycle   = epics.pv.PV('VA-TI-CYCLE')
 
 si_current.wait_for_connection()
