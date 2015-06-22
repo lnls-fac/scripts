@@ -14,7 +14,7 @@ git_functions = ('pull','push','status','diff','clone')
 def run_git_clone():
 
     if not os.path.exists(lnls.folder_code):
-        print('gitall.py: please create ' + lnls.folder_code + ' folder with correct permissions first!')
+        print('fac-gitall.py: please create ' + lnls.folder_code + ' folder with correct permissions first!')
         return
 
     all_repos = ('collective_effects',
@@ -56,7 +56,7 @@ def run_git(func):
 if __name__ == '__main__':
 
     if len(sys.argv) != 2 or sys.argv[1] not in git_functions:
-        print('usage: gitall.py [' + '|'.join(git_functions) + ']')
+        print('usage: fac-gitall.py [' + '|'.join(git_functions) + ']')
     else:
         print()
         run_git(sys.argv[1])
