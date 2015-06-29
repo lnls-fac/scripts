@@ -6,3 +6,4 @@ ALLPVS="`sirius-pvs-li.py $PREFIX` `sirius-pvs-tb.py $PREFIX` `sirius-pvs-bo.py 
 complete -W "$ALLPVS" caget
 complete -W "$ALLPVS" camonitor
 complete -W "$ALLPVS" caput
+complete -W "$ALLPVS" cainfo

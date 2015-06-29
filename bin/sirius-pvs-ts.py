@@ -11,7 +11,7 @@ try:
 except:
     prefix = ''
 
-fake_names = va.ts_fake_record_names.get_record_names()
+fake_names = va.fake_rnames_ts.get_record_names()
 record_names = sirius.ts.record_names.get_record_names()
 pvs_list = list(record_names.keys()) + list(fake_names.keys())
 pvs_string = prefix + (' '+prefix).join(pvs_list)
