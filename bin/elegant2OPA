@@ -11,6 +11,7 @@ vac_chamber ='ax = 12.00, ay = 12.00;\n'
 mags = dict()
 #Markers
 atribs = dict()
+mags['marker'] = (atribs,'marker')
 mags['mark'] = (atribs,'marker')
 mags['maxamp'] = (atribs,'marker')
 mags['rfca'] = (atribs,'marker')
@@ -78,7 +79,7 @@ def elegant2OPA(filename):
             if i.startswith('!'):
                 fout.write('{' + i[1:] + '}\n')
             elif not len(i):
-                fileout.write('\n')
+                fout.write('\n')
             else: # caso contrário, começo a traduzir a linha
                 line = i.partition(':')
                 newline = '{0:8}:'.format(line[0])
