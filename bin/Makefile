@@ -5,6 +5,7 @@ GENERALSCRIPTS = \
 		compilacao_epics.sh\
 		delete_dups.py\
 		elegant2OPA\
+                elegant2AT\
 		hosts_update.py\
 		pytrack.py\
 		run_in_clients.sh\
