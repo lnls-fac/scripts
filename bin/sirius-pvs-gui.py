@@ -16,8 +16,9 @@ qt_app = QApplication(sys.argv)
 
 class RecordNameList(QWidget):
 
-    def __init__(self):
+    def __init__(self, prefix):
         QWidget.__init__(self)
+        self.prefix = prefix
         self.setWindowTitle('Record name list')
         self.setMinimumSize(500, 500)
         self.layout = QVBoxLayout()
@@ -122,7 +123,7 @@ class RecordNameList(QWidget):
         list = QListWidget()
         list.setMaximumHeight(200)
         for name in names:
-            list.addItem(name)
+            list.addItem(self.prefix + name)
         return button, list
 
     def create_system_button(self, label, system_dict, layout):
@@ -137,7 +138,7 @@ class RecordNameList(QWidget):
         list = QListWidget()
         list.setMaximumHeight(200)
         for name in names:
-            list.addItem(name)
+            list.addItem(self.prefix + name)
         button.clicked.connect(partial(self.system_one_button_clicked, list=list))
         layout.addWidget(button)
         layout.addWidget(list)
@@ -167,5 +168,11 @@ si_fk_name  = _pvs_si._get_fake_record_names
 ti_rec_name = _sirius.ti.record_names.get_record_names
 ti_fk_name  = _pvs_ti._get_fake_record_names
 
-app = RecordNameList()
+
+if len(sys.argv) > 1:
+    prefix = sys.argv[1]
+else:
+    prefix = "VA-"
+
+app = RecordNameList(prefix)
 app.run()
