@@ -18,7 +18,7 @@ cycle_interval = 1.0/_RAMP_CYCLE_FREQ
 
 # pvs that control injection process
 si_current = epics.pv.PV('VA-SIDI-CURRENT')
-ti_cycle   = epics.pv.PV('VA-TI-CYCLE')
+ti_cycle   = epics.pv.PV('VA-LITI-CYCLE')
 
 si_current.wait_for_connection()
 ti_cycle.wait_for_connection()
