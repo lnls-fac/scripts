@@ -10,7 +10,6 @@ from va.pvs import tb as _pvs_tb
 from va.pvs import ts as _pvs_ts
 from va.pvs import bo as _pvs_bo
 from va.pvs import si as _pvs_si
-from va.pvs import ti as _pvs_ti
 
 qt_app = QApplication(sys.argv)
 
@@ -26,7 +25,7 @@ class RecordNameList(QWidget):
         # LI
         li_rn = li_rec_name()
         li_rn.update(li_fk_name())
-        self.create_one_button_system('LI', li_rn, self.layout)
+        self.create_one_button_system('LI', li_rn , self.layout)
 
         # TB
         tb_di, tb_di_list = self.create_button_and_list('TBDI', tb_rec_name('tbdi'))
@@ -34,8 +33,9 @@ class RecordNameList(QWidget):
         tb_pu, tb_pu_list = self.create_button_and_list('TBPU', tb_rec_name('tbpu'))
         tb_ma, tb_ma_list = self.create_button_and_list('TBMA', tb_rec_name('tbma'))
         tb_pm, tb_pm_list = self.create_button_and_list('TBPM', tb_rec_name('tbpm'))
+        tb_ti, tb_ti_list = self.create_button_and_list('TBTI', tb_rec_name('tbti'))
         tb_fk, tb_fk_list = self.create_button_and_list('TBFK', tb_fk_name())
-        tb_dict = {tb_di:tb_di_list, tb_ps:tb_ps_list, tb_pu:tb_pu_list, tb_ma:tb_ma_list, tb_pm:tb_pm_list, tb_fk:tb_fk_list}
+        tb_dict = {tb_di:tb_di_list, tb_ps:tb_ps_list, tb_pu:tb_pu_list, tb_ma:tb_ma_list, tb_pm:tb_pm_list, tb_fk:tb_fk_list, tb_ti:tb_ti_list}
         self.create_system_button('TB', tb_dict, self.layout)
         self.create_button_group_and_add_to_layout(tb_dict, self.layout)
 
@@ -45,8 +45,9 @@ class RecordNameList(QWidget):
         bo_pu, bo_pu_list = self.create_button_and_list('BOPA', bo_rec_name('bopa'))
         bo_ma, bo_ma_list = self.create_button_and_list('BOMA', bo_rec_name('boma'))
         bo_pm, bo_pm_list = self.create_button_and_list('BORF', bo_rec_name('borf'))
+        bo_ti, bo_ti_list = self.create_button_and_list('BOTI', bo_rec_name('boti'))
         bo_fk, bo_fk_list = self.create_button_and_list('BOFK', bo_fk_name())
-        bo_dict = {bo_di:bo_di_list, bo_ps:bo_ps_list, bo_pu:bo_pu_list, bo_ma:bo_ma_list, bo_pm:bo_pm_list, bo_fk:bo_fk_list}
+        bo_dict = {bo_di:bo_di_list, bo_ps:bo_ps_list, bo_pu:bo_pu_list, bo_ma:bo_ma_list, bo_pm:bo_pm_list, bo_fk:bo_fk_list, bo_ti:bo_ti_list}
         self.create_system_button('BO', bo_dict, self.layout)
         self.create_button_group_and_add_to_layout(bo_dict, self.layout)
 
@@ -56,8 +57,9 @@ class RecordNameList(QWidget):
         ts_pu, ts_pu_list = self.create_button_and_list('TSPU', ts_rec_name('tspu'))
         ts_ma, ts_ma_list = self.create_button_and_list('TSMA', ts_rec_name('tsma'))
         ts_pm, ts_pm_list = self.create_button_and_list('TSPM', ts_rec_name('tspm'))
+        ts_ti, ts_ti_list = self.create_button_and_list('TSTI', ts_rec_name('tsti'))
         ts_fk, ts_fk_list = self.create_button_and_list('TSFK', ts_fk_name())
-        ts_dict = {ts_di:ts_di_list, ts_ps:ts_ps_list, ts_pu:ts_pu_list, ts_ma:ts_ma_list, ts_pm:ts_pm_list, ts_fk:ts_fk_list}
+        ts_dict = {ts_di:ts_di_list, ts_ps:ts_ps_list, ts_pu:ts_pu_list, ts_ma:ts_ma_list, ts_pm:ts_pm_list, ts_fk:ts_fk_list, ts_ti:ts_ti_list}
         self.create_system_button('TS', ts_dict, self.layout)
         self.create_button_group_and_add_to_layout(ts_dict, self.layout)
 
@@ -67,13 +69,11 @@ class RecordNameList(QWidget):
         si_pu, si_pu_list = self.create_button_and_list('SIPA', si_rec_name('sipa'))
         si_ma, si_ma_list = self.create_button_and_list('SIMA', si_rec_name('sima'))
         si_pm, si_pm_list = self.create_button_and_list('SIRF', si_rec_name('sirf'))
+        si_ti, si_ti_list = self.create_button_and_list('SITI', si_rec_name('siti'))
         si_fk, si_fk_list = self.create_button_and_list('SIFK', si_fk_name())
-        si_dict = {si_di:si_di_list, si_ps:si_ps_list, si_pu:si_pu_list, si_ma:si_ma_list, si_pm:si_pm_list, si_fk:si_fk_list}
+        si_dict = {si_di:si_di_list, si_ps:si_ps_list, si_pu:si_pu_list, si_ma:si_ma_list, si_pm:si_pm_list, si_fk:si_fk_list, si_ti:si_ti_list}
         self.create_system_button('SI', si_dict, self.layout)
         self.create_button_group_and_add_to_layout(si_dict, self.layout)
-
-        # TI
-        self.create_one_button_system('TI', ti_rec_name('ti'), self.layout)
 
         self.setLayout(self.layout)
 
@@ -166,9 +166,6 @@ ts_fk_name  = _pvs_ts._get_fake_record_names
 # SI
 si_rec_name = _sirius.si.record_names.get_record_names
 si_fk_name  = _pvs_si._get_fake_record_names
-# TI
-ti_rec_name = _sirius.ti.record_names.get_record_names
-ti_fk_name  = _pvs_ti._get_fake_record_names
 
 
 if len(sys.argv) > 1:
