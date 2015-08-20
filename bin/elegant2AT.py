@@ -33,7 +33,7 @@ def elegant2AT(filename):
         for i in filein.splitlines(False):
             # vejo se é um quadrupolo
             if i.find('ksext') != -1:
-                sext       = i.split(':')[0].strip('"') + '_strength'
+                sext       = i.split(':')[0].strip('"').strip('m') + '_strength'
                 sext_stren = float(i.split(':')[1].split('k2=')[1].split(',')[0])
                 fout.write('{0:16} = {1: 9.4f};\n'.format(sext,sext_stren/2))
     
