@@ -4,8 +4,8 @@ DEST_DIR = /usr/local/bin
 GENERALSCRIPTS = \
 		compilacao_epics.sh\
 		delete_dups.py\
-		elegant2OPA\
-                elegant2AT\
+		elegant2OPA.py\
+                elegant2AT.py\
 		hosts_update.py\
 		pytrack.py\
 		run_in_clients.sh\
