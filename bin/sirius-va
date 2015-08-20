@@ -66,6 +66,8 @@ function start_module {
       cd $(dir_boot si_ps); start_instance si_ps 38004 $(dir_app si_ps) $(dir_boot si_ps)"/st.cmd"
     elif [ $1 == "si_tune" ]; then
       cd $(dir_boot si_tune); start_instance si_tune 38005 $(dir_app si_tune) $(dir_boot si_tune)"/st.cmd"
+  elif [ $1 == "si_rf" ]; then
+      cd $(dir_boot si_rf); start_instance si_tune 38006 $(dir_app si_rf) $(dir_boot si_rf)"/st.cmd"
     elif [ $1 == "topup" ]; then
       start_instance topup 38100 /usr/local/bin/sirius-topup.py
     elif [ $1 == "viocs" ]; then
@@ -88,6 +90,8 @@ function stop_module {
     stop_instances si_ps
   elif [ $1 == "si_tune" ]; then
     stop_instances si_tune
+  elif [ $1 == "si_rf" ]; then
+    stop_instances si_rf
   elif [ $1 == "topup" ]; then
     stop_instances topup
   elif [ $1 == "viocs" ]; then
@@ -104,6 +108,7 @@ function start_all {
   start_module si_bpms
   start_module si_ps
   start_module si_tune
+  start_module si_rf
   start_module topup
 }
 
@@ -113,10 +118,12 @@ function start_viocs {
   start_module si_bpms
   start_module si_ps
   start_module si_tune
+  start_module si_rf
 }
 
 function stop_all {
   stop_instances topup
+  stop_instances si_rf
   stop_instances si_tune
   stop_instances si_ps
   stop_instances si_bpms
@@ -126,6 +133,7 @@ function stop_all {
 }
 
 function stop_viocs {
+  stop_instances si_rf
   stop_instances si_tune
   stop_instances si_ps
   stop_instances si_bpms
