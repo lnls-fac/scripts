@@ -61,7 +61,7 @@ mags['csbend2'] = (atribs,'combined')
 
 
 def usage():
-    print('\nUsage: elegant2OPA fileName1 fileName2 ... fileNameN\n')
+    print('\nUsage: elegant2OPA.py fileName1 fileName2 ... fileNameN\n')
 
 
 def elegant2OPA(filename):
