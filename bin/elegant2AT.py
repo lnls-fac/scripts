@@ -26,7 +26,7 @@ def elegant2AT(filename):
             if i.find('kquad') != -1:
                 quad       = i.split(':')[0].strip('"') + '_strength'
                 quad_stren = float(i.split(':')[1].split('k1=')[1].split(',')[0])
-                fout.write('{0:16} = {1:> 08.6f}\n'.format(quad,quad_stren))
+                fout.write('{0:16} = {1:> 08.6f};\n'.format(quad,quad_stren))
 
         fout.write('\n\n%% {0}\n'.format('Sextupoles'))
         fout.write('%% {0}\n\n'.format(15*'='))
@@ -35,7 +35,7 @@ def elegant2AT(filename):
             if i.find('ksext') != -1:
                 sext       = i.split(':')[0].strip('"') + '_strength'
                 sext_stren = float(i.split(':')[1].split('k2=')[1].split(',')[0])
-                fout.write('{0:16} = {1: 9.4f}\n'.format(sext,sext_stren/2))
+                fout.write('{0:16} = {1: 9.4f};\n'.format(sext,sext_stren/2))
     
 try:
     
