@@ -66,8 +66,8 @@ function start_module {
       cd $(dir_boot si_ps); start_instance si_ps 38004 $(dir_app si_ps) $(dir_boot si_ps)"/st.cmd"
     elif [ $1 == "si_tune" ]; then
       cd $(dir_boot si_tune); start_instance si_tune 38005 $(dir_app si_tune) $(dir_boot si_tune)"/st.cmd"
-  elif [ $1 == "si_rf" ]; then
-      cd $(dir_boot si_rf); start_instance si_tune 38006 $(dir_app si_rf) $(dir_boot si_rf)"/st.cmd"
+    elif [ $1 == "si_rf" ]; then
+      cd $(dir_boot si_rf); start_instance si_rf 38006 $(dir_app si_rf) $(dir_boot si_rf)"/st.cmd"
     elif [ $1 == "topup" ]; then
       start_instance topup 38100 /usr/local/bin/sirius-topup.py
     elif [ $1 == "viocs" ]; then
