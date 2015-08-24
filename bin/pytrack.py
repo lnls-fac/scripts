@@ -58,6 +58,44 @@ if track_linepass_run:
 
 
 try:
+	dynap_xy_threads_run
+except:
+	dynap_xy_threads_run = False
+if dynap_xy_threads_run:
+	def dynap_xy_threads(track_version   = default_track_version,
+		         flat_filename   = dynap_xy_threads_flatfilename,
+		         energy          = ebeam_energy,
+       		     harmonic_number = harmonic_number,
+	     	     cavity_state    = cavity_state,
+	     	     radiation_state = radiation_state,
+		         vchamber_state  = vchamber_state,
+	     	     de              = dynap_xy_threads_de,
+	     	     nr_turns        = dynap_xy_threads_nr_turns,
+	      	     x_nrpts         = dynap_xy_threads_x_nrpts,
+	     	     x_min           = dynap_xy_threads_x_min,
+	     	     x_max           = dynap_xy_threads_x_max,
+	     	     y_nrpts         = dynap_xy_threads_y_nrpts,
+	     	     y_min           = dynap_xy_threads_y_min,
+	     	     y_max           = dynap_xy_threads_y_max,
+                 nr_threads      = dynap_xy_threads_nr_threads):
+	
+		args = [track_version, 'dynap_xy_threads', 
+			str(flat_filename),
+			str(energy), 
+			str(harmonic_number), 
+			str(cavity_state),
+			str(radiation_state),
+			str(vchamber_state),
+			str(de),
+			str(nr_turns),
+			str(x_nrpts), str(x_min), str(x_max),
+			str(y_nrpts), str(y_min), str(y_max),
+            str(nr_threads),
+			]
+		subprocess.call(args)
+
+
+try:
 	dynap_xy_run
 except:
 	dynap_xy_run = False
@@ -239,7 +277,11 @@ if dynap_exfmap_run:
 
 
 if __name__ == "__main__":
-	
+
+	''' DYNAP_XY_THREADS '''	
+	if dynap_xy_threads_run:
+		dynap_xy_threads()
+
 	''' DYNAP_XY '''	
 	if dynap_xy_run:
 		dynap_xy()
