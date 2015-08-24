@@ -252,12 +252,12 @@ if dynap_exfmap_run:
 		             vchamber_state  = vchamber_state,
                      y               = dynap_exfmap_y,
 	     	         nr_turns        = dynap_exfmap_nr_turns,
-	      	         x_nrpts         = dynap_exfmap_x_nrpts,
+	      	         e_nrpts         = dynap_exfmap_e_nrpts,
+	     	         e_min           = dynap_exfmap_e_min,
+	     	         e_max           = dynap_exfmap_e_max,
+	     	         x_nrpts         = dynap_exfmap_x_nrpts,
 	     	         x_min           = dynap_exfmap_x_min,
 	     	         x_max           = dynap_exfmap_x_max,
-	     	         y_nrpts         = dynap_exfmap_y_nrpts,
-	     	         y_min           = dynap_exfmap_y_min,
-	     	         y_max           = dynap_exfmap_y_max,
                      nr_threads      = dynap_exfmap_nr_threads):
 	
 		args = [track_version, 'dynap_exfmap', 
@@ -269,8 +269,8 @@ if dynap_exfmap_run:
 			str(vchamber_state),
 			str(y),
 			str(nr_turns),
+			str(e_nrpts), str(e_min), str(e_max),
 			str(x_nrpts), str(x_min), str(x_max),
-			str(y_nrpts), str(y_min), str(y_max),
             str(nr_threads)
 			]
 		subprocess.call(args)
