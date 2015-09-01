@@ -5,7 +5,7 @@ GENERALSCRIPTS = \
 		compilacao_epics.sh\
 		delete_dups.py\
 		elegant2OPA.py\
-                elegant2AT.py\
+        elegant2AT.py\
 		hosts_update.py\
 		pytrack.py\
 		run_in_clients.sh\
@@ -27,7 +27,7 @@ SCRIPTS = $(GENERALSCRIPTS)\
 FULLSCRIPTS = $(addprefix $(DEST_DIR)/, $(SCRIPTS))
 
 install: uninstall $(SCRIPTS)
-	cp $(SCRIPTS) $(DEST_DIR)
+	cp $(SCRIPTS) $(DEST_DIR); cd $(DEST_DIR); chmod a+x $(SCRIPTS)
 
 uninstall:
 	-rm -rf $(FULLSCRIPTS)
