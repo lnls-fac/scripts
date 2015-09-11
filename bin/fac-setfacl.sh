@@ -12,11 +12,9 @@ sudo chmod -R a+r $FACROOT
 printf "everyone can execute directory files...\n"
 sudo find $FACROOT -type d -exec chmod a+x {} \;
 
-printf "facl attributes: user and group can read and write all files...\n"
-sudo setfacl -R -d -m user::rw,group::rw,other::r $FACROOT
+printf "facl attributes: fac users can read and write all files...\n"
+sudo setfacl -d -m group:fac:rw $FACROOT
 
-printf "facl attributes: others can read and execute all directories...\n"
-sudo find $FACROOT -type d -exec setfacl -d -m other::rx {} \;
 
 
 
