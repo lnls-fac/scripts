@@ -68,8 +68,16 @@ function start_module {
       cd $(dir_boot si_tune); start_instance si_tune 38005 $(dir_app si_tune) $(dir_boot si_tune)"/st.cmd"
     elif [ $1 == "si_rf" ]; then
       cd $(dir_boot si_rf); start_instance si_rf 38006 $(dir_app si_rf) $(dir_boot si_rf)"/st.cmd"
-    elif [ $1 == "topup" ]; then
-      start_instance topup 38100 /usr/local/bin/sirius-topup.py
+    elif [ $1 == "bo_current" ]; then
+      cd $(dir_boot bo_current); start_instance bo_current 38007 $(dir_app bo_current) $(dir_boot bo_current)"/st.cmd"
+    elif [ $1 == "bo_bpms" ]; then
+      cd $(dir_boot bo_bpms); start_instance bo_bpms 38008 $(dir_app bo_bpms) $(dir_boot bo_bpms)"/st.cmd"
+    elif [ $1 == "bo_ps" ]; then
+      cd $(dir_boot bo_ps); start_instance bo_ps 38009 $(dir_app bo_ps) $(dir_boot bo_ps)"/st.cmd"
+    elif [ $1 == "bo_rf" ]; then
+      cd $(dir_boot bo_rf); start_instance bo_rf 38010 $(dir_app bo_rf) $(dir_boot bo_rf)"/st.cmd"
+#    elif [ $1 == "topup" ]; then
+#      start_instance topup 38100 /usr/local/bin/sirius-topup.py
     elif [ $1 == "viocs" ]; then
       start_viocs
     else
@@ -92,8 +100,16 @@ function stop_module {
     stop_instances si_tune
   elif [ $1 == "si_rf" ]; then
     stop_instances si_rf
-  elif [ $1 == "topup" ]; then
-    stop_instances topup
+  elif [ $1 == "bo_current" ]; then
+    stop_instances bo_current
+  elif [ $1 == "bo_bpms" ]; then
+    stop_instances bo_bpms
+  elif [ $1 == "bo_ps" ]; then
+    stop_instances bo_ps
+  elif [ $1 == "bo_rf" ]; then
+    stop_instances bo_rf
+#  elif [ $1 == "topup" ]; then
+#    stop_instances topup
   elif [ $1 == "viocs" ]; then
     stop_viocs
   else
@@ -109,7 +125,11 @@ function start_all {
   start_module si_ps
   start_module si_tune
   start_module si_rf
-  start_module topup
+  start_module bo_current
+  start_module bo_bpms
+  start_module bo_ps
+  start_module bo_rf
+  #start_module topup
 }
 
 function start_viocs {
@@ -119,16 +139,24 @@ function start_viocs {
   start_module si_ps
   start_module si_tune
   start_module si_rf
+  start_module bo_current
+  start_module bo_bpms
+  start_module bo_ps
+  start_module bo_rf
 }
 
 function stop_all {
-  stop_instances topup
+  #stop_instances topup
   stop_instances si_rf
   stop_instances si_tune
   stop_instances si_ps
   stop_instances si_bpms
   stop_instances si_lifetime
   stop_instances si_current
+  stop_instances bo_rf
+  stop_instances bo_ps
+  stop_instances bo_bpms
+  stop_instances bo_current
   stop_instances vaca
 }
 
@@ -139,6 +167,10 @@ function stop_viocs {
   stop_instances si_bpms
   stop_instances si_lifetime
   stop_instances si_current
+  stop_instances bo_rf
+  stop_instances bo_ps
+  stop_instances bo_bpms
+  stop_instances bo_current
 }
 
 function list_modules {
