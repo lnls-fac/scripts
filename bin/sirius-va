@@ -76,6 +76,14 @@ function start_module {
       cd $(dir_boot bo_ps); start_instance bo_ps 38009 $(dir_app bo_ps) $(dir_boot bo_ps)"/st.cmd"
     elif [ $1 == "bo_rf" ]; then
       cd $(dir_boot bo_rf); start_instance bo_rf 38010 $(dir_app bo_rf) $(dir_boot bo_rf)"/st.cmd"
+    elif [ $1 == "tb_bpms" ]; then
+      cd $(dir_boot tb_bpms); start_instance tb_bpms 38011 $(dir_app tb_bpms) $(dir_boot tb_bpms)"/st.cmd"
+    elif [ $1 == "tb_ps" ]; then
+      cd $(dir_boot tb_ps); start_instance tb_ps 38012 $(dir_app tb_ps) $(dir_boot tb_ps)"/st.cmd"
+    elif [ $1 == "ts_bpms" ]; then
+      cd $(dir_boot ts_bpms); start_instance ts_bpms 38013 $(dir_app ts_bpms) $(dir_boot ts_bpms)"/st.cmd"
+    elif [ $1 == "ts_ps" ]; then
+      cd $(dir_boot ts_ps); start_instance ts_ps 38014 $(dir_app ts_ps) $(dir_boot ts_ps)"/st.cmd"
 #    elif [ $1 == "topup" ]; then
 #      start_instance topup 38100 /usr/local/bin/sirius-topup.py
     elif [ $1 == "viocs" ]; then
@@ -108,6 +116,14 @@ function stop_module {
     stop_instances bo_ps
   elif [ $1 == "bo_rf" ]; then
     stop_instances bo_rf
+  elif [ $1 == "tb_bpms" ]; then
+    stop_instances tb_bpms
+  elif [ $1 == "tb_ps" ]; then
+    stop_instances tb_ps
+  elif [ $1 == "ts_bpms" ]; then
+    stop_instances ts_bpms
+  elif [ $1 == "ts_ps" ]; then
+    stop_instances ts_ps
 #  elif [ $1 == "topup" ]; then
 #    stop_instances topup
   elif [ $1 == "viocs" ]; then
@@ -129,6 +145,10 @@ function start_all {
   start_module bo_bpms
   start_module bo_ps
   start_module bo_rf
+  start_module tb_bpms
+  start_module tb_ps
+  start_module ts_bpms
+  start_module ts_ps
   #start_module topup
 }
 
@@ -143,6 +163,11 @@ function start_viocs {
   start_module bo_bpms
   start_module bo_ps
   start_module bo_rf
+  start_module tb_bpms
+  start_module tb_ps
+  start_module ts_bpms
+  start_module ts_ps
+
 }
 
 function stop_all {
@@ -157,6 +182,10 @@ function stop_all {
   stop_instances bo_ps
   stop_instances bo_bpms
   stop_instances bo_current
+  stop_instances tb_ps
+  stop_instances tb_bpms
+  stop_instances ts_ps
+  stop_instances ts_bpms
   stop_instances vaca
 }
 
@@ -171,6 +200,10 @@ function stop_viocs {
   stop_instances bo_ps
   stop_instances bo_bpms
   stop_instances bo_current
+  stop_instances tb_ps
+  stop_instances tb_bpms
+  stop_instances ts_ps
+  stop_instances ts_bpms
 }
 
 function list_modules {
