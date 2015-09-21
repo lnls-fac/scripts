@@ -30,13 +30,17 @@ AVAILABLE_HOSTS = dict(
 
 my_mac = str(hex(get_mac()))
 my_mac = ':'.join([my_mac[i:i+2].upper() for i in range(2,len(my_mac),2)])
-my_ip  = socket.gethostbyname_ex(socket.gethostname())[2][1]
+
+my_ip  = socket.gethostbyname(socket.gethostname())
+if my_ip.startswith('127.0.'):
+    my_ip  = socket.gethostbyname_ex(socket.gethostname())[2][1]
+
 my_subnet = '.'.join(my_ip.split('.')[0:3])
 
 hosts_in_my_subnet = AVAILABLE_HOSTS[my_subnet]
 
 nm = nmap.PortScanner()
-scan = nm.scan(hosts='10.0.21.0/24',arguments='-sP',sudo=True)
+scan = nm.scan(hosts=my_subnet+'.0/24',arguments='-sP',sudo=True)
 result = scan['scan']
 
 hosts_online = {result[x]['addresses']['mac']:x 
