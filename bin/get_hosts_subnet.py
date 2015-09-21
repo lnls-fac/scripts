@@ -29,6 +29,7 @@ AVAILABLE_HOSTS = dict(
          })
 
 my_mac = str(hex(get_mac()))
+if len(my_mac) != 12: my_mac = '0'+my_mac
 my_mac = ':'.join([my_mac[i:i+2].upper() for i in range(2,len(my_mac),2)])
 
 my_ip  = socket.gethostbyname(socket.gethostname())
