@@ -31,6 +31,7 @@ def run_git_clone():
                  'trackcpp',
                  'tracy_sirius',
                  'va',
+                 'magfield',
                  )
 
     for repo in all_repos:

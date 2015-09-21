@@ -7,7 +7,12 @@ import lnls
 import signal
 import sys
 
-_TOPUP_CURRENT     = 300       # [mA]
+
+if len(sys.argv) > 1:
+    _TOPUP_CURRENT = float(sys.argv[1])
+else:
+    _TOPUP_CURRENT = 300 # [mA]
+
 _MAX_CURRENT_DECAY = 0.5       # [%]
 _TIME_INTERVAL     = 2.0       # [s]
 _RAMP_CYCLE_FREQ   = 2.0       # [Hz]
@@ -18,7 +23,7 @@ cycle_interval = 1.0/_RAMP_CYCLE_FREQ
 
 # pvs that control injection process
 si_current = epics.pv.PV('VA-SIDI-CURRENT')
-ti_cycle   = epics.pv.PV('VA-TI-CYCLE')
+ti_cycle   = epics.pv.PV('VA-LITI-CYCLE')
 
 si_current.wait_for_connection()
 ti_cycle.wait_for_connection()

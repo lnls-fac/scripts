@@ -11,6 +11,7 @@ vac_chamber ='ax = 12.00, ay = 12.00;\n'
 mags = dict()
 #Markers
 atribs = dict()
+mags['marker'] = (atribs,'marker')
 mags['mark'] = (atribs,'marker')
 mags['maxamp'] = (atribs,'marker')
 mags['rfca'] = (atribs,'marker')
@@ -26,6 +27,7 @@ mags['moni'] = (atribs,'monitor')
 atribs = {'l': ('l = ',1)}
 mags['drift'] = (atribs,'drift')
 mags['drif'] = (atribs,'drift')
+mags['ukickmap'] = (atribs,'drift')
 #Quadrupoles
 atribs = {'l': ('l = ',1),
       'k1':('k = ',1)}
@@ -59,7 +61,7 @@ mags['csbend2'] = (atribs,'combined')
 
 
 def usage():
-    print('\nUsage: elegant2OPA fileName1 fileName2 ... fileNameN\n')
+    print('\nUsage: elegant2OPA.py fileName1 fileName2 ... fileNameN\n')
 
 
 def elegant2OPA(filename):
@@ -78,10 +80,11 @@ def elegant2OPA(filename):
             if i.startswith('!'):
                 fout.write('{' + i[1:] + '}\n')
             elif not len(i):
-                fileout.write('\n')
+                fout.write('\n')
             else: # caso contrário, começo a traduzir a linha
                 line = i.partition(':')
-                newline = '{0:8}:'.format(line[0])
+                if not line[1]: continue
+                newline = '{0:8}:'.format(line[0].strip('"'))
                 if line[2].startswith('line'): # vejo se é a definicao de uma sequencia
                     table = line[2].replace('line=(',' ').strip(')').replace(',',', ')
                     if not table.count('*'):
@@ -132,10 +135,4 @@ try:
         elegant2OPA(filename=files)
 except IndexError:
     usage()
-    
-    
-    
-    
-    
-    
 
