@@ -24,13 +24,13 @@ AVAILABLE_HOSTS = dict(
          '08:00:27:95:0D:DE':'lnls155-virtual'},
      '10.0.28':
         {'AC:16:2D:34:6A:43':'liu-linux',
-         '3c:d9:2b:70:d2:d8':'lnls82-linux',
-         '1c:c1:de:66:1b:55':'lnls54-linux'}     
+         '3C:D9:2B:70:D2:D8':'lnls82-linux',
+         '1C:C1:DE:66:1B:55':'lnls54-linux'}     
          })
 
 my_mac = str(hex(get_mac()))
-if len(my_mac) != 12: my_mac = '0'+my_mac
-my_mac = ':'.join([my_mac[i:i+2].upper() for i in range(2,len(my_mac),2)])
+if len(my_mac) != 12: my_mac = '0'+my_mac[2:]
+my_mac = ':'.join([my_mac[i:i+2].upper() for i in range(0,len(my_mac),2)])
 
 my_ip  = socket.gethostbyname(socket.gethostname())
 if my_ip.startswith('127.0.'):
