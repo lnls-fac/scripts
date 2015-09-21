@@ -44,7 +44,7 @@ scan = nm.scan(hosts=my_subnet+'.0/24',arguments='-sP',sudo=True)
 result = scan['scan']
 
 hosts_online = {result[x]['addresses']['mac']:x 
-                for x in result.keys() if not x.startswith('10.0.21.98')}
+                for x in result.keys() if not x.startswith(my_ip)}
 
 
 print(STRFORMAT.format('Hosts', 'State', 'IP'))
