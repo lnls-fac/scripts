@@ -41,11 +41,11 @@ if track_linepass_run:
                        py0             = track_linepass_py0,
 		     	       de0             = track_linepass_de0,
                        dl0             = track_linepass_dl0):
-	
-		args = [track_version, 'track_linepass', 
+
+		args = [track_version, 'track_linepass',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -78,11 +78,11 @@ if dynap_xy_threads_run:
 	     	     y_min           = dynap_xy_threads_y_min,
 	     	     y_max           = dynap_xy_threads_y_max,
                  nr_threads      = dynap_xy_threads_nr_threads):
-	
-		args = [track_version, 'dynap_xy_threads', 
+
+		args = [track_version, 'dynap_xy_threads',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -115,11 +115,11 @@ if dynap_xy_run:
 	     	     y_nrpts         = dynap_xy_y_nrpts,
 	     	     y_min           = dynap_xy_y_min,
 	     	     y_max           = dynap_xy_y_max):
-	
-		args = [track_version, 'dynap_xy', 
+
+		args = [track_version, 'dynap_xy',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -150,11 +150,11 @@ if dynap_ex_run:
 	     	     x_nrpts         = dynap_ex_x_nrpts,
 	     	     x_min           = dynap_ex_x_min,
 	     	     x_max           = dynap_ex_x_max):
-	
-		subprocess.call([track_version, 'dynap_ex', 
+
+		subprocess.call([track_version, 'dynap_ex',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -163,7 +163,7 @@ if dynap_ex_run:
 			str(e_nrpts), str(e_min), str(e_max),
 			str(x_nrpts), str(x_min), str(x_max),
 			]
-		)	
+		)
 
 try:
 	dynap_ma_run
@@ -184,17 +184,87 @@ if dynap_ma_run:
 		         s_min           = dynap_ma_s_min,
 		         s_max           = dynap_ma_s_max,
 		         fam_names       = dynap_ma_fam_names):
-	
-		args = [track_version, 'dynap_ma', 
+
+		args = [track_version, 'dynap_ma',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
 			str(nr_turns),
 			str(y0),
 			str(e_e0), str(e_tol),
+			str(s_min), str(s_max)]
+		for famname in fam_names:
+			args.append(famname)
+		subprocess.call(args)
+
+try:
+	dynap_pxa_run
+except:
+	dynap_pxa_run = False
+if dynap_pxa_run:
+	def dynap_pxa(track_version   = default_track_version,
+		          flat_filename   = dynap_pxa_flatfilename,
+		          energy          = ebeam_energy,
+       		      harmonic_number = harmonic_number,
+	     	      cavity_state    = cavity_state,
+	     	      radiation_state = radiation_state,
+		          vchamber_state  = vchamber_state,
+	     	      nr_turns        = dynap_pxa_nr_turns,
+		          y0              = 30e-6,
+		          px_px0          = dynap_pxa_px_px0,
+		          px_tol          = dynap_pxa_px_tol,
+		          s_min           = dynap_pxa_s_min,
+		          s_max           = dynap_pxa_s_max,
+		          fam_names       = dynap_pxa_fam_names):
+
+		args = [track_version, 'dynap_pxa',
+			str(flat_filename),
+			str(energy),
+			str(harmonic_number),
+			str(cavity_state),
+			str(radiation_state),
+			str(vchamber_state),
+			str(nr_turns),
+			str(y0),
+			str(px_px0), str(px_tol),
+			str(s_min), str(s_max)]
+		for famname in fam_names:
+			args.append(famname)
+		subprocess.call(args)
+
+try:
+	dynap_pya_run
+except:
+	dynap_pya_run = False
+if dynap_pya_run:
+	def dynap_pya(track_version   = default_track_version,
+		          flat_filename   = dynap_pya_flatfilename,
+		          energy          = ebeam_energy,
+       		      harmonic_number = harmonic_number,
+	     	      cavity_state    = cavity_state,
+	     	      radiation_state = radiation_state,
+		          vchamber_state  = vchamber_state,
+	     	      nr_turns        = dynap_pya_nr_turns,
+		          y0              = 30e-6,
+		          py_py0          = dynap_pya_py_py0,
+		          py_tol          = dynap_pya_py_tol,
+		          s_min           = dynap_pya_s_min,
+		          s_max           = dynap_pya_s_max,
+		          fam_names       = dynap_pya_fam_names):
+
+		args = [track_version, 'dynap_pya',
+			str(flat_filename),
+			str(energy),
+			str(harmonic_number),
+			str(cavity_state),
+			str(radiation_state),
+			str(vchamber_state),
+			str(nr_turns),
+			str(y0),
+			str(py_py0), str(py_tol),
 			str(s_min), str(s_max)]
 		for famname in fam_names:
 			args.append(famname)
@@ -221,11 +291,11 @@ if dynap_xyfmap_run:
 	     	         y_min           = dynap_xyfmap_y_min,
 	     	         y_max           = dynap_xyfmap_y_max,
                      nr_threads      = dynap_xyfmap_nr_threads):
-	
-		args = [track_version, 'dynap_xyfmap', 
+
+		args = [track_version, 'dynap_xyfmap',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -259,11 +329,11 @@ if dynap_exfmap_run:
 	     	         x_min           = dynap_exfmap_x_min,
 	     	         x_max           = dynap_exfmap_x_max,
                      nr_threads      = dynap_exfmap_nr_threads):
-	
-		args = [track_version, 'dynap_exfmap', 
+
+		args = [track_version, 'dynap_exfmap',
 			str(flat_filename),
-			str(energy), 
-			str(harmonic_number), 
+			str(energy),
+			str(harmonic_number),
 			str(cavity_state),
 			str(radiation_state),
 			str(vchamber_state),
@@ -278,15 +348,15 @@ if dynap_exfmap_run:
 
 if __name__ == "__main__":
 
-	''' DYNAP_XY_THREADS '''	
+	''' DYNAP_XY_THREADS '''
 	if dynap_xy_threads_run:
 		dynap_xy_threads()
 
-	''' DYNAP_XY '''	
+	''' DYNAP_XY '''
 	if dynap_xy_run:
 		dynap_xy()
 
-	''' DYNAP_EX '''	
+	''' DYNAP_EX '''
 	if dynap_ex_run:
 		dynap_ex()
 
@@ -294,18 +364,22 @@ if __name__ == "__main__":
 	if dynap_ma_run:
 		dynap_ma()
 
-	''' DYNAP_XYFMAP '''	
+	''' DYNAP_PXA '''
+	if dynap_pxa_run:
+		dynap_pxa()
+
+	''' DYNAP_PYA '''
+	if dynap_pya_run:
+		dynap_pya()
+
+	''' DYNAP_XYFMAP '''
 	if dynap_xyfmap_run:
 		dynap_xyfmap()
 
-	''' DYNAP_EXFMAP '''	
+	''' DYNAP_EXFMAP '''
 	if dynap_exfmap_run:
 		dynap_exfmap()
 
 	''' LINEPASS '''
 	if track_linepass_run:
 		track_linepass()
-
-
-	
-
