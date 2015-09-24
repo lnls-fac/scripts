@@ -17,7 +17,8 @@ def run_git_clone():
         print('fac-gitall.py: please create ' + lnls.folder_code + ' folder with correct permissions first!')
         return
 
-    all_repos = ('collective_effects',
+    all_repos = ('apsuite',
+                 'collective_effects',
                  'fieldmaptrack',
                  'job_manager',
                  'lnls',
