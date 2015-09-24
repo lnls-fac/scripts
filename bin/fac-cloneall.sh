@@ -11,6 +11,7 @@ fi
 echo "Cloning repositories..."
 
 for REPOSITORY in \
+    apsuite \
     collective_effects \
     fieldmaptrack \
     job_manager \
