@@ -5,14 +5,15 @@ GENERALSCRIPTS = \
 		compilacao_epics.sh\
 		delete_dups.py\
 		elegant2OPA.py\
-        elegant2AT.py\
+		elegant2AT.py\
 		hosts_update.py\
 		get_hosts_subnet.py\
 		pytrack.py\
 		run_in_clients.sh\
 		savestate_vbox.sh\
 		start_vbox.sh\
-		update_ip_on_workstation.sh
+		update_ip_on_workstation.sh\
+		sshsudo
 
 FACSCRIPTS = $(shell ls fac-*)
 
