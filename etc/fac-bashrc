@@ -78,17 +78,22 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 
 # Aliases
 # =======
+
+alias gofacroot='cd $FACROOR'
+
+alias gohla='cd $FACROOT/hla'
+alias gosiriusdb='cd $FACROOT/siriusdb'
 alias gocode='cd $FACCODE'
 alias godata='cd $FACDATA'
+
 alias golnls='cd $FACCODE/lnls'
 alias gosirius='cd $FACCODE/sirius'
 alias gotrackcpp='cd $FACCODE/trackcpp'
 alias gomathphys='cd $FACCODE/mathphys'
 alias gova='cd $FACCODE/va'
 alias goscripts='cd $FACCODE/scripts'
-alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
 alias gopyaccel='cd $FACCODE/pyaccel'
-alias gocalcs='cd $FACDATA/sirius/si/beam_dynamics/calcs/v07/c05'
-alias gooficial='cd $FACDATA/sirius/si/beam_dynamics/oficial/v07/c05'
 alias gomml='cd $FACCODE/MatlabMiddleLayer/Release'
-alias gohla='cd $FACROOT/hla'
+alias goapsuite='cd $FACCODE/apsuite'
+
+alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
