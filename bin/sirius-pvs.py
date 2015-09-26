@@ -12,7 +12,6 @@ _rname_functions = {
     'bo':va.pvs.bo.get_all_record_names,
     'ts':va.pvs.ts.get_all_record_names,
     'si':va.pvs.si.get_all_record_names,
-    'ti':va.pvs.ti.get_all_record_names,
 }
 
 
