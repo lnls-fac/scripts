@@ -76,6 +76,10 @@ complete -W "--input-file"                                                      
 # =================
 complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
 
+# Completion for binary trackcpp
+# ==============================
+complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap dynap_exfmap track_linepass tests" trackcpp
+
 # Aliases
 # =======
 
