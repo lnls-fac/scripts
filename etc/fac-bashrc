@@ -36,6 +36,10 @@ if [ -z $EV4_BASE ] ; then
     export EV4_BASE=/usr/local/epics/v4
 fi
 
+if [ -z $EPICS_EXTENSIONS ] ; then
+    export EPICS_EXTENSIONS=/usr/local/epics/R3.14/extensions
+fi
+
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
 export PVDATABASE=$EV4_BASE/pvDatabaseCPP
 export PVASRV=$EV4_BASE/pvaSrv
@@ -45,6 +49,7 @@ export PVDATA=$EV4_BASE/pvDataCPP
 export PVCOMMON=$EV4_BASE/pvCommonCPP
 export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
+export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 
 # Definitions for elegant rpn
 # ===========================
