@@ -7,7 +7,13 @@ from uuid import getnode as get_mac
 STRFORMAT = '{0:18s} {1:6s} {2:15s}'
 AVAILABLE_HOSTS = dict(
     {'10.0.7':
-        {'08:00:27:F8:38:3A':'lnls340-virtual',
+        {'00:25:90:E7:55:92':'lnls343',
+         '08:2E:5F:01:68:3A':'lnls340',
+         '3C:D9:2B:6F:33:2C':'lnls138',
+         '08:2E:5F:01:67:AE':'lnls119',
+         '2C:41:38:8E:EF:A2':'lnls346',
+         '08:2E:5F:01:58:67':'lnls116',
+         '08:00:27:F8:38:3A':'lnls340-virtual',
          '08:00:27:86:C6:0F':'lnls343-1-virtual',
          '08:00:27:34:7C:12':'lnls343-2-virtual',
          '08:00:27:35:25:D6':'lnls138-virtual',
@@ -25,7 +31,7 @@ AVAILABLE_HOSTS = dict(
      '10.0.28':
         {'AC:16:2D:34:6A:43':'liu-linux',
          '3C:D9:2B:70:D2:D8':'lnls82-linux',
-         '1C:C1:DE:66:1B:55':'lnls54-linux'}     
+         '1C:C1:DE:66:1B:55':'lnls54-linux'}
          })
 
 my_mac = str(hex(get_mac()))[2:]
@@ -44,7 +50,7 @@ nm = nmap.PortScanner()
 scan = nm.scan(hosts=my_subnet+'.0/24',arguments='-sP',sudo=True)
 result = scan['scan']
 
-hosts_online = {result[x]['addresses']['mac']:x 
+hosts_online = {result[x]['addresses']['mac']:x
                 for x in result.keys() if not x.startswith(my_ip)}
 
 
@@ -57,5 +63,3 @@ for mac, name in hosts_in_my_subnet.items():
             print(STRFORMAT.format(name,'down',''))
         else:
             print(STRFORMAT.format(name,'up', my_ip))
-
-
