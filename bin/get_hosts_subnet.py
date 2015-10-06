@@ -7,7 +7,8 @@ from uuid import getnode as get_mac
 STRFORMAT = '{0:18s} {1:6s} {2:15s}'
 AVAILABLE_HOSTS = dict(
     {'10.0.7':
-        {'00:25:90:E7:55:92':'lnls343',
+        {'00:25:90:E7:58:8B':'lnls350',
+         '00:25:90:E7:55:92':'lnls343',
          '08:2E:5F:01:68:3A':'lnls340',
          '3C:D9:2B:6F:33:2C':'lnls138',
          '08:2E:5F:01:67:AE':'lnls119',
