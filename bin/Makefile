@@ -7,7 +7,7 @@ GENERALSCRIPTS = \
 		elegant2OPA.py\
 		elegant2AT.py\
 		hosts_update.py\
-		get_hosts_subnet.py\
+		manage_hosts_subnet.py\
 		pytrack.py\
 		run_in_clients.sh\
 		savestate_vbox.sh\
