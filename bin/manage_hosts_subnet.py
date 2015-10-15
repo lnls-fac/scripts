@@ -24,6 +24,9 @@ AVAILABLE_HOSTS = dict(
          'lnls350-1-virtual':'08:00:27:CB:3D:D7',
          'lnls350-2-virtual':'08:00:27:13:93:5D',
          'lnls346-virtual':'08:00:27:3F:9E:DB',
+         'lnls209-linux':'AC:16:2D:34:6A:43',
+         'lnls82-linux':'3C:D9:2B:70:D2:D8',
+         'lnls54-linux':'1C:C1:DE:66:1B:55'
      },'10.0.21':{
          'lnls210-linux':'AC:16:2D:34:C8:A5',
          'lnls208-linux':'AC:16:2D:34:C8:F3',
@@ -31,9 +34,6 @@ AVAILABLE_HOSTS = dict(
          'fac8-linux':'00:1E:C9:21:9C:06',
          'lnls155-virtual':'08:00:27:95:0D:DE',
      },'10.0.28':{
-         'lnls209-linux':'AC:16:2D:34:6A:43',
-         'lnls82-linux':'3C:D9:2B:70:D2:D8',
-         'lnls54-linux':'1C:C1:DE:66:1B:55'
          }})
 
 my_mac = str(hex(get_mac()))[2:]
