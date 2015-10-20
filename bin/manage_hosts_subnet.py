@@ -29,6 +29,7 @@ AVAILABLE_HOSTS = dict(
          'lnls54-linux':'1C:C1:DE:66:1B:55'
      },'10.0.21':{
          'lnls210-linux':'AC:16:2D:34:C8:A5',
+         'lnls210-virtual':'08:00:27:2C:94:77',
          'lnls208-linux':'AC:16:2D:34:C8:F3',
          'lnls212-linux':'AC:16:2D:34:BD:C5',
          'fac8-linux':'00:1E:C9:21:9C:06',
