@@ -3,6 +3,7 @@
 import nmap
 import socket
 import optparse
+import subprocess as subproc
 from wakeonlan import wol
 from uuid import getnode as get_mac
 
