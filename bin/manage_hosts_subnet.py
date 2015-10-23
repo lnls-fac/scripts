@@ -78,6 +78,16 @@ def wake_hosts(hosts):
               'This program requires you to be logged in the same subnet as the\n'+
               'computer you want to send the wake signal.\n')
 
+def control_service(hosts,wt2do='start'):
+
+    BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\{:s}%{:s}'
+    usuario = input('User on remote host: ')
+    senha = input('Password on remote host: ')
+
+    for host in hosts:
+        out = subproc.getoutput(BASESTR.format(wt2do, host, usuario, senha))
+        print(out)
+
 
 if __name__ == '__main__':
 
@@ -87,9 +97,17 @@ if __name__ == '__main__':
                       help="wake up hosts. [format: host1,host2,...,hostN]")
     parser.add_option('-c','--check',dest='check',action='store_true',
                       help="check which hosts are online.", default=False)
+    parser.add_option('-s','--startVmBox',dest='start',type='str',
+                      help="Start VmBoxService hosts. [format: host1,...,hostN]")
+    parser.add_option('-p','--stopVmBox',dest='stop',type='str',
+                      help="Stop VmBoxService hosts. [format: host1,...,hostN]")
     (opts, _) = parser.parse_args()
 
     if opts.check:
         check_hosts()
     elif opts.wake:
         wake_hosts(opts.wake.split(','))
+    elif opts.start:
+        control_service(opts.start.split(','),wt2do='start')
+    elif opts.stop:
+        control_service(opts.stop.split(','),wt2do='stop')
