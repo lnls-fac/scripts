@@ -87,6 +87,7 @@ def control_service(hosts,wt2do='start'):
     senha = getpass.getpass('Password on remote host: ')
 
     for host in hosts:
+        print(host, ':')
         out = subproc.getoutput(BASESTR.format(wt2do, host, usuario, senha))
         # out = BASESTR.format(wt2do, host, usuario, senha)
         print(out)
