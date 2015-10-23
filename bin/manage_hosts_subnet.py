@@ -3,6 +3,7 @@
 import nmap
 import socket
 import optparse
+import getpass
 import subprocess as subproc
 from wakeonlan import wol
 from uuid import getnode as get_mac
@@ -81,12 +82,13 @@ def wake_hosts(hosts):
 
 def control_service(hosts,wt2do='start'):
 
-    BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\{:s}%{:s}'
+    BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\\{:s}%{:s}'
     usuario = input('User on remote host: ')
-    senha = input('Password on remote host: ')
+    senha = getpass.getpass('Password on remote host: ')
 
     for host in hosts:
         out = subproc.getoutput(BASESTR.format(wt2do, host, usuario, senha))
+        # out = BASESTR.format(wt2do, host, usuario, senha)
         print(out)
 
 
@@ -98,10 +100,12 @@ if __name__ == '__main__':
                       help="wake up hosts. [format: host1,host2,...,hostN]")
     parser.add_option('-c','--check',dest='check',action='store_true',
                       help="check which hosts are online.", default=False)
-    parser.add_option('-s','--startVmBox',dest='start',type='str',
-                      help="Start VmBoxService hosts. [format: host1,...,hostN]")
-    parser.add_option('-p','--stopVmBox',dest='stop',type='str',
-                      help="Stop VmBoxService hosts. [format: host1,...,hostN]")
+    parser.add_option('-b','--startVBox',dest='start',type='str',
+                      help="Start VBoxVmService hosts. [format: host1,...,hostN]")
+    parser.add_option('-s','--statusVBox',dest='status',type='str',
+                      help="Verify status of VBoxVmService on hosts. [format: host1,...,hostN]")
+    parser.add_option('-p','--stopVBox',dest='stop',type='str',
+                      help="Stop VBoxVmService hosts. [format: host1,...,hostN]")
     (opts, _) = parser.parse_args()
 
     if opts.check:
@@ -110,5 +114,7 @@ if __name__ == '__main__':
         wake_hosts(opts.wake.split(','))
     elif opts.start:
         control_service(opts.start.split(','),wt2do='start')
+    elif opts.status:
+        control_service(opts.status.split(','),wt2do='status')
     elif opts.stop:
         control_service(opts.stop.split(','),wt2do='stop')
