@@ -36,6 +36,7 @@ AVAILABLE_HOSTS = dict(
          'lnls212-linux':'AC:16:2D:34:BD:C5',
          'fac8-linux':'00:1E:C9:21:9C:06',
          'lnls155-virtual':'08:00:27:95:0D:DE',
+         'lnls224-virtual':'08:00:27:84:6E:95'  #Fluka
      },'10.0.28':{
          }})
 
