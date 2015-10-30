@@ -59,7 +59,8 @@ def check_hosts():
     hosts_online = {result[x]['addresses'].get('mac',my_mac):x for x in result.keys()}
 
     print(STRFORMAT.format('Hosts', 'State', 'IP'))
-    for name, mac in hosts_in_my_subnet.items():
+    for name in sorted(hosts_in_my_subnet):
+        mac = hosts_in_my_subnet[name]
         if mac in hosts_online:
             print(STRFORMAT.format(name,'up', hosts_online[mac].replace(':','.')))
         else:
