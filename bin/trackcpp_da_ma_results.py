@@ -106,6 +106,110 @@ def find_right_folders(paths):
         if paths2: pathnames += [find_right_folders(paths2)]
     return pathnames
 
+def trackcpp_load_dynap_xy(pathname, var_plane='x'):
+
+    nr_header_lines = 13;
+    fname = fullfile(pathname, 'dynap_xy_out.txt');
+
+    tdata = importdata(fname, ' ', nr_header_lines); tdata = tdata.data;
+
+    # Agora, eu tenho que encontrar a DA
+    # primeiro eu identifico quantos x e y existem
+    npx = length(unique(tdata(:,6)));
+    npy = size(tdata,1)/npx;
+    #agora eu pego a coluna da frequencia x
+    x = tdata(:,6);
+    y = tdata(:,7);
+    plane = tdata(:,4);
+    turn = tdata(:,2);
+    # e a redimensiono para que todos os valores calculados para x iguais
+    # fiquem na mesma coluna:
+    x = reshape(x,npy,npx); dados.x = x;
+    y = reshape(y,npy,npx); dados.y = y;
+    plane = reshape(plane,npy,npx); dados.plane = plane;
+    turn = reshape(turn,npy,npx); dados.turn = turn;
+    # e vejo qual o primeiro valor nulo dessa frequencia, para identificar
+    # a borda da DA
+    if strcmp(var_plane,'y')
+        y  = flipud(y);
+        plane = flipud(plane);
+        lost = plane == 0;
+        [~,ind] = min(lost,[],1);
+        # para lidar com casos em que a abertura vertical é maior que o espaço
+        # calculado.
+        ind = ind.*any(~lost) + (~any(~lost)).*ones(1,npx)*npy;
+        # por fim, defino a DA
+        h = x(1,:);
+        v = unique(y(ind,:)','rows');
+        dynapt = [h', v'];
+        area = trapz(h,v);
+    else
+        idx = x(1,:) > 0;
+        x_ma = x(1,idx);
+        lost = plane(:,idx) == 0;
+        [~,ind_pos] = min(lost,[],2);
+        # para lidar com casos em que a abertura horizontal é maior que o espaço
+        ind_pos = ind_pos.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(idx); % calculado.
+        h = x_ma(ind_pos)';
+        v = y(:,1);
+        dynapt = [h, v];
+        area = abs(trapz(v,h));
+        x_mi = fliplr(x(1,~idx));
+        lost = fliplr(plane(:,~idx)) == 0;
+        [~,ind_neg] = min(lost,[],2);
+        # para lidar com casos em que a abertura horizontal é maior que o espaço
+        ind_neg = ind_neg.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(~idx); % calculado.
+        h = fliplr(x_mi(ind_neg))';
+        v = flipud(y(:,1));
+        dynapt = [[h, v]; dynapt];
+        area = area + abs(trapz(v,h));
+
+def trackcpp_load_dynap_ex(pathname):
+    nr_header_lines = 13;
+    fname = fullfile(pathname, 'dynap_ex_out.txt');
+    tdata = importdata(fname, ' ', nr_header_lines); tdata = tdata.data;
+
+    % Agora, eu tenho que encontrar a DA
+    %primeiro eu identifico quantos x e y existem
+    npe = length(unique(tdata(:,8)));
+    npx = size(tdata,1)/npe;
+    %agora eu pego a coluna da frequencia x
+    en = tdata(:,8);
+    x = tdata(:,6);
+    plane = tdata(:,4);
+    turn = tdata(:,2);
+    % e a redimensiono para que todos os valores calculados para x iguais
+    %fiquem na mesma coluna:
+    en = reshape(en,npx,npe); dados.en = en;
+    x = reshape(x,npx,npe); dados.x = x;
+    plane = reshape(plane,npx,npe); dados.plane = plane;
+    turn = reshape(turn,npx,npe); dados.turn = turn;
+    % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
+    % a borda da DA
+    [~,ind] = min(plane == 0,[],1);
+
+    % por fim, defino a DA
+    en = en(1,:);
+    x = unique(x(ind,:)','rows');
+
+    dynapt = [en', x'];
+
+def trackcpp_load_ma_data(pathname):
+    fname = fullfile(pathname,'dynap_ma_out.txt');
+
+    a = importdata(fname, ' ', 13);
+
+    spos  = a.data(1:2:end,5)';
+
+    accep(1,:) = a.data(2:2:end,8)';
+    accep(2,:) = -abs(a.data(1:2:end,8)'); % for cases in which the momentum
+                                           %aperture is less than the tolerance
+    nLost(1,:) = a.data(2:2:end,2)';
+    nLost(2,:) = a.data(1:2:end,2)';
+
+    eLost(1,:) = a.data(2:2:end,3)';
+    eLost(2,:) = a.data(1:2:end,3)';
+
 def trackcpp_da_ma_lt(path=None):
 
     # users selects submachine
@@ -220,7 +324,7 @@ def trackcpp_da_ma_lt(path=None):
                         area += [a]
                         aper_xy += [aper]
                     else:
-                        print('{0:-2d}-{1:5s}: xynao carregou\n'.format(i,result[k]))
+                        print('{0:-2d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
                 if ex:
                     if _os.path.isfile(_os.path.sep.join([path,'dynap_ex_out.txt'])):
                         aper, *_ = trackcpp_load_dynap_ex(path)
@@ -260,11 +364,11 @@ def trackcpp_da_ma_lt(path=None):
                 lt_ave  = ltime.mean()
             if rms_mode:
                 if xy:
-                    xy_rms  = aper_xy.std(axis=2,dof=1)
+                    xy_rms  = aper_xy.std(axis=2,ddof=1)
                     neg_rms = xy_rms[0][2]
-                    area_rms= area.std(axis=2,dof=1)
+                    area_rms= area.std(axis=2,ddof=1)
                 if ex:
-                    ex_rms  = aper_ex.std(axis=2,dof=1)
+                    ex_rms  = aper_ex.std(axis=2,ddof=1)
                 if ma:
                     rmsAccep = squeeze(std(accep,0,1))*100
                     rmsLT = std(lifetime)
@@ -300,10 +404,10 @@ def trackcpp_da_ma_lt(path=None):
                 if rms_mode:
                     print('{0:5.2f} \x00B1 {1:-5.2f}   {2:5.1f} \x00B1 {-5.1f}   '.format(
                             area_ave*1e6, area_rms*1e6, neg_ave*1e3, neg_rms*1e3),end='')
-                    axy.plot(1000*(xy_rms[0,:,0]+xy_ave[0,:,0]),
-                             1000*(xy_rms[0,:,1]+xy_ave[0,:,1]),**rms_conf)
-                    axy.plot(1000*(xy_rms[0,:,0]-xy_ave[0,:,0]),
-                             1000*(xy_rms[0,:,1]-xy_ave[0,:,1]),**rms_conf)
+                    axy.plot(1000*(xy_rms[0]+xy_ave[0]),
+                             1000*(xy_rms[1]+xy_ave[1]),**rms_conf)
+                    axy.plot(1000*(xy_rms[0]-xy_ave[0]),
+                             1000*(xy_rms[1]-xy_ave[1]),**rms_conf)
                 else:
                     print('{0:5.2f}           {1:5.1f}           '.format(area_ave*1e6, neg_ave*1e3),end='')
 
@@ -319,10 +423,10 @@ def trackcpp_da_ma_lt(path=None):
                     aex.set_ylim([-limx 0])
                 aex.plot(1000*ex_ave[0,:,0], 1000*ex_ave[0,:,1],**ave_conf)
                 if rms_mode:
-                    aex.plot(1000*(ex_rms[0,:,0]+ex_ave[0,:,0]),
-                             1000*(ex_rms[0,:,1]+ex_ave[0,:,1]),**rms_conf)
-                    aex.plot(1000*(ex_rms[0,:,0]-ex_ave[0,:,0]),
-                             1000*(ex_rms[0,:,1]-ex_ave[0,:,1]),**rms_conf)
+                    aex.plot(1000*(ex_ave[0]+ex_rms[0]),
+                             1000*(ex_ave[1]+ex_rms[1]),**rms_conf)
+                    aex.plot(1000*(ex_ave[0]-ex_rms[0]),
+                             1000*(ex_ave[1]-ex_rms[1]),**rms_conf)
             if ma:
                 #imprime o tempo de vida
                 if rms_mode:
@@ -345,8 +449,8 @@ def trackcpp_da_ma_lt(path=None):
                             yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
                 ama.plot(pos,ma_ave,**ave_conf)
                 if rms_mode:
-                    ama.plot(pos,ma_ave+ma_rms,**rms_conf)
-                    ama.plot(pos,ma_ave-ma_rms,**rms_conf)
+                    ama.plot(pos,ma_ave[0]+ma_rms[0],**rms_conf)
+                    ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
 
             if xy or ma: print()
 
