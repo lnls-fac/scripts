@@ -183,16 +183,10 @@ def trackcpp_da_ma_lt(path=None):
 
     # parâmetros para a geração das figuras
     color_vec = ['b','r','g','m','c','k','y']
-    esp_lin = 5
-    size_font = 24
-    limx = 12
-    limy = 3.5
-    limpe = 6
-    limne = 6
+    esp_lin, size_font = 5, 24
+    limx, limy, limpe, limne = 12, 3.5, 6, 6
 
     var_plane = 'x' #determinaçao da abertura dinâmica por varreduda no plano x
-
-    leg_text = []
 
     i=0
     while i < n_calls:
@@ -214,7 +208,7 @@ def trackcpp_da_ma_lt(path=None):
                 n_pastas = 1
 
             na = _os.path.abspath(path).split('/')[1:]
-            leg_text += input_dialog('Digite a legenda',na[-3],'Legenda')
+            leg_text = input_dialog('Digite a legenda',na[-3],'Legenda')[1][0]
 
             lt_prob = 0
             for k in range(n_pastas):
@@ -236,7 +230,7 @@ def trackcpp_da_ma_lt(path=None):
 
                 if ma:
                     if _os.path.isfile(_os.path.sep.join([path,'dynap_ma_out.txt'])):
-                        spos, aceit, *_ = trackcpp_load_ma_data(path)
+                        pos, aceit, *_ = trackcpp_load_ma_data(path)
                         if _np.isclose(aceit,0).any():
                             lt_prob += 1
                         else:
@@ -250,24 +244,27 @@ def trackcpp_da_ma_lt(path=None):
                     else:
                         print('{0:-2d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
 
-
             if xy:
                 aper_xy = np.dstack(aper_xy)
                 xy_ave  = aper_xy.mean(axis=2)
-                YatNegX = xy[0][2]
+                neg_ave = xy_ave[0][2]
                 area    = np.dstack(area)
+                area_ave= area.mean()
             if ex:
                 aper_ex = np.dstack(aper_ex)
+                ex_ave  = aper_ex.mean(axis=2)
             if ma:
-                accep = np.dstack(accep)*100
-                ltime = np.dstack(lifetime)
+                accep   = np.dstack(accep)*100
+                ma_ave  = accep.mean(axis=2)
+                ltime   = np.dstack(lifetime)
+                lt_ave  = ltime.mean()
             if rms_mode:
                 if xy:
-                    rmsOnda = std(aper_xy,1)
-                    rmsYatNegX = rmsOnda(1,3,1)
-                    rmsArea = std(area)
+                    xy_rms  = aper_xy.std(axis=2,dof=1)
+                    neg_rms = xy_rms[0][2]
+                    area_rms= area.std(axis=2,dof=1)
                 if ex:
-                    rmsOffda = std(aper_ex.std(axis=),1)
+                    ex_rms  = aper_ex.std(axis=2,dof=1)
                 if ma:
                     rmsAccep = squeeze(std(accep,0,1))*100
                     rmsLT = std(lifetime)
@@ -275,9 +272,10 @@ def trackcpp_da_ma_lt(path=None):
             ########  exposição dos resultados ######
 
             color = color_vec[i % len(color_vec)]
-
+            ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-',label=leg_text)
+            rms_conf = dict(linewidth=2,color=color,linestyle='--')
             if not i:
-                if xy && ma:
+                if xy and ma:
                     print('\n{0:-20s {1:-15s} {2:-15s} {3:-15s}\n'.format('Config',
                             'Dynap XY [mm^2]', 'Aper@y=0.2 [mm]', 'Lifetime [h]'))
                 elif ma:
@@ -285,199 +283,83 @@ def trackcpp_da_ma_lt(path=None):
                 elif xy:
                     print('\n{0:-20s {1:-15s}\n'.format('Config', 'Dynap XY [mm^2]',
                                                         'Aper@y=0.2 [mm]'))
-            if xy || ma:
-                print('{0:-20s} '.format(leg_text[i].upper()))
+            if xy or ma:
+                print('{0:-20s} '.format(leg_text.upper()))
 
             if xy:
                 if not i:
-                    f  = figure('Position',[1,1,896,750])
-                    fa = axes('Parent',f,'YGrid','on','XGrid','on','FontSize',size_font)
-                    box(fa,'on')
-                    hold(fa,'all')
-                    xlabel('x [mm]','FontSize',size_font)
-                    ylabel('y [mm]','FontSize',size_font)
-                    xlim(fa,[-limx limx]);  ylim(fa,[0 limy])
-                    plot(fa, 1000*aveOnda(1,:,1), 1000*aveOnda(1,:,2),
-                    'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
-                if rms_mode
-                    fprintf('{0:5.2f} \x00B1 {1:-5.2f}   {2:5.1f} \x00B1 {-5.1f   ',
-                            aveArea*1e6, rmsArea*1e6, aveYatNegX*1e3, rmsYatNegX*1e3)
-                    plot(fa, 1000*(rmsOnda(1,:,1)+aveOnda(1,:,1)),1000*(rmsOnda(1,:,2)+aveOnda(1,:,2)),
-                        'Marker','.','LineWidth',2,'LineStyle','--','Color', color)
-                    plot(fa, 1000*(aveOnda(1,:,1)-rmsOnda(1,:,1)),1000*(aveOnda(1,:,2)-rmsOnda(1,:,2)),
-                        'Marker','.','LineWidth',2,'LineStyle','--','Color', color)
-                else
-                    print('{0:5.2f}           {1:5.1f}           '.format(aveArea*1e6, aveYatNegX*1e3))
-
-            if ex
-                if i == 1:
-                    fdp  = figure('Position',[1,1,896,750]);
-                    fdpa = axes('Parent',fdp,'YGrid','on','XGrid','on','FontSize',size_font);
-                    box(fdpa,'on'); hold(fdpa,'all');
-                    xlabel('\delta [{]','FontSize',size_font);
-                    ylabel('x [mm]','FontSize',size_font);
-                    xlim(fdpa,[-limne limpe]);  ylim(fdpa,[-limx,0]);
-                plot(fdpa, 100*aveOffda(1,:,1),1000*aveOffda(1,:,2),...
-                    'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
-                if rms_mode
-                    pldp(i,1) = plot(fdpa, 100*aveOffda(1,:,1), 1000*(rmsOffda(1,:,2)+aveOffda(1,:,2)),...
-                        'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
-                    pldp(i,3) = plot(fdpa, 100*aveOffda(1,:,1),1000*(aveOffda(1,:,2)-rmsOffda(1,:,2)),...
-                        'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
-
-            if ma
-                #imprime o tempo de vida
-                if rms_mode
-                    fprintf('{5.2f \x00B1 {-5.2f ', aveLT, rmsLT);
-                    if lt_prob,
-                        fprintf(['   *{02d máquinas desprezadas no cálculo',...
-                                ' por possuírem aceitancia nula.'],lt_prob);
-                    end
-                else
-                    fprintf('{5.2f ', aveLT);
-                end
-
-                if i == 1
-                    flt  = figure('Position',[1, 1, 1296, 553]);
-                    falt = axes('Parent',flt,'YGrid','on','FontSize',size_font,...
-                                'Position',[0.10 0.17 0.84 0.73],'XGrid','on',...
-                                'yTickLabel',{'-5','-2.5','0','2.5','5'},...
-                                'YTick',[-5 -2.5 0 2.5 5]);
-                    box(falt,'on');  hold(falt,'all');
-                    ylim(falt, [-limne-0.2,limpe+0.2]); xlim(falt, [0, 52]);
-                    xlabel('Pos [m]','FontSize',size_font);
-                    ylabel('\delta [{]','FontSize',size_font);
-                end
-                pllt(i,:) = plot(falt,spos,aveAccep, 'Marker','.','LineWidth',...
-                    esp_lin,'Color',color, 'LineStyle','-');
-                if rms_mode;
-                    plot(falt,spos,aveAccep + rmsAccep, 'Marker','.','Color',...
-                         color,'LineWidth',2,'LineStyle','--');
-                    plot(falt,spos,aveAccep - rmsAccep, 'Marker','.','Color',...
-                          color,'LineWidth',2,'LineStyle','--');
-                end
-            end
-            if xy || ma, fprintf('\n'); end
-            drawnow;
-
-
-    title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[0]
-
-    if xy:
-        legend(pl(:,2),'show',leg_text, 'Location','Best')
-        title(fa,'DAXY - ' + title_text)
-    if ex:
-        legend(pldp(:,2),'show',leg_text, 'Location','Best')
-        title(fdpa,['DAEX - ' + title_text)
-    if ma:
-        legend(pllt(:,1),'show',leg_text, 'Location','Best')
-        lnls_drawlattice(the_ring,10, 0, true,0.2, false, falt)
-        title(falt,'MA - ' + title_text)
-    ########################################
-
-    leg_text
-    paths = []
-    while i < n_calls:
-        ok, dirs = directories_dialog(path,'Selecione pasta com os dados?')
-        if if not ok: return
-        paths += find_right_folders(dirs)
-
-        for pat in paths:
-            if i >= n_calls: break
-            i+=1
-            na = _os.path.abspath(pat).split('/')[1:]
-            leg_text += input_dialog('Digite a legenda',na[-3],'Legenda')
-
-    title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[0]
-
-    if xy:
-        A, B = deal_xy(paths,leg_text,title_text)
-
-        if xy && ma:
-            print('\n{0:-20s {1:-15s} {2:-15s} {3:-15s}\n'.format('Config',
-                    'Dynap XY [mm^2]', 'Aper@y=0.2 [mm]', 'Lifetime [h]'))
-        elif ma:
-            print('\n{0:-20s {1:-15s}\n'.format('Config', 'Lifetime [h]'))
-        elif xy:
-            print('\n{0:-20s {1:-15s}\n'.format('Config', 'Dynap XY [mm^2]',
-                                                'Aper@y=0.2 [mm]'))
-    if xy || ma:
-        print('{0:-20s} '.format(leg_text[i].upper()))
-
-    if xy || ma, fprintf('\n')
-
-
-    def deal_xy(paths,leg_text,title_text):
-
-        for ii,path in enumerate(paths):
-
-            area, aper_xy, aper_ex, ltime, accep = [],[],[],[],[]
-
-            result = [i for i in _os.listdir(path) if _os.path.isdir(i)]
-            n_pastas = len(result)
-            rms_mode = True
-            if n_pastas == 0:
-                rms_mode = false
-                n_pastas = 1
-
-            for k in range(n_pastas):
-                if rms_mode: path += _os.path.sep + result[i]
-
-                if _os.path.isfile(_os.path.sep.join([path,'dynap_xy_out.txt'])):
-                    aper, a, *_ = trackcpp_load_dynap_xy(path,var_plane)
-                    area += [a]
-                    aper_xy += [aper]
+                    fxy, axy = _plt.subplots()
+                    fxy.set_figsize((5,4))
+                    axy.grid(True)
+                    axy.hold(True)
+                    axy.set_xlabel('x [mm]',font_size=size_font)
+                    axy.set_ylabel('y [mm]',font_size=size_font)
+                    axy.set_xlim([-limx limx])
+                    axy.set_ylim([0 limy])
+                axy.plot(1000*xy_ave[0,:,0], 1000*xy_ave[0,:,1],**ave_conf)
+                if rms_mode:
+                    print('{0:5.2f} \x00B1 {1:-5.2f}   {2:5.1f} \x00B1 {-5.1f}   '.format(
+                            area_ave*1e6, area_rms*1e6, neg_ave*1e3, neg_rms*1e3),end='')
+                    axy.plot(1000*(xy_rms[0,:,0]+xy_ave[0,:,0]),
+                             1000*(xy_rms[0,:,1]+xy_ave[0,:,1]),**rms_conf)
+                    axy.plot(1000*(xy_rms[0,:,0]-xy_ave[0,:,0]),
+                             1000*(xy_rms[0,:,1]-xy_ave[0,:,1]),**rms_conf)
                 else:
-                    print('{0:-2d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
+                    print('{0:5.2f}           {1:5.1f}           '.format(area_ave*1e6, neg_ave*1e3),end='')
 
-            aper_xy = np.dstack(aper_xy)
-            xy_ave  = aper_xy.mean(axis=2)
-            YatNegX = xy[0][2]
-            area    = np.dstack(area)
-            if rms_mode:
-                rmsOnda = std(aper_xy,1)
-                rmsYatNegX = rmsOnda(1,3,1)
-                rmsArea = std(area)
+            if ex:
+                if not i:
+                    fex, aex = _plt.subplots()
+                    fex.set_figsize((5,4))
+                    aex.grid(True)
+                    aex.hold(True)
+                    aex.set_xlabel(r'$\delta$ [%]',font_size=size_font)
+                    aex.set_ylabel('x [mm]',font_size=size_font)
+                    aex.set_xlim([-limne limpe])
+                    aex.set_ylim([-limx 0])
+                aex.plot(1000*ex_ave[0,:,0], 1000*ex_ave[0,:,1],**ave_conf)
+                if rms_mode:
+                    aex.plot(1000*(ex_rms[0,:,0]+ex_ave[0,:,0]),
+                             1000*(ex_rms[0,:,1]+ex_ave[0,:,1]),**rms_conf)
+                    aex.plot(1000*(ex_rms[0,:,0]-ex_ave[0,:,0]),
+                             1000*(ex_rms[0,:,1]-ex_ave[0,:,1]),**rms_conf)
+            if ma:
+                #imprime o tempo de vida
+                if rms_mode:
+                    print('{5.2f} \x00B1 {-5.2f} '.format(aveLT, rmsLT),end='')
+                    if lt_prob:
+                        print('   *{0:02d) máquinas desprezadas'.format(lt_prob)+
+                              ' no cálculo por possuírem aceitancia nula.',end='')
+                else:
+                    print('{5.2f} ', aveLT)
+                if not i:
+                    fma, ama = _plt.subplots()
+                    fma.set_figsize((7,3.5))
+                    ama.grid(True)
+                    ama.hold(True)
+                    ama.set_xlabel('Pos [m]',font_size=size_font)
+                    ama.set_ylabel(r'$\delta$ [%]',font_size=size_font)
+                    ama.set_xlim([-limne-0.2,limpe+0.2])
+                    ama.set_ylim([0, 52])
+                    ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
+                            yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
+                ama.plot(pos,ma_ave,**ave_conf)
+                if rms_mode:
+                    ama.plot(pos,ma_ave+ma_rms,**rms_conf)
+                    ama.plot(pos,ma_ave-ma_rms,**rms_conf)
 
-            ########  exposição dos resultados ######
-            color = color_vec[i % len(color_vec)]
-
-            if not i:
-                f  = figure('Position',[1,1,896,750])
-                fa = axes('Parent',f,'YGrid','on','XGrid','on','FontSize',size_font)
-                box(fa,'on')
-                hold(fa,'all')
-                xlabel('x [mm]','FontSize',size_font)
-                ylabel('y [mm]','FontSize',size_font)
-                xlim(fa,[-limx limx]);  ylim(fa,[0 limy])
-                plot(fa, 1000*aveOnda(1,:,1), 1000*aveOnda(1,:,2),
-                'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
-            if rms_mode
-                fprintf('{0:5.2f} \x00B1 {1:-5.2f}   {2:5.1f} \x00B1 {-5.1f   ',
-                        aveArea*1e6, rmsArea*1e6, aveYatNegX*1e3, rmsYatNegX*1e3)
-                plot(fa, 1000*(rmsOnda(1,:,1)+aveOnda(1,:,1)),1000*(rmsOnda(1,:,2)+aveOnda(1,:,2)),
-                    'Marker','.','LineWidth',2,'LineStyle','--','Color', color)
-                plot(fa, 1000*(aveOnda(1,:,1)-rmsOnda(1,:,1)),1000*(aveOnda(1,:,2)-rmsOnda(1,:,2)),
-                    'Marker','.','LineWidth',2,'LineStyle','--','Color', color)
-            else
-                print('{0:5.2f}           {1:5.1f}           '.format(aveArea*1e6, aveYatNegX*1e3))
-
-            if i == 1:
-                fdp  = figure('Position',[1,1,896,750]);
-                fdpa = axes('Parent',fdp,'YGrid','on','XGrid','on','FontSize',size_font);
-                box(fdpa,'on'); hold(fdpa,'all');
-                xlabel('\delta [{]','FontSize',size_font);
-                ylabel('x [mm]','FontSize',size_font);
-                xlim(fdpa,[-limne limpe]);  ylim(fdpa,[-limx,0]);
-            plot(fdpa, 100*aveOffda(1,:,1),1000*aveOffda(1,:,2),...
-                'Marker','.','LineWidth',esp_lin,'Color',color, 'LineStyle','-');
-            if rms_mode
-                pldp(i,1) = plot(fdpa, 100*aveOffda(1,:,1), 1000*(rmsOffda(1,:,2)+aveOffda(1,:,2)),...
-                    'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
-                pldp(i,3) = plot(fdpa, 100*aveOffda(1,:,1),1000*(aveOffda(1,:,2)-rmsOffda(1,:,2)),...
-                    'Marker','.','LineWidth',2,'LineStyle','--','Color', color);
+            if xy or ma: print()
 
 
+    title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
 
-        legend(pl(:,2),'show',leg_text, 'Location','Best')
-        title(fa,'DAXY - ' + title_text)
+    if xy:
+        axy.legend(loc='best')
+        axy.set_title('DAXY - ' + title_text)
+    if ex:
+        aex.legend(loc='best')
+        aex.set_title('DAEX - ' + title_text)
+    if ma:
+        ama.legend(loc='best')
+        lnls_drawlattice(the_ring,10, 0, true,0.2, false, falt)
+        ama.set_title('MA - ' + title_text)
