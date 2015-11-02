@@ -9,12 +9,32 @@ import matplotlib.pyplot as _plt
 import sirius, pyaccel
 import mathphys as _mp
 
-def directories_dialog(name='Select Directories'):
+# Tabela para interpolar d_touschek
+dic = _mp.utils.load_pickle('/home/fac_files/code/scripts/bin/TouschekDIntegralTable')
+X_TOUS = dic['x']
+Y_TOUS = dic['y']
+
+# parâmetros para a geração das figuras
+color_vec = ['b','r','g','m','c','k','y']
+esp_lin, size_font = 5, 24
+limx, limy, limpe, limne = 12, 3.5, 6, 6
+var_plane = 'x' #determinaçao da abertura dinâmica por varreduda no plano x
+# size_font = 16
+type_colormap = 'Jet'
+mostra = 0  # 0 = porcentagem de part perdidas
+            # 1 = número medio de voltas
+            # 2 = posicao em que foram perdidas
+            # 3 = plano em que foram perdidas
+plot_loss_rate = True
+
+def directories_dialog(path=None,name='Select Directories'):
     ok = True
     def _pressed_cancel():
         nonlocal ok
         Fi.close()
         ok &= False
+
+    path = path or _os.path.abspath(_os.path.curdir)
 
     try:
         app = QtGui.QApplication([])
@@ -25,6 +45,7 @@ def directories_dialog(name='Select Directories'):
     Fi.setWindowTitle(name)
     Fi.setOption(Fi.DontUseNativeDialog, True)
     Fi.setFileMode(Fi.DirectoryOnly)
+    Fi.setDirectory(path)
     for view in Fi.findChildren(QtGui.QListView):
         if isinstance(view.model(), QtGui.QFileSystemModel):
              view.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
@@ -271,11 +292,6 @@ def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
 
     gamma = E/m0
 
-    # Tabela para interpolar d_touschek
-    dic = _mp.utils.load_pickle('/home/fac_files/code/scripts/bin/TouschekDIntegralTable')
-    x = dic['x']
-    y = dic['y']
-
     s    = Accep['s']
     accp = Accep['pos']
     accn = Accep['neg']
@@ -317,8 +333,8 @@ def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
     ksin = (2*_np.sqrt(C1)/gamma * d_accn)**2
 
     # Interpola d_touschek
-    Dp = _np.interp(ksip,x,y,left=0.0,right=0.0)
-    Dn = _np.interp(ksin,x,y,left=0.0,right=0.0)
+    Dp = _np.interp(ksip,X_TOUS,Y_TOUS,left=0.0,right=0.0)
+    Dn = _np.interp(ksin,X_TOUS,Y_TOUS,left=0.0,right=0.0)
 
     # Tempo de vida touschek inverso
     Ratep = (r0**2*c/8/_np.pi)*N/gamma**2 / d_accp**3 * Dp / V
@@ -331,24 +347,8 @@ def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
 
     return resp
 
-def trackcpp_da_ma_lt(path=None):
-
-    # users selects submachine
-    prompt = ['Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots']
-    defaultanswer = ['si', '3.0', '2','ma xy ex']
-    answer = []
-    ok, answer = input_dialog(prompt,defaultanswer, 'Main Parameters')
-    if not ok: return
-    energy = float(answer[1]) * 1e9
-    n_calls = round(float(answer[2]))
-
-    xy = True if answer[3].find('xy') >= 0 else False
-    ex = True if answer[3].find('ex') >= 0 else False
-    ma = True if answer[3].find('ma') >= 0 else False
-
-    if answer[0].find('bo') >= 0:
-        if path is None: path = _os.path.sep.join(['home','fac_files','data',
-                                                'sirius','bo','beam_dynamics'])
+def ma_analysis(folders,leg_text,title_text,mach,energy):
+    if mach.find('bo') >= 0:
         acc = getattr(sirius,'bo')
         acc = acc.create_accelerator()
         acc.energy = energy
@@ -371,8 +371,6 @@ def trackcpp_da_ma_lt(path=None):
             nrBun = 1
             accepRF = eqpar['rf_energy_acceptance']
     else:
-        if path is None: path = _os.path.sep.join(['home','fac_files','data',
-                                                'sirius','si','beam_dynamics'])
         acc = getattr(sirius,'si')
         acc = acc.create_accelerator()
         acc.energy = energy
@@ -386,7 +384,6 @@ def trackcpp_da_ma_lt(path=None):
         I       = 100
         nrBun   = 864
         accepRF = eqpar[0]['rf_energy_acceptance']
-
 
     # users selects beam lifetime parameters
     prompt = ['Emitance[nm.rad]', 'Energy spread', 'Bunch length (with IBS) [mm]',
@@ -408,327 +405,332 @@ def trackcpp_da_ma_lt(path=None):
     twi, *_ = pyaccel.optics.calc_twiss(acc,indices='open')
     twispos = pyaccel.lattice.find_spos(acc,indices='open')
 
-    # parâmetros para a geração das figuras
-    color_vec = ['b','r','g','m','c','k','y']
-    esp_lin, size_font = 5, 24
-    limx, limy, limpe, limne = 12, 3.5, 6, 6
+    fma, ama = _plt.subplots()
+    fma.set_size_inches((7,3.5))
+    ama.grid(True)
+    ama.hold(True)
+    ama.set_xlabel('Pos [m]',fontsize=size_font)
+    ama.set_ylabel(r'$\delta$ [%]',fontsize=size_font)
+    ama.set_xlim([0, 52])
+    ama.set_ylim([-limne-0.2,limpe+0.2])
+    ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
+            yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
+    ama.set_title('MA - ' + title_text)
+    pyaccel.graphics.draw_lattice(acc,symmetry=10, offset=0, gca=True,height=0.4)
 
-    var_plane = 'x' #determinaçao da abertura dinâmica por varreduda no plano x
+    if len(paths) == 1:
+        ltime, accep, rate = [],[],[]
 
-    if n_calls == 1:
-        pass
-        # size_font = 16
-        # type_colormap = 'Jet'
-        #
-        # mostra = 0 # 0 = porcentagem de part perdidas
-        # # 1 = número medio de voltas
-        # # 2 = posicao em que foram perdidas
-        # # 3 = plano em que foram perdidas
-        # ok, paths = directories_dialog('Selecione pasta com os dados?')
-        # if not ok: return
-        #
-        # path = find_right_folders(paths)[0]
-        #
-        # area, aper_xy, aper_ex, ltime, accep = [],[],[],[],[]
-        #
-        # result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
-        # n_pastas = len(result)
-        #
-        # lt_prob = 0
-        # for k in range(n_pastas):
-        #     pathn = _os.path.sep.join([path,result[k]])
-        #
-        #     if xy:
-        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
-        #             _, a, dados1 = trackcpp_load_dynap_xy(pathn,var_plane)
-        #             if mostra == 0:
-        #                 idx_daxy = idx_daxy + (dados1['plane'] == 0)
-        #             elif mostra == 1:
-        #                 idx_daxy = idx_daxy + dados1['turn']
-        #             elif mostra == 2:
-        #                 idx_daxy = idx_daxy + (dados1['pos'] % 51.8396)
-        #             elif mostra == 3:
-        #                 idx_daxy = idx_daxy + dados1['plane']
-        #         else:
-        #             print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
-        #     if ex:
-        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
-        #             _, dados2 = trackcpp_load_dynap_ex(pathn)
-        #             if mostra == 0:
-        #                 idx_daxy = idx_daxy + (dados2['plane'] == 0)
-        #             elif mostra == 1:
-        #                 idx_daxy = idx_daxy + dados2['turn']
-        #             elif mostra == 2:
-        #                 idx_daxy = idx_daxy + (dados2['pos'] % 51.8396)
-        #             elif mostra == 3:
-        #                 idx_daxy = idx_daxy + dados2['plane']
-        #         else:
-        #             print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
-        #
-        #     if ma:
-        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
-        #             pos, aceit, *_ = trackcpp_load_ma_data(pathn)
-        #             if _np.isclose(aceit,0).any():
-        #                 lt_prob += 1
-        #             else:
-        #                 accep += [aceit]
-        #                 Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
-        #                              neg= _np.maximum(aceit[1], -accepRF))
-        #                 # não estou usando alguns outputs
-        #                 LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
-        #                 ltime += [1/LT['ave_rate']/60/60] # em horas
-        #         else:
-        #             print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
-        # if xy and (mostra == 0):
-        #     idx_daxy = (n_pastas-idx_daxy)/n_pastas*100
-        #     idx_daxy[0,0] = 100
-        #     idx_daxy[0,1] = 0
-        # if ex and (mostra == 0):
-        #     idx_daex = (n_pastas-idx_daex)/n_pastas*100
-        #     idx_daex[0,0] = 100
-        #     idx_daex[0,1] = 0
-        # if ma:
-        #     accep   = _np.dstack(accep)*100
-        #     ma_ave  = accep.mean(axis=2)
-        #     ltime   = _np.hstack(ltime)
-        #     lt_ave  = ltime.mean()
-        #     ma_rms = accep.std(axis=2,ddof=1)
-        #     lt_rms = ltime.std(ddof=1)
-        #
-        # # make the figures
-        # if xy:
-        #     fxy, axy = _plt.subplots()
-        #     fxy.set_size_inches((5,4))
-        #     axy.grid(True)
-        #     axy.hold(True)
-        #     axy.set_xlabel('x [mm]',fontsize=size_font)
-        #     axy.set_ylabel('y [mm]',fontsize=size_font)
-        #     axy.set_xlim([-limx, limx])
-        #     axy.set_ylim([0, limy])
-        #     pc = axy.pcolormesh(1000*dados1['x'], 1000*dados1['y'], idx_daxy)
-        #     axy.annotate('y = 1 mm',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
-        #     fxy.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
-        # if ex:
-        #     fex, aex = _plt.subplots()
-        #     fex.set_size_inches((5,4))
-        #     aex.grid(True)
-        #     aex.hold(True)
-        #     aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
-        #     aex.set_ylabel('x [mm]',fontsize=size_font)
-        #     aex.set_xlim([-limne, limpe])
-        #     aex.set_ylim([-limx, 0])
-        #     pc = aex.pcolormesh(100*dados2.en, 1000*dados2.x, idx_daex)
-        #     aex.annotate(r'$\delta$ = 0',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
-        #     fex.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
-        # if ma
-        #     f2=figure('Position',[3, 3, 956, 462]);
-        #     falt = axes('Parent',f2,'YGrid','on','XGrid','on','yTickLabel',{'-5','-2.5','0','2.5','5'},...
-        #         'YTick',[-5 -2.5 0 2.5 5],'Units','pixels','Position',[77 64 864, 385],'FontSize',size_font);
-        #     box(falt,'on'); hold(falt,'all');
-        #     xlabel('pos [m]','FontSize',size_font);
-        #     ylabel('\delta [%]','FontSize',size_font);
-        #     plot(falt,spos,squeeze(accep(:,1,:))*100,'Color',[0.6 0.6 1.0]);
-        #     plot(falt,spos,squeeze(accep(:,2,:))*100,'Color',[0.6 0.6 1.0]);
-        #     plot(falt,spos,aveAccep,'LineWidth',3,'Color',[0,0,1]);
-        #     if plot_LR, plot(falt,LT.Pos,limeLT/2*LossRate/max(LossRate(:)),'Color',[0,0,0]); end
-        #     lnls_drawlattice(the_ring,10, 0, true,0.2);
-        #     xlim([0, limsLT]); ylim([-limeLT-0.3, limeLT+0.3]);
-        #
-        #     string = {sprintf('%-10s = %3.1f GeV','Energy',params.E/1e9),...
-        #         sprintf('%-10s = %5.3f mA','I/bunch',params.N*1.601e-19/1.72e-6*1e3),...
-        #         sprintf('%-10s = %3.1f %%','Coupling',params.K*100),...
-        #         sprintf('%-10s = %5.3f nm.rad','\epsilon_0',params.emit0*1e9),...
-        #         sprintf('%-10s = %5.3f %%','\sigma_{\delta}',params.sigE*100),...
-        #         sprintf('%-9s = %5.3f mm','\sigma_L',params.sigS*1e3),...
-        #         sprintf('Tousc LT = %5.1f \xb1 %3.1f h',aveLT,stdLT)};
-        #     annotation(f2,'textbox','Units','pixels','Position',[390, 162, 220, 90],'String',string(1:3),...
-        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
-        #     annotation(f2,'textbox','Units','pixels','Position',[420, 267, 192, 91],'String',string(4:6),...
-        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
-        #     annotation(f2,'textbox','Units','pixels','Position',[632, 202, 253, 37],'String',string(7),...
-        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
-        # _plt.show()
-        # return
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
 
+        for k in range(n_pastas):
+            pathn = _os.path.sep.join([path,result[k]])
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
+                pos, aceit, *_ = trackcpp_load_ma_data(pathn)
+                accep += [aceit]
+                Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
+                             neg= _np.maximum(aceit[1], -accepRF))
+                # não estou usando alguns outputs
+                LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                rate += LT['rate']
+                ltime += [1/LT['ave_rate']/60/60] # em horas
+            else:
+                print('{1:5s}: ma nao carregou\n'.format(result[k]))
+        accep  = _np.dstack(accep)*100
+        rate   = _np.dstack(rate)
+        ma_ave = accep.mean(axis=2)
+        ltime  = _np.hstack(ltime)
+        lt_ave = ltime.mean()
+        lt_rms = ltime.std(ddof=1)
 
+        # make the figures
+        ama.plot(pos,accep[0]*100,color=[0.6 0.6 1.0])
+        ama.plot(pos,accep[1]*100,color=[0.6 0.6 1.0])
+        ama.plot(pos,ma_ave.T,'LineWidth',3,'Color',[0,0,1]);
+        if plot_loss_rate:
+            ama.plot(LT['pos'],limne/2*rate/rate.max(),color='k')
+
+        stri = ('{0:10s} = {1:3.1f} GeV\n'.format('Energy',E/1e9) +
+                '{0:10s} = {1:5.3f} mA\n'.format('I/bunch',I/nrBun*1e3) +
+                '{0:10s} = {1:3.1f} %'.format('Coupling',K*100))
+        ama.annotate(stri,(0.4,0.5),fontsize=size_font,color='w',xycoords='axes fraction')
+
+        stri = (r'${0:10s}$ = {1:5.3f} nm.rad\n'.format('\epsilon_0',emit0*1e9)+
+            r'${0:10s}$ = {5.3f} %\n'.format('\sigma_{\delta}',sigE*100)+
+            r'${0:10s}$ = {5.3f} mm'.format('\sigma_L',sigS*1e3))
+        ama.annotate(stri,(0.4,0.4),fontsize=size_font,color='w',xycoords='axes fraction')
+
+        stri = 'Tousc LT = {5.1f} \xb1 {3.1f} h'.format(lt_ave,lt_rms)
+        ama.annotate(stri,(0.4,0.4),fontsize=size_font,color='w',xycoords='axes fraction')
+        return fma
+
+    print('\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]'))
+    for i,path in enumerate(paths):
+        ltime, accep = [],[]
+
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
+        rms_mode = True
+        if n_pastas == 0:
+            rms_mode = False
+            n_pastas = 1
+
+        lt_prob = 0
+        for k in range(n_pastas):
+            pathn = path
+            if rms_mode: pathn += _os.path.sep + result[k]
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
+                pos, aceit, *_ = trackcpp_load_ma_data(pathn)
+                if _np.isclose(aceit,0).any():
+                    lt_prob += 1
+                else:
+                    accep += [aceit]
+                    Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
+                                 neg= _np.maximum(aceit[1], -accepRF))
+                    # não estou usando alguns outputs
+                    LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                    ltime += [1/LT['ave_rate']/60/60] # em horas
+            else:
+                print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
+        accep   = _np.dstack(accep)*100
+        ma_ave  = accep.mean(axis=2)
+        ltime   = _np.hstack(ltime)
+        lt_ave  = ltime.mean()
+        if rms_mode:
+            ma_rms = accep.std(axis=2,ddof=1)
+            lt_rms = ltime.std(ddof=1)
+
+        ########  exposição dos resultados ######
+        color = color_vec[i % len(color_vec)]
+        ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
+        rms_conf = dict(linewidth=2,color=color,linestyle='--')
+        #imprime o tempo de vida
+        print('{0:20s} '.format(leg_text[i].upper()), end='')
+        if rms_mode:
+            print('{0:>5.2f} \xB1 {1:5.2f} '.format(lt_ave, lt_rms))
+            if lt_prob:
+                print('   *{0:02d) máquinas desprezadas'.format(lt_prob)+
+                      ' no cálculo por possuírem aceitancia nula.')
+        else:
+            print('{5.2f} ', lt_ave)
+        ama.plot(pos,ma_ave[0],label=leg_text[i],**ave_conf)
+        ama.plot(pos,ma_ave[1],**ave_conf)
+        if rms_mode:
+            ama.plot(pos,ma_ave[0]+ma_rms[0],**rms_conf)
+            ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
+    ama.legend(loc='best')
+    return fma
+
+def xy_analysis(paths,leg_text,title_text):
+
+    fxy, axy = _plt.subplots()
+    fxy.set_size_inches((5,4))
+    axy.grid(True)
+    axy.hold(True)
+    axy.set_xlabel('x [mm]',fontsize=size_font)
+    axy.set_ylabel('y [mm]',fontsize=size_font)
+    axy.set_title('DAXY - ' + title_text)
+    axy.set_xlim([-limx, limx])
+    axy.set_ylim([0, limy])
+
+    if len(paths) == 1:
+        path = paths[0]
+
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
+
+        for k in range(n_pastas):
+            pathn = _os.path.sep.join([path,result[k]])
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
+                _, a, dados1 = trackcpp_load_dynap_xy(pathn,var_plane)
+                if mostra == 0:
+                    idx_daxy += (dados['plane'] == 0)
+                elif mostra == 1:
+                    idx_daxy += dados['turn']
+                elif mostra == 2:
+                    idx_daxy += (dados['pos'] % 51.8396)
+                elif mostra == 3:
+                    idx_daxy += dados['plane']
+            else:
+                print('{1:5s}: xy nao carregou\n'.format(result[k]))
+        if mostra == 0:
+            idx_daxy = (n_pastas-idx_daxy)/n_pastas*100
+            idx_daxy[0,0] = 100
+            idx_daxy[0,1] = 0
+        # make the figures
+        pc = axy.pcolormesh(1000*dados['x'], 1000*dados['y'], idx_daxy)
+        axy.annotate('y = 1 mm',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
+        fxy.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        return fxy
+
+    print('\n{0:20s} {1:15s} {2:15s}\n'.format('Config','Dynap XY [mm^2]','Aper@y=0.2 [mm]'))
+    for i,path in enumerate(paths):
+        area, aper_xy = [],[]
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
+        rms_mode = True
+        if n_pastas == 0:
+            rms_mode = False
+            n_pastas = 1
+        for k in range(n_pastas):
+            pathn = path
+            if rms_mode: pathn += _os.path.sep + result[k]
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
+                aper, a, *_ = trackcpp_load_dynap_xy(pathn,var_plane)
+                area += [a]
+                aper_xy += [aper]
+            else:
+                print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
+        aper_xy = _np.dstack(aper_xy)*1000
+        xy_ave  = aper_xy.mean(axis=2)
+        neg_ave = xy_ave[0][2]
+        area    = _np.hstack(area)*1e6
+        area_ave= area.mean()
+        if rms_mode:
+            xy_rms  = aper_xy.std(axis=2,ddof=1)
+            neg_rms = xy_rms[0][2]
+            area_rms= area.std(ddof=1)
+
+        ########  exposição dos resultados ######
+        color = color_vec[i % len(color_vec)]
+        ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
+        rms_conf = dict(linewidth=2,color=color,linestyle='--')
+
+        print('{0:20s} '.format(leg_text[i].upper()), end='')
+
+        axy.plot(xy_ave[0], xy_ave[1],label=leg_text[i],**ave_conf)
+        if rms_mode:
+            print('{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   '.format(
+                    area_ave, area_rms, neg_ave, neg_rms))
+            axy.plot(xy_ave[0]+xy_rms[0], xy_ave[1]+xy_rms[1],**rms_conf)
+            axy.plot(xy_ave[0]-xy_rms[0], xy_ave[1]-xy_rms[1],**rms_conf)
+        else:
+            print('{0:>5.2f}           {1:>5.1f}           '.format(area_ave, neg_ave))
+    axy.legend(loc='best')
+    return fxy
+
+def ex_analysis(paths,leg_text,title_text):
+
+    fex, aex = _plt.subplots()
+    fex.set_size_inches((5,4))
+    aex.grid(True)
+    aex.hold(True)
+    aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
+    aex.set_ylabel('x [mm]',fontsize=size_font)
+    aex.set_xlim([-limne, limpe])
+    aex.set_ylim([-limx, 0])
+    aex.set_title('DAEX - ' + title_text)
+    if len(paths) == 1:
+        path = paths[0]
+        aper_ex = []
+
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
+
+        for k in range(n_pastas):
+            pathn = _os.path.sep.join([path,result[k]])
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
+                _, dados = trackcpp_load_dynap_ex(pathn)
+                if mostra == 0:
+                    idx_daex += (dados['plane'] == 0)
+                elif mostra == 1:
+                    idx_daex += dados['turn']
+                elif mostra == 2:
+                    idx_daex += (dados['pos'] % 51.8396)
+                elif mostra == 3:
+                    idx_daex += dados['plane']
+            else:
+                print('{1:5s}: ex nao carregou\n'.format(result[k]))
+        if mostra == 0:
+            idx_daex = (n_pastas-idx_daex)/n_pastas*100
+            idx_daex[0,0] = 100
+            idx_daex[0,1] = 0
+        pc = aex.pcolormesh(100*dados.en, 1000*dados.x, idx_daex)
+        aex.annotate(r'$\delta$ = 0',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
+        fex.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        return fex
+
+    for i,path in enumerate(paths):
+        aper_ex = []
+
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        n_pastas = len(result)
+        rms_mode = True
+        if n_pastas == 0:
+            rms_mode = False
+            n_pastas = 1
+        for k in range(n_pastas):
+            pathn = path
+            if rms_mode: pathn += _os.path.sep + result[k]
+            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
+                aper, *_ = trackcpp_load_dynap_ex(pathn)
+                aper_ex += [aper]
+            else:
+                print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
+        aper_ex = _np.dstack(aper_ex)
+        ex_ave  = aper_ex.mean(axis=2)
+        if rms_mode:
+            ex_rms  = aper_ex.std(axis=2,ddof=1)
+
+        ########  exposição dos resultados ######
+        color = color_vec[i % len(color_vec)]
+        ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
+        rms_conf = dict(linewidth=2,color=color,linestyle='--')
+
+        aex.plot(100*ex_ave[0], 1000*ex_ave[1],label=leg_text[i],**ave_conf)
+        if rms_mode:
+            aex.plot(100*(ex_ave[0]+ex_rms[0]),
+                     1000*(ex_ave[1]+ex_rms[1]),**rms_conf)
+            aex.plot(100*(ex_ave[0]-ex_rms[0]),
+                     1000*(ex_ave[1]-ex_rms[1]),**rms_conf)
+    aex.legend(loc='best')
+    return fex
+
+def trackcpp_da_ma_lt(inipath=None, save=False, show=True):
+
+    # users selects submachine
+    prompt = ['Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots']
+    defaultanswer = ['si', '3.0', '2','ma xy ex']
+    answer = []
+    ok, answer = input_dialog(prompt,defaultanswer, 'Main Parameters')
+    if not ok: return
+    energy = float(answer[1]) * 1e9
+    n_calls = round(float(answer[2]))
+
+    xy = True if answer[3].find('xy') >= 0 else False
+    ex = True if answer[3].find('ex') >= 0 else False
+    ma = True if answer[3].find('ma') >= 0 else False
+
+    if inipath is None:
+        inipath = _os.path.sep.join(['home','fac_files','data',
+                                'sirius',answer[0],'beam_dynamics'])
     i=0
+    leg_text = []
+    folders = []
     while i < n_calls:
-        ok, paths = directories_dialog('Selecione pasta com os dados?')
+        ok, paths = directories_dialog(inipath,'Selecione pasta com os dados')
         if not ok: return
-
         paths = find_right_folders(paths)
-
         for path in paths:
             if i >= n_calls: break
-
-            area, aper_xy, aper_ex, ltime, accep = [],[],[],[],[]
-
-            result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
-            n_pastas = len(result)
-            rms_mode = True
-            if n_pastas == 0:
-                rms_mode = False
-                n_pastas = 1
-
+            folders += [path]
             na = _os.path.abspath(path).split('/')[1:]
-            leg_text = input_dialog('Digite a legenda',na[-3],'Legenda')[1][0]
-
-            lt_prob = 0
-            for k in range(n_pastas):
-                pathn = path
-                if rms_mode: pathn += _os.path.sep + result[k]
-
-                if xy:
-                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
-                        aper, a, *_ = trackcpp_load_dynap_xy(pathn,var_plane)
-                        area += [a]
-                        aper_xy += [aper]
-                    else:
-                        print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
-                if ex:
-                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
-                        aper, *_ = trackcpp_load_dynap_ex(pathn)
-                        aper_ex += [aper]
-                    else:
-                        print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
-
-                if ma:
-                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
-                        pos, aceit, *_ = trackcpp_load_ma_data(pathn)
-                        if _np.isclose(aceit,0).any():
-                            lt_prob += 1
-                        else:
-                            accep += [aceit]
-                            Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
-                                         neg= _np.maximum(aceit[1], -accepRF))
-                            # não estou usando alguns outputs
-                            LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
-                            ltime += [1/LT['ave_rate']/60/60] # em horas
-                    else:
-                        print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
-
-            if xy:
-                aper_xy = _np.dstack(aper_xy)*1000
-                xy_ave  = aper_xy.mean(axis=2)
-                neg_ave = xy_ave[0][2]
-                area    = _np.hstack(area)*1e6
-                area_ave= area.mean()
-            if ex:
-                aper_ex = _np.dstack(aper_ex)
-                ex_ave  = aper_ex.mean(axis=2)
-            if ma:
-                accep   = _np.dstack(accep)*100
-                ma_ave  = accep.mean(axis=2)
-                ltime   = _np.hstack(ltime)
-                lt_ave  = ltime.mean()
-            if rms_mode:
-                if xy:
-                    xy_rms  = aper_xy.std(axis=2,ddof=1)
-                    neg_rms = xy_rms[0][2]
-                    area_rms= area.std(ddof=1)
-                if ex:
-                    ex_rms  = aper_ex.std(axis=2,ddof=1)
-                if ma:
-                    ma_rms = accep.std(axis=2,ddof=1)
-                    lt_rms = ltime.std(ddof=1)
-
-            ########  exposição dos resultados ######
-
-            color = color_vec[i % len(color_vec)]
-            ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
-            rms_conf = dict(linewidth=2,color=color,linestyle='--')
-            if not i:
-                if xy and ma:
-                    print('\n{0:20s} {1:15s} {2:15s} {3:15s}\n'.format('Config',
-                            'Dynap XY [mm^2]', 'Aper@y=0.2 [mm]', 'Lifetime [h]'))
-                elif ma:
-                    print('\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]'))
-                elif xy:
-                    print('\n{0:20s} {1:15s} {2:15s}\n'.format('Config',
-                                        'Dynap XY [mm^2]','Aper@y=0.2 [mm]'))
-            if xy or ma:
-                print('{0:20s} '.format(leg_text.upper()), end='')
-
-            if xy:
-                if not i:
-                    fxy, axy = _plt.subplots()
-                    fxy.set_size_inches((5,4))
-                    axy.grid(True)
-                    axy.hold(True)
-                    axy.set_xlabel('x [mm]',fontsize=size_font)
-                    axy.set_ylabel('y [mm]',fontsize=size_font)
-                    axy.set_xlim([-limx, limx])
-                    axy.set_ylim([0, limy])
-                axy.plot(xy_ave[0], xy_ave[1],label=leg_text,**ave_conf)
-                if rms_mode:
-                    print('{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   '.format(
-                            area_ave, area_rms, neg_ave, neg_rms),end='')
-                    axy.plot(xy_ave[0]+xy_rms[0], xy_ave[1]+xy_rms[1],**rms_conf)
-                    axy.plot(xy_ave[0]-xy_rms[0], xy_ave[1]-xy_rms[1],**rms_conf)
-                else:
-                    print('{0:>5.2f}           {1:>5.1f}           '.format(area_ave, neg_ave),end='')
-
-            if ex:
-                if not i:
-                    fex, aex = _plt.subplots()
-                    fex.set_size_inches((5,4))
-                    aex.grid(True)
-                    aex.hold(True)
-                    aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
-                    aex.set_ylabel('x [mm]',fontsize=size_font)
-                    aex.set_xlim([-limne, limpe])
-                    aex.set_ylim([-limx, 0])
-                aex.plot(100*ex_ave[0], 1000*ex_ave[1],label=leg_text,**ave_conf)
-                if rms_mode:
-                    aex.plot(100*(ex_ave[0]+ex_rms[0]),
-                             1000*(ex_ave[1]+ex_rms[1]),**rms_conf)
-                    aex.plot(100*(ex_ave[0]-ex_rms[0]),
-                             1000*(ex_ave[1]-ex_rms[1]),**rms_conf)
-            if ma:
-                #imprime o tempo de vida
-                if rms_mode:
-                    print('{0:>5.2f} \xB1 {1:5.2f} '.format(lt_ave, lt_rms),end='')
-                    if lt_prob:
-                        print('   *{0:02d) máquinas desprezadas'.format(lt_prob)+
-                              ' no cálculo por possuírem aceitancia nula.',end='')
-                else:
-                    print('{5.2f} ', lt_ave)
-                if not i:
-                    fma, ama = _plt.subplots()
-                    fma.set_size_inches((7,3.5))
-                    ama.grid(True)
-                    ama.hold(True)
-                    ama.set_xlabel('Pos [m]',fontsize=size_font)
-                    ama.set_ylabel(r'$\delta$ [%]',fontsize=size_font)
-                    ama.set_xlim([0, 52])
-                    ama.set_ylim([-limne-0.2,limpe+0.2])
-                    ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
-                            yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
-                ama.plot(pos,ma_ave[0],label=leg_text,**ave_conf)
-                ama.plot(pos,ma_ave[1],**ave_conf)
-                if rms_mode:
-                    ama.plot(pos,ma_ave[0]+ma_rms[0],**rms_conf)
-                    ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
-
-            if xy or ma: print()
-
+            leg_text += input_dialog('Digite a legenda',na[-3],'Legenda')[1]
             i+=1
-
-
     title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
 
     if xy:
-        axy.legend(loc='best')
-        axy.set_title('DAXY - ' + title_text)
+        fxy = xy_analysis(folders,leg_text,title_text)
+        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
     if ex:
-        aex.legend(loc='best')
-        aex.set_title('DAEX - ' + title_text)
+        fex = ex_analysis(folders,leg_text,title_text)
+        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
     if ma:
-        ama.legend(loc='best')
-        pyaccel.graphics.draw_lattice(acc,symmetry=10, offset=0, gca=True,height=0.4)
-        ama.set_title('MA - ' + title_text)
-
-    _plt.show()
+        fma = ma_analysis(folders,leg_text,title_text,answer[0],energy)
+        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
+    if show: _plt.show()
 
 if __name__ == '__main__':
-    trackcpp_da_ma_lt(_os.path.abspath(_os.path.curdir))
+    path = _os.path.abspath(_os.path.curdir)
+    trackcpp_da_ma_lt(path)
