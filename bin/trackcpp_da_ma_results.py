@@ -4,8 +4,10 @@ import os as _os
 import numpy as _np
 import optparse as _optparse
 from guidata.qt import QtGui, QtCore
+import matplotlib.pyplot as _plt
 
 import sirius, pyaccel
+import mathphys as _mp
 
 def directories_dialog(name='Select Directories'):
     ok = True
@@ -36,7 +38,16 @@ def directories_dialog(name='Select Directories'):
     Fi.show()
     QtCore.QCoreApplication.instance().exec_()
 
-    return ok, Fi.selectedFiles()
+    # The folder selection is also selecting its parent:
+    sel_files = Fi.selectedFiles()
+    sel_files2 = set(sel_files)
+    for fi1 in sel_files:
+        for fi2 in sel_files:
+            if fi2 != fi1 and fi1 in fi2:
+                sel_files2 -= {fi1}
+                break
+
+    return ok, list(sel_files2)
 
 def input_dialog(prompt,def_answer=None,name='Type Parameters'):
     ok = False
@@ -101,114 +112,224 @@ def find_right_folders(paths):
             if file.startswith(('dynap_xy_out.txt','dynap_ex_out.txt','dynap_ma_out.txt')):
                 pathnames += [path]
             else:
+                file = _os.path.sep.join((path,file))
                 if _os.path.isdir(file) and  not file.startswith(('.','..')):
-                    paths2 += [_os.path.sep.join((path,file))]
-        if paths2: pathnames += [find_right_folders(paths2)]
+                    paths2 += [file]
+        if paths2: pathnames += find_right_folders(paths2)
     return pathnames
 
-def trackcpp_load_dynap_xy(pathname, var_plane='x'):
+def trackcpp_load_dynap_xy(path, var_plane='x'):
+    # Carrego os dados:
+    nr_header_lines = 13
+    fname = _os.path.sep.join([path, 'dynap_xy_out.txt'])
+    turn,plane,x,y = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,6),unpack=True)
 
-    nr_header_lines = 13;
-    fname = fullfile(pathname, 'dynap_xy_out.txt');
+    # Identifico quantos x e y existem:
+    nx = len(_np.unique(x))
+    ny = x.shape[0]//nx
 
-    tdata = importdata(fname, ' ', nr_header_lines); tdata = tdata.data;
+    # Redimensiono para que todos os x iguais fiquem na mesma coluna:
+    # o flipud é usado porque y é decrescente:
+    fun = lambda x: _np.flipud(x.reshape((nx,ny)).T)
+    turn, plane, x, y = fun(turn), fun(plane), fun(x), fun(y)
+    dados = dict(x=x,y=y,plane=plane,turn=turn)
 
-    # Agora, eu tenho que encontrar a DA
-    # primeiro eu identifico quantos x e y existem
-    npx = length(unique(tdata(:,6)));
-    npy = size(tdata,1)/npx;
-    #agora eu pego a coluna da frequencia x
-    x = tdata(:,6);
-    y = tdata(:,7);
-    plane = tdata(:,4);
-    turn = tdata(:,2);
-    # e a redimensiono para que todos os valores calculados para x iguais
-    # fiquem na mesma coluna:
-    x = reshape(x,npy,npx); dados.x = x;
-    y = reshape(y,npy,npx); dados.y = y;
-    plane = reshape(plane,npy,npx); dados.plane = plane;
-    turn = reshape(turn,npy,npx); dados.turn = turn;
-    # e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-    # a borda da DA
-    if strcmp(var_plane,'y')
-        y  = flipud(y);
-        plane = flipud(plane);
-        lost = plane == 0;
-        [~,ind] = min(lost,[],1);
-        # para lidar com casos em que a abertura vertical é maior que o espaço
-        # calculado.
-        ind = ind.*any(~lost) + (~any(~lost)).*ones(1,npx)*npy;
-        # por fim, defino a DA
-        h = x(1,:);
-        v = unique(y(ind,:)','rows');
-        dynapt = [h', v'];
-        area = trapz(h,v);
-    else
-        idx = x(1,:) > 0;
-        x_ma = x(1,idx);
-        lost = plane(:,idx) == 0;
-        [~,ind_pos] = min(lost,[],2);
-        # para lidar com casos em que a abertura horizontal é maior que o espaço
-        ind_pos = ind_pos.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(idx); % calculado.
-        h = x_ma(ind_pos)';
-        v = y(:,1);
-        dynapt = [h, v];
-        area = abs(trapz(v,h));
-        x_mi = fliplr(x(1,~idx));
-        lost = fliplr(plane(:,~idx)) == 0;
-        [~,ind_neg] = min(lost,[],2);
-        # para lidar com casos em que a abertura horizontal é maior que o espaço
-        ind_neg = ind_neg.*any(~lost,2) + (~any(~lost,2)).*ones(npy,1)*sum(~idx); % calculado.
-        h = fliplr(x_mi(ind_neg))';
-        v = flipud(y(:,1));
-        dynapt = [[h, v]; dynapt];
-        area = area + abs(trapz(v,h));
+    # E identifico a borda da DA:
+    if var_plane =='y':
+        lost = plane != 0
+        ind = lost.argmax(axis=0)
+        # Caso a abertura vertical seja maior que o espaço calculado:
+        anyloss = lost.any(axis=0)
+        ind = ind*anyloss + (~anyloss)*(y.shape[0]-1)
 
-def trackcpp_load_dynap_ex(pathname):
-    nr_header_lines = 13;
-    fname = fullfile(pathname, 'dynap_ex_out.txt');
-    tdata = importdata(fname, ' ', nr_header_lines); tdata = tdata.data;
+        # por fim, defino a DA:
+        h = x[0]
+        v = y[:,0][ind]
+        aper = _np.vstack([h,v])
+        area = _np.trapz(v,x=h)
+    else:
+        idx  = x > 0
+        # para x negativo:
+        x_mi     = _np.fliplr(x[~idx].reshape((ny,-1)))
+        plane_mi = _np.fliplr(plane[~idx].reshape((ny,-1)))
+        lost  = plane_mi != 0
+        ind_neg = lost.argmax(axis=1)
+        # Caso a abertura horizontal seja maior que o espaço calculado:
+        anyloss = lost.any(axis=1)
+        ind_neg = ind_neg*anyloss + (~anyloss)*(x_mi.shape[1]-1)
 
-    % Agora, eu tenho que encontrar a DA
-    %primeiro eu identifico quantos x e y existem
-    npe = length(unique(tdata(:,8)));
-    npx = size(tdata,1)/npe;
-    %agora eu pego a coluna da frequencia x
-    en = tdata(:,8);
-    x = tdata(:,6);
-    plane = tdata(:,4);
-    turn = tdata(:,2);
-    % e a redimensiono para que todos os valores calculados para x iguais
-    %fiquem na mesma coluna:
-    en = reshape(en,npx,npe); dados.en = en;
-    x = reshape(x,npx,npe); dados.x = x;
-    plane = reshape(plane,npx,npe); dados.plane = plane;
-    turn = reshape(turn,npx,npe); dados.turn = turn;
-    % e vejo qual o primeiro valor nulo dessa frequencia, para identificar
-    % a borda da DA
-    [~,ind] = min(plane == 0,[],1);
+        h_neg = x_mi[0][ind_neg]
+        v_neg = y[:,0]
+        aper_neg = _np.vstack([h_neg,v_neg])
+        area_neg = _np.trapz(h_neg,x=v_neg)
 
-    % por fim, defino a DA
-    en = en(1,:);
-    x = unique(x(ind,:)','rows');
+        #para x positivo
+        x_ma = x[idx].reshape((ny,-1))
+        plane_ma = plane[idx].reshape((ny,-1))
+        lost    = plane_ma != 0
+        ind_pos = lost.argmax(axis=1)
+        # Caso a abertura horizontal seja maior que o espaço calculado:
+        anyloss = lost.any(axis=1)
+        ind_pos = ind_pos*anyloss + (~anyloss)*(x_ma.shape[1]-1)
 
-    dynapt = [en', x'];
+        # por fim, defino a DA em x positivo:
+        h_pos = x_ma[0][ind_pos]
+        v_pos = y[:,0]
+        aper_pos = _np.fliplr(_np.vstack([h_pos,v_pos]))
+        area_pos = _np.trapz(h_pos,x=v_pos)
 
-def trackcpp_load_ma_data(pathname):
-    fname = fullfile(pathname,'dynap_ma_out.txt');
+        aper = _np.hstack([aper_neg,aper_pos])
+        area = -_np.trapz(aper[0],x=aper[1])
 
-    a = importdata(fname, ' ', 13);
+    return aper, area, dados
 
-    spos  = a.data(1:2:end,5)';
+def trackcpp_load_dynap_ex(path):
+    # Carrego os dados:
+    nr_header_lines = 13
+    fname = _os.path.sep.join([path, 'dynap_ex_out.txt'])
+    turn,plane,x,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,7),unpack=True)
 
-    accep(1,:) = a.data(2:2:end,8)';
-    accep(2,:) = -abs(a.data(1:2:end,8)'); % for cases in which the momentum
-                                           %aperture is less than the tolerance
-    nLost(1,:) = a.data(2:2:end,2)';
-    nLost(2,:) = a.data(1:2:end,2)';
+    # Identifico quantos x e y existem:
+    ne = len(_np.unique(x))
+    nx = x.shape[0]//ne
 
-    eLost(1,:) = a.data(2:2:end,3)';
-    eLost(2,:) = a.data(1:2:end,3)';
+    # Redimensiono para que todos os x iguais fiquem na mesma linha:
+    fun = lambda x: x.reshape((nx,ne)).T
+    turn, plane, x, en = fun(turn), fun(plane), fun(x), fun(en)
+    dados = dict(x=x,en=en,plane=plane,turn=turn)
+
+    lost = plane != 0
+    ind = lost.argmax(axis=0)
+    # Caso a abertura horizontal seja maior que o espaço calculado:
+    anyloss = lost.any(axis=0)
+    ind = ind*anyloss + (~anyloss)*(x.shape[0]-1)
+
+    # por fim, defino a DA:
+    h = en[0]
+    v = x[:,0][ind]
+    aper = _np.vstack([h,v])
+
+    return aper, dados
+
+def trackcpp_load_ma_data(path):
+
+    # Carrego os dados:
+    nr_header_lines = 13
+    fname = _os.path.sep.join([path, 'dynap_ma_out.txt'])
+    turn,el,pos,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,2,4,7),unpack=True)
+
+    pos  = pos[::2]
+    # the -abs is for cases where the momentum aperture is less than the tolerance
+    accep = _np.vstack([ en[1::2], -_np.abs(en[0::2]) ])
+    nLost = _np.vstack([turn[1::2],turn[0::2]])
+    eLost = _np.vstack([el[1::2],  el[0::2]])
+
+    return pos, accep, nLost, eLost
+
+def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
+    """ calcula o inverso do tempo de vida Touschek.
+
+      Saídas:
+          Resp = estrutura com campos:
+              Rate = taxa de perda de elétrons ao longo do anel [1/s]
+              AveRate = Taxa média de perda de elétrons [1/s]
+              Pos  = Posição do anel onde foi calculada a taxa [m]
+              Volume = Volume do feixe ao longo do anel [m^3]
+
+      Entradas:
+          params = estrutura com campos:
+              emit0 = emitância natural [m rad]
+              E     = energia das partículas [eV]
+              N     = número de elétrons por bunch
+              sigE  = dispersão de energia relativa sigE,
+              sigS  = comprimento do bunch [m]
+              K     = fator de acoplamento (emity = K*emitx)
+
+          Accep = estrutura com campos:
+              pos = aceitância positiva para uma seleção de pontos do anel;
+              neg = aceitância negativa para uma seleção de pontos do anel;
+                       (lembrar: min(accep_din, accep_rf))
+              s   = posição longitudinal dos pontos para os quais a
+                       aceitância foi calculada.
+
+          Optics = estrutura com as funções óticas ao longo do trecho
+                  para o qual setá calculado o tempo de vida:
+                       pos,   betax,    betay,  etax,   etay,
+                              alphax,   alphay, etaxl,  etayl
+
+      CUIDADO: os limites de cálculo são definidos pelos pontos
+         inicial e final da Aceitância e não das funções ópticas.
+    """
+
+    c   = _mp.constants.light_speed
+    me  = _mp.constants.electron_mass
+    Qe  = _mp.constants.elementary_charge
+    mu0 = _mp.constants.vacuum_permeability
+    ep0 = _mp.constants.vacuum_permitticity
+    r0  = _mp.constants.electron_radius
+    m0  = _mp.constants.electron_rest_energy * _mp.units.joule_2_eV
+
+    gamma = E/m0
+
+    # Tabela para interpolar d_touschek
+    dic = _mp.utils.load_pickle('/home/fac_files/code/scripts/bin/TouschekDIntegralTable')
+    x = dic['x']
+    y = dic['y']
+
+    s    = Accep['s']
+    accp = Accep['pos']
+    accn = Accep['neg']
+    # calcular o tempo de vida a cada 10 cm do anel:
+    npoints = int((s[-1] - s[0])/0.1)
+    s_calc = _np.linspace(s[0], s[-1], npoints)
+
+    d_accp  = _np.interp(s_calc,s, accp)
+    d_accn  = _np.interp(s_calc,s,-accn)
+    # if momentum aperture is 0, set it to 1e-4:
+    d_accp[d_accp==0] = 1e-4
+    d_accn[d_accn==0] = 1e-4
+
+    _, ind = _np.unique(twispos,return_index=True)
+
+    betax  = _np.interp(s_calc, twispos[ind], twiss.betax[ind])
+    alphax = _np.interp(s_calc, twispos[ind], twiss.alphax[ind])
+    etax   = _np.interp(s_calc, twispos[ind], twiss.etax[ind])
+    etaxl  = _np.interp(s_calc, twispos[ind], twiss.etapx[ind])
+    betay  = _np.interp(s_calc, twispos[ind], twiss.betay[ind])
+    etay   = _np.interp(s_calc, twispos[ind], twiss.etay[ind])
+
+    # Volume do bunch
+    sigX = _np.sqrt(betay*(K/(1+K))*emit0 + etay**2*sigE**2)
+    sigY = _np.sqrt(betax*(1/(1+K))*emit0 + etax**2*sigE**2)
+    V = sigS * sigX * sigY
+
+
+    # Tamanho betatron horizontal do bunch
+    Sx2 = 1/(1+K) * emit0 * betax
+
+    fator = betax*etaxl + alphax*etax
+    A1 = 1/(4*sigE**2) + (etax**2 + fator**2)/(4*Sx2)
+    B1 = betax*fator/(2*Sx2)
+    C1 = betax**2/(4*Sx2) - B1**2/(4*A1)
+
+    # Limite de integração inferior
+    ksip = (2*_np.sqrt(C1)/gamma * d_accp)**2
+    ksin = (2*_np.sqrt(C1)/gamma * d_accn)**2
+
+    # Interpola d_touschek
+    Dp = _np.interp(ksip,x,y,left=0.0,right=0.0)
+    Dn = _np.interp(ksin,x,y,left=0.0,right=0.0)
+
+    # Tempo de vida touschek inverso
+    Ratep = (r0**2*c/8/_np.pi)*N/gamma**2 / d_accp**3 * Dp / V
+    Raten = (r0**2*c/8/_np.pi)*N/gamma**2 / d_accn**3 * Dn / V
+    rate = (Ratep + Raten) / 2
+
+    # Tempo de vida touschek inverso médio
+    ave_rate = _np.trapz(rate,x=s_calc) / ( s_calc[-1] - s_calc[0] )
+    resp = dict(rate=rate,ave_rate=ave_rate,volume=V,pos=s_calc)
+
+    return resp
 
 def trackcpp_da_ma_lt(path=None):
 
@@ -264,7 +385,7 @@ def trackcpp_da_ma_lt(path=None):
         K       = 0.01
         I       = 100
         nrBun   = 864
-        accepRF = eqpar['rf_energy_acceptance']
+        accepRF = eqpar[0]['rf_energy_acceptance']
 
 
     # users selects beam lifetime parameters
@@ -281,9 +402,11 @@ def trackcpp_da_ma_lt(path=None):
     I       = float(answer[4])/1000
     nrBun   = int(answer[5])
     accepRF = float(answer[6])/100
-    N       = I/nrBun/1.601e-19*ats.revTime
+    N       = I/nrBun/_mp.constants.elementary_charge*(acc.length/_mp.constants.light_speed)
+    params  = dict(emit0=emit0, sigE=sigE, sigS=sigS, K=K, N=N, E=energy)
 
     twi, *_ = pyaccel.optics.calc_twiss(acc,indices='open')
+    twispos = pyaccel.lattice.find_spos(acc,indices='open')
 
     # parâmetros para a geração das figuras
     color_vec = ['b','r','g','m','c','k','y']
@@ -292,23 +415,159 @@ def trackcpp_da_ma_lt(path=None):
 
     var_plane = 'x' #determinaçao da abertura dinâmica por varreduda no plano x
 
+    if n_calls == 1:
+        pass
+        # size_font = 16
+        # type_colormap = 'Jet'
+        #
+        # mostra = 0 # 0 = porcentagem de part perdidas
+        # # 1 = número medio de voltas
+        # # 2 = posicao em que foram perdidas
+        # # 3 = plano em que foram perdidas
+        # ok, paths = directories_dialog('Selecione pasta com os dados?')
+        # if not ok: return
+        #
+        # path = find_right_folders(paths)[0]
+        #
+        # area, aper_xy, aper_ex, ltime, accep = [],[],[],[],[]
+        #
+        # result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        # n_pastas = len(result)
+        #
+        # lt_prob = 0
+        # for k in range(n_pastas):
+        #     pathn = _os.path.sep.join([path,result[k]])
+        #
+        #     if xy:
+        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
+        #             _, a, dados1 = trackcpp_load_dynap_xy(pathn,var_plane)
+        #             if mostra == 0:
+        #                 idx_daxy = idx_daxy + (dados1['plane'] == 0)
+        #             elif mostra == 1:
+        #                 idx_daxy = idx_daxy + dados1['turn']
+        #             elif mostra == 2:
+        #                 idx_daxy = idx_daxy + (dados1['pos'] % 51.8396)
+        #             elif mostra == 3:
+        #                 idx_daxy = idx_daxy + dados1['plane']
+        #         else:
+        #             print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
+        #     if ex:
+        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
+        #             _, dados2 = trackcpp_load_dynap_ex(pathn)
+        #             if mostra == 0:
+        #                 idx_daxy = idx_daxy + (dados2['plane'] == 0)
+        #             elif mostra == 1:
+        #                 idx_daxy = idx_daxy + dados2['turn']
+        #             elif mostra == 2:
+        #                 idx_daxy = idx_daxy + (dados2['pos'] % 51.8396)
+        #             elif mostra == 3:
+        #                 idx_daxy = idx_daxy + dados2['plane']
+        #         else:
+        #             print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
+        #
+        #     if ma:
+        #         if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
+        #             pos, aceit, *_ = trackcpp_load_ma_data(pathn)
+        #             if _np.isclose(aceit,0).any():
+        #                 lt_prob += 1
+        #             else:
+        #                 accep += [aceit]
+        #                 Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
+        #                              neg= _np.maximum(aceit[1], -accepRF))
+        #                 # não estou usando alguns outputs
+        #                 LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+        #                 ltime += [1/LT['ave_rate']/60/60] # em horas
+        #         else:
+        #             print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
+        # if xy and (mostra == 0):
+        #     idx_daxy = (n_pastas-idx_daxy)/n_pastas*100
+        #     idx_daxy[0,0] = 100
+        #     idx_daxy[0,1] = 0
+        # if ex and (mostra == 0):
+        #     idx_daex = (n_pastas-idx_daex)/n_pastas*100
+        #     idx_daex[0,0] = 100
+        #     idx_daex[0,1] = 0
+        # if ma:
+        #     accep   = _np.dstack(accep)*100
+        #     ma_ave  = accep.mean(axis=2)
+        #     ltime   = _np.hstack(ltime)
+        #     lt_ave  = ltime.mean()
+        #     ma_rms = accep.std(axis=2,ddof=1)
+        #     lt_rms = ltime.std(ddof=1)
+        #
+        # # make the figures
+        # if xy:
+        #     fxy, axy = _plt.subplots()
+        #     fxy.set_size_inches((5,4))
+        #     axy.grid(True)
+        #     axy.hold(True)
+        #     axy.set_xlabel('x [mm]',fontsize=size_font)
+        #     axy.set_ylabel('y [mm]',fontsize=size_font)
+        #     axy.set_xlim([-limx, limx])
+        #     axy.set_ylim([0, limy])
+        #     pc = axy.pcolormesh(1000*dados1['x'], 1000*dados1['y'], idx_daxy)
+        #     axy.annotate('y = 1 mm',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
+        #     fxy.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        # if ex:
+        #     fex, aex = _plt.subplots()
+        #     fex.set_size_inches((5,4))
+        #     aex.grid(True)
+        #     aex.hold(True)
+        #     aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
+        #     aex.set_ylabel('x [mm]',fontsize=size_font)
+        #     aex.set_xlim([-limne, limpe])
+        #     aex.set_ylim([-limx, 0])
+        #     pc = aex.pcolormesh(100*dados2.en, 1000*dados2.x, idx_daex)
+        #     aex.annotate(r'$\delta$ = 0',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
+        #     fex.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        # if ma
+        #     f2=figure('Position',[3, 3, 956, 462]);
+        #     falt = axes('Parent',f2,'YGrid','on','XGrid','on','yTickLabel',{'-5','-2.5','0','2.5','5'},...
+        #         'YTick',[-5 -2.5 0 2.5 5],'Units','pixels','Position',[77 64 864, 385],'FontSize',size_font);
+        #     box(falt,'on'); hold(falt,'all');
+        #     xlabel('pos [m]','FontSize',size_font);
+        #     ylabel('\delta [%]','FontSize',size_font);
+        #     plot(falt,spos,squeeze(accep(:,1,:))*100,'Color',[0.6 0.6 1.0]);
+        #     plot(falt,spos,squeeze(accep(:,2,:))*100,'Color',[0.6 0.6 1.0]);
+        #     plot(falt,spos,aveAccep,'LineWidth',3,'Color',[0,0,1]);
+        #     if plot_LR, plot(falt,LT.Pos,limeLT/2*LossRate/max(LossRate(:)),'Color',[0,0,0]); end
+        #     lnls_drawlattice(the_ring,10, 0, true,0.2);
+        #     xlim([0, limsLT]); ylim([-limeLT-0.3, limeLT+0.3]);
+        #
+        #     string = {sprintf('%-10s = %3.1f GeV','Energy',params.E/1e9),...
+        #         sprintf('%-10s = %5.3f mA','I/bunch',params.N*1.601e-19/1.72e-6*1e3),...
+        #         sprintf('%-10s = %3.1f %%','Coupling',params.K*100),...
+        #         sprintf('%-10s = %5.3f nm.rad','\epsilon_0',params.emit0*1e9),...
+        #         sprintf('%-10s = %5.3f %%','\sigma_{\delta}',params.sigE*100),...
+        #         sprintf('%-9s = %5.3f mm','\sigma_L',params.sigS*1e3),...
+        #         sprintf('Tousc LT = %5.1f \xb1 %3.1f h',aveLT,stdLT)};
+        #     annotation(f2,'textbox','Units','pixels','Position',[390, 162, 220, 90],'String',string(1:3),...
+        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
+        #     annotation(f2,'textbox','Units','pixels','Position',[420, 267, 192, 91],'String',string(4:6),...
+        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
+        #     annotation(f2,'textbox','Units','pixels','Position',[632, 202, 253, 37],'String',string(7),...
+        #         'FontSize',size_font,'FitBoxToText','on','LineStyle','none','Color',[0 0 0]);
+        # _plt.show()
+        # return
+
+
     i=0
     while i < n_calls:
-        ok, paths = directories_dialog(path,'Selecione pasta com os dados?')
-        if if not ok: return
+        ok, paths = directories_dialog('Selecione pasta com os dados?')
+        if not ok: return
+
         paths = find_right_folders(paths)
 
         for path in paths:
             if i >= n_calls: break
-            i+=1
 
             area, aper_xy, aper_ex, ltime, accep = [],[],[],[],[]
 
-            result = [i for i in _os.listdir(path) if _os.path.isdir(i)]
+            result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
             n_pastas = len(result)
             rms_mode = True
             if n_pastas == 0:
-                rms_mode = false
+                rms_mode = False
                 n_pastas = 1
 
             na = _os.path.abspath(path).split('/')[1:]
@@ -316,143 +575,144 @@ def trackcpp_da_ma_lt(path=None):
 
             lt_prob = 0
             for k in range(n_pastas):
-                if rms_mode: path += _os.path.sep + result[i]
+                pathn = path
+                if rms_mode: pathn += _os.path.sep + result[k]
 
                 if xy:
-                    if _os.path.isfile(_os.path.sep.join([path,'dynap_xy_out.txt'])):
-                        aper, a, *_ = trackcpp_load_dynap_xy(path,var_plane)
+                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
+                        aper, a, *_ = trackcpp_load_dynap_xy(pathn,var_plane)
                         area += [a]
                         aper_xy += [aper]
                     else:
-                        print('{0:-2d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
+                        print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
                 if ex:
-                    if _os.path.isfile(_os.path.sep.join([path,'dynap_ex_out.txt'])):
-                        aper, *_ = trackcpp_load_dynap_ex(path)
+                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
+                        aper, *_ = trackcpp_load_dynap_ex(pathn)
                         aper_ex += [aper]
                     else:
-                        print('{0:-2d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
+                        print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
 
                 if ma:
-                    if _os.path.isfile(_os.path.sep.join([path,'dynap_ma_out.txt'])):
-                        pos, aceit, *_ = trackcpp_load_ma_data(path)
+                    if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
+                        pos, aceit, *_ = trackcpp_load_ma_data(pathn)
                         if _np.isclose(aceit,0).any():
                             lt_prob += 1
                         else:
                             accep += [aceit]
-                            Accep['s']   = spos
-                            Accep['pos'] = np.mininum(aceit[0], accepRF)
-                            Accep['neg'] = np.maximum(aceit[1], -accepRF)
+                            Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
+                                         neg= _np.maximum(aceit[1], -accepRF))
                             # não estou usando alguns outputs
-                            LT = lnls_tau_touschek_inverso(params,Accep,twi)
-                            ltime += [1/LT['AveRate']/60/60] # em horas
+                            LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                            ltime += [1/LT['ave_rate']/60/60] # em horas
                     else:
-                        print('{0:-2d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
+                        print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
 
             if xy:
-                aper_xy = np.dstack(aper_xy)
+                aper_xy = _np.dstack(aper_xy)*1000
                 xy_ave  = aper_xy.mean(axis=2)
                 neg_ave = xy_ave[0][2]
-                area    = np.dstack(area)
+                area    = _np.hstack(area)*1e6
                 area_ave= area.mean()
             if ex:
-                aper_ex = np.dstack(aper_ex)
+                aper_ex = _np.dstack(aper_ex)
                 ex_ave  = aper_ex.mean(axis=2)
             if ma:
-                accep   = np.dstack(accep)*100
+                accep   = _np.dstack(accep)*100
                 ma_ave  = accep.mean(axis=2)
-                ltime   = np.dstack(lifetime)
+                ltime   = _np.hstack(ltime)
                 lt_ave  = ltime.mean()
             if rms_mode:
                 if xy:
                     xy_rms  = aper_xy.std(axis=2,ddof=1)
                     neg_rms = xy_rms[0][2]
-                    area_rms= area.std(axis=2,ddof=1)
+                    area_rms= area.std(ddof=1)
                 if ex:
                     ex_rms  = aper_ex.std(axis=2,ddof=1)
                 if ma:
-                    rmsAccep = squeeze(std(accep,0,1))*100
-                    rmsLT = std(lifetime)
+                    ma_rms = accep.std(axis=2,ddof=1)
+                    lt_rms = ltime.std(ddof=1)
 
             ########  exposição dos resultados ######
 
             color = color_vec[i % len(color_vec)]
-            ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-',label=leg_text)
+            ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
             rms_conf = dict(linewidth=2,color=color,linestyle='--')
             if not i:
                 if xy and ma:
-                    print('\n{0:-20s {1:-15s} {2:-15s} {3:-15s}\n'.format('Config',
+                    print('\n{0:20s} {1:15s} {2:15s} {3:15s}\n'.format('Config',
                             'Dynap XY [mm^2]', 'Aper@y=0.2 [mm]', 'Lifetime [h]'))
                 elif ma:
-                    print('\n{0:-20s {1:-15s}\n'.format('Config', 'Lifetime [h]'))
+                    print('\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]'))
                 elif xy:
-                    print('\n{0:-20s {1:-15s}\n'.format('Config', 'Dynap XY [mm^2]',
-                                                        'Aper@y=0.2 [mm]'))
+                    print('\n{0:20s} {1:15s} {2:15s}\n'.format('Config',
+                                        'Dynap XY [mm^2]','Aper@y=0.2 [mm]'))
             if xy or ma:
-                print('{0:-20s} '.format(leg_text.upper()))
+                print('{0:20s} '.format(leg_text.upper()), end='')
 
             if xy:
                 if not i:
                     fxy, axy = _plt.subplots()
-                    fxy.set_figsize((5,4))
+                    fxy.set_size_inches((5,4))
                     axy.grid(True)
                     axy.hold(True)
-                    axy.set_xlabel('x [mm]',font_size=size_font)
-                    axy.set_ylabel('y [mm]',font_size=size_font)
-                    axy.set_xlim([-limx limx])
-                    axy.set_ylim([0 limy])
-                axy.plot(1000*xy_ave[0,:,0], 1000*xy_ave[0,:,1],**ave_conf)
+                    axy.set_xlabel('x [mm]',fontsize=size_font)
+                    axy.set_ylabel('y [mm]',fontsize=size_font)
+                    axy.set_xlim([-limx, limx])
+                    axy.set_ylim([0, limy])
+                axy.plot(xy_ave[0], xy_ave[1],label=leg_text,**ave_conf)
                 if rms_mode:
-                    print('{0:5.2f} \x00B1 {1:-5.2f}   {2:5.1f} \x00B1 {-5.1f}   '.format(
-                            area_ave*1e6, area_rms*1e6, neg_ave*1e3, neg_rms*1e3),end='')
-                    axy.plot(1000*(xy_rms[0]+xy_ave[0]),
-                             1000*(xy_rms[1]+xy_ave[1]),**rms_conf)
-                    axy.plot(1000*(xy_rms[0]-xy_ave[0]),
-                             1000*(xy_rms[1]-xy_ave[1]),**rms_conf)
+                    print('{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   '.format(
+                            area_ave, area_rms, neg_ave, neg_rms),end='')
+                    axy.plot(xy_ave[0]+xy_rms[0], xy_ave[1]+xy_rms[1],**rms_conf)
+                    axy.plot(xy_ave[0]-xy_rms[0], xy_ave[1]-xy_rms[1],**rms_conf)
                 else:
-                    print('{0:5.2f}           {1:5.1f}           '.format(area_ave*1e6, neg_ave*1e3),end='')
+                    print('{0:>5.2f}           {1:>5.1f}           '.format(area_ave, neg_ave),end='')
 
             if ex:
                 if not i:
                     fex, aex = _plt.subplots()
-                    fex.set_figsize((5,4))
+                    fex.set_size_inches((5,4))
                     aex.grid(True)
                     aex.hold(True)
-                    aex.set_xlabel(r'$\delta$ [%]',font_size=size_font)
-                    aex.set_ylabel('x [mm]',font_size=size_font)
-                    aex.set_xlim([-limne limpe])
-                    aex.set_ylim([-limx 0])
-                aex.plot(1000*ex_ave[0,:,0], 1000*ex_ave[0,:,1],**ave_conf)
+                    aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
+                    aex.set_ylabel('x [mm]',fontsize=size_font)
+                    aex.set_xlim([-limne, limpe])
+                    aex.set_ylim([-limx, 0])
+                aex.plot(100*ex_ave[0], 1000*ex_ave[1],label=leg_text,**ave_conf)
                 if rms_mode:
-                    aex.plot(1000*(ex_ave[0]+ex_rms[0]),
+                    aex.plot(100*(ex_ave[0]+ex_rms[0]),
                              1000*(ex_ave[1]+ex_rms[1]),**rms_conf)
-                    aex.plot(1000*(ex_ave[0]-ex_rms[0]),
+                    aex.plot(100*(ex_ave[0]-ex_rms[0]),
                              1000*(ex_ave[1]-ex_rms[1]),**rms_conf)
             if ma:
                 #imprime o tempo de vida
                 if rms_mode:
-                    print('{5.2f} \x00B1 {-5.2f} '.format(aveLT, rmsLT),end='')
+                    print('{0:>5.2f} \xB1 {1:5.2f} '.format(lt_ave, lt_rms),end='')
                     if lt_prob:
                         print('   *{0:02d) máquinas desprezadas'.format(lt_prob)+
                               ' no cálculo por possuírem aceitancia nula.',end='')
                 else:
-                    print('{5.2f} ', aveLT)
+                    print('{5.2f} ', lt_ave)
                 if not i:
                     fma, ama = _plt.subplots()
-                    fma.set_figsize((7,3.5))
+                    fma.set_size_inches((7,3.5))
                     ama.grid(True)
                     ama.hold(True)
-                    ama.set_xlabel('Pos [m]',font_size=size_font)
-                    ama.set_ylabel(r'$\delta$ [%]',font_size=size_font)
-                    ama.set_xlim([-limne-0.2,limpe+0.2])
-                    ama.set_ylim([0, 52])
+                    ama.set_xlabel('Pos [m]',fontsize=size_font)
+                    ama.set_ylabel(r'$\delta$ [%]',fontsize=size_font)
+                    ama.set_xlim([0, 52])
+                    ama.set_ylim([-limne-0.2,limpe+0.2])
                     ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
                             yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
-                ama.plot(pos,ma_ave,**ave_conf)
+                ama.plot(pos,ma_ave[0],label=leg_text,**ave_conf)
+                ama.plot(pos,ma_ave[1],**ave_conf)
                 if rms_mode:
                     ama.plot(pos,ma_ave[0]+ma_rms[0],**rms_conf)
                     ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
 
             if xy or ma: print()
+
+            i+=1
 
 
     title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
@@ -465,5 +725,10 @@ def trackcpp_da_ma_lt(path=None):
         aex.set_title('DAEX - ' + title_text)
     if ma:
         ama.legend(loc='best')
-        lnls_drawlattice(the_ring,10, 0, true,0.2, false, falt)
+        pyaccel.graphics.draw_lattice(acc,symmetry=10, offset=0, gca=True,height=0.4)
         ama.set_title('MA - ' + title_text)
+
+    _plt.show()
+
+if __name__ == '__main__':
+    trackcpp_da_ma_lt(_os.path.abspath(_os.path.curdir))
