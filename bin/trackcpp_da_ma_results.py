@@ -26,6 +26,7 @@ mostra = 0  # 0 = porcentagem de part perdidas
             # 2 = posicao em que foram perdidas
             # 3 = plano em que foram perdidas
 plot_loss_rate = True
+_full = lambda x: _os.path.sep.join(x)
 
 def directories_dialog(path=None,name='Select Directories'):
     ok = True
@@ -44,6 +45,11 @@ def directories_dialog(path=None,name='Select Directories'):
     Fi = QtGui.QFileDialog()
     Fi.setWindowTitle(name)
     Fi.setOption(Fi.DontUseNativeDialog, True)
+    qr = Fi.frameGeometry()
+    cp = QtGui.QDesktopWidget().availableGeometry().center()
+    qr.moveCenter(cp)
+    Fi.move(qr.topLeft())
+
     Fi.setFileMode(Fi.DirectoryOnly)
     Fi.setDirectory(path)
     for view in Fi.findChildren(QtGui.QListView):
@@ -91,6 +97,7 @@ def input_dialog(prompt,def_answer=None,name='Type Parameters'):
         app = QtGui.QApplication([])
     except RuntimeError:
         pass
+
     w = QtGui.QWidget()
     w.setWindowTitle(name)
     grid = QtGui.QGridLayout()
@@ -100,19 +107,26 @@ def input_dialog(prompt,def_answer=None,name='Type Parameters'):
         title  = QtGui.QLabel(prompt[i])
         edit  += [QtGui.QLineEdit()]
         if def_answer is not None: edit[i].setText(def_answer[i])
-        grid.addWidget(title, 2*i,  0,1,2)
+        grid.addWidget(title, 2*i,  0,1,2)# title, row,col,spanrow,spancol
         grid.addWidget(edit[i], 2*i+1, 0,1,2)
+    #Ok Button
     qbtn = QtGui.QPushButton('Ok', w)
     qbtn.clicked.connect(_pressed_ok)
     qbtn.resize(qbtn.sizeHint())
     grid.addWidget(qbtn, 2*(i+1), 0)
+    #Cancel Button
     qbtn = QtGui.QPushButton('Cancel', w)
     qbtn.clicked.connect(_pressed_cancel)
     qbtn.resize(qbtn.sizeHint())
     grid.addWidget(qbtn, 2*(i+1), 1)
+
+    #Defining the layout of the window:
     w.setLayout(grid)
-    w.setGeometry(300, 300, i*50, 50)
-    w.setWindowTitle('InputDialog')
+    w.resize(50, i*50)
+    qr = w.frameGeometry()
+    cp = QtGui.QDesktopWidget().availableGeometry().center()
+    qr.moveCenter(cp)
+    w.move(qr.topLeft())
     w.show()
     QtCore.QCoreApplication.instance().exec_()
 
@@ -133,16 +147,16 @@ def find_right_folders(paths):
             if file.startswith(('dynap_xy_out.txt','dynap_ex_out.txt','dynap_ma_out.txt')):
                 pathnames += [path]
             else:
-                file = _os.path.sep.join((path,file))
+                file = _full((path,file))
                 if _os.path.isdir(file) and  not file.startswith(('.','..')):
                     paths2 += [file]
         if paths2: pathnames += find_right_folders(paths2)
     return pathnames
 
-def trackcpp_load_dynap_xy(path, var_plane='x'):
+def load_dynap_xy(path, var_plane='x'):
     # Carrego os dados:
     nr_header_lines = 13
-    fname = _os.path.sep.join([path, 'dynap_xy_out.txt'])
+    fname = _full([path, 'dynap_xy_out.txt'])
     turn,plane,x,y = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,6),unpack=True)
 
     # Identifico quantos x e y existem:
@@ -204,10 +218,10 @@ def trackcpp_load_dynap_xy(path, var_plane='x'):
 
     return aper, area, dados
 
-def trackcpp_load_dynap_ex(path):
+def load_dynap_ex(path):
     # Carrego os dados:
     nr_header_lines = 13
-    fname = _os.path.sep.join([path, 'dynap_ex_out.txt'])
+    fname = _full([path, 'dynap_ex_out.txt'])
     turn,plane,x,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,7),unpack=True)
 
     # Identifico quantos x e y existem:
@@ -232,11 +246,11 @@ def trackcpp_load_dynap_ex(path):
 
     return aper, dados
 
-def trackcpp_load_ma_data(path):
+def load_ma_data(path):
 
     # Carrego os dados:
     nr_header_lines = 13
-    fname = _os.path.sep.join([path, 'dynap_ma_out.txt'])
+    fname = _full([path, 'dynap_ma_out.txt'])
     turn,el,pos,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,2,4,7),unpack=True)
 
     pos  = pos[::2]
@@ -347,7 +361,7 @@ def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
 
     return resp
 
-def ma_analysis(folders,leg_text,title_text,mach,energy):
+def ma_analysis(paths,leg_text,title_text,mach,energy):
     if mach.find('bo') >= 0:
         acc = getattr(sirius,'bo')
         acc = acc.create_accelerator()
@@ -405,8 +419,7 @@ def ma_analysis(folders,leg_text,title_text,mach,energy):
     twi, *_ = pyaccel.optics.calc_twiss(acc,indices='open')
     twispos = pyaccel.lattice.find_spos(acc,indices='open')
 
-    fma, ama = _plt.subplots()
-    fma.set_size_inches((7,3.5))
+    fma, ama = _plt.subplots(figsize=(11,6))
     ama.grid(True)
     ama.hold(True)
     ama.set_xlabel('Pos [m]',fontsize=size_font)
@@ -419,57 +432,58 @@ def ma_analysis(folders,leg_text,title_text,mach,energy):
     pyaccel.graphics.draw_lattice(acc,symmetry=10, offset=0, gca=True,height=0.4)
 
     if len(paths) == 1:
+        path = paths[0]
         ltime, accep, rate = [],[],[]
 
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
 
         for k in range(n_pastas):
-            pathn = _os.path.sep.join([path,result[k]])
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
-                pos, aceit, *_ = trackcpp_load_ma_data(pathn)
+            pathn = _full([path,result[k]])
+            if _os.path.isfile(_full([pathn,'dynap_ma_out.txt'])):
+                pos, aceit, *_ = load_ma_data(pathn)
                 accep += [aceit]
                 Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                              neg= _np.maximum(aceit[1], -accepRF))
                 # não estou usando alguns outputs
                 LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
-                rate += LT['rate']
+                rate += [LT['rate']]
                 ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
                 print('{1:5s}: ma nao carregou\n'.format(result[k]))
         accep  = _np.dstack(accep)*100
-        rate   = _np.dstack(rate)
+        rate   = _np.vstack(rate)
         ma_ave = accep.mean(axis=2)
         ltime  = _np.hstack(ltime)
         lt_ave = ltime.mean()
         lt_rms = ltime.std(ddof=1)
 
         # make the figures
-        ama.plot(pos,accep[0]*100,color=[0.6 0.6 1.0])
-        ama.plot(pos,accep[1]*100,color=[0.6 0.6 1.0])
-        ama.plot(pos,ma_ave.T,'LineWidth',3,'Color',[0,0,1]);
+        ama.plot(pos,accep[0],color=[0.6, 0.6, 1.0])
+        ama.plot(pos,accep[1],color=[0.6, 0.6, 1.0])
+        ama.plot(pos,ma_ave.T,linewidth=esp_lin,color=[0,0,1])
         if plot_loss_rate:
-            ama.plot(LT['pos'],limne/2*rate/rate.max(),color='k')
+            ama.plot(LT['pos'],limne/2*rate.T/rate.max(),color='k')
 
-        stri = ('{0:10s} = {1:3.1f} GeV\n'.format('Energy',E/1e9) +
+        stri = ('{0:10s} = {1:3.1f} GeV\n'.format('Energy',energy/1e9) +
                 '{0:10s} = {1:5.3f} mA\n'.format('I/bunch',I/nrBun*1e3) +
                 '{0:10s} = {1:3.1f} %'.format('Coupling',K*100))
-        ama.annotate(stri,(0.4,0.5),fontsize=size_font,color='w',xycoords='axes fraction')
+        ama.annotate(stri,(0.1,0.3),fontsize=12,color='k',xycoords='axes fraction')
 
-        stri = (r'${0:10s}$ = {1:5.3f} nm.rad\n'.format('\epsilon_0',emit0*1e9)+
-            r'${0:10s}$ = {5.3f} %\n'.format('\sigma_{\delta}',sigE*100)+
-            r'${0:10s}$ = {5.3f} mm'.format('\sigma_L',sigS*1e3))
-        ama.annotate(stri,(0.4,0.4),fontsize=size_font,color='w',xycoords='axes fraction')
+        stri = ('${0:10s}$ = {1:5.3f} nm.rad\n'.format('\epsilon_0',emit0*1e9)+
+            '${0:10s}$ = {1:5.3f} % \n'.format('\sigma_{\delta}',sigE*100)+
+            '${0:10s}$ = {1:5.3f} mm'.format('\sigma_L',sigS*1e3))
+        ama.annotate(stri,(0.4,0.3),fontsize=12,color='k',xycoords='axes fraction')
 
-        stri = 'Tousc LT = {5.1f} \xb1 {3.1f} h'.format(lt_ave,lt_rms)
-        ama.annotate(stri,(0.4,0.4),fontsize=size_font,color='w',xycoords='axes fraction')
+        stri = 'Tousc LT = {0:5.1f} \xb1 {1:3.1f} h'.format(lt_ave,lt_rms)
+        ama.annotate(stri,(0.67,0.35),fontsize=12,color='k',xycoords='axes fraction')
         return fma
 
     print('\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]'))
     for i,path in enumerate(paths):
         ltime, accep = [],[]
 
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
         rms_mode = True
         if n_pastas == 0:
@@ -480,8 +494,8 @@ def ma_analysis(folders,leg_text,title_text,mach,energy):
         for k in range(n_pastas):
             pathn = path
             if rms_mode: pathn += _os.path.sep + result[k]
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ma_out.txt'])):
-                pos, aceit, *_ = trackcpp_load_ma_data(pathn)
+            if _os.path.isfile(_full([pathn,'dynap_ma_out.txt'])):
+                pos, aceit, *_ = load_ma_data(pathn)
                 if _np.isclose(aceit,0).any():
                     lt_prob += 1
                 else:
@@ -524,8 +538,7 @@ def ma_analysis(folders,leg_text,title_text,mach,energy):
 
 def xy_analysis(paths,leg_text,title_text):
 
-    fxy, axy = _plt.subplots()
-    fxy.set_size_inches((5,4))
+    fxy, axy = _plt.subplots(figsize=(9,6))
     axy.grid(True)
     axy.hold(True)
     axy.set_xlabel('x [mm]',fontsize=size_font)
@@ -537,13 +550,15 @@ def xy_analysis(paths,leg_text,title_text):
     if len(paths) == 1:
         path = paths[0]
 
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
 
+        idx_daxy = None
         for k in range(n_pastas):
-            pathn = _os.path.sep.join([path,result[k]])
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
-                _, a, dados1 = trackcpp_load_dynap_xy(pathn,var_plane)
+            pathn = _full([path,result[k]])
+            if _os.path.isfile(_full([pathn,'dynap_xy_out.txt'])):
+                _, a, dados = load_dynap_xy(pathn,var_plane)
+                if idx_daxy is None: idx_daxy = dados['plane']*0.0
                 if mostra == 0:
                     idx_daxy += (dados['plane'] == 0)
                 elif mostra == 1:
@@ -560,14 +575,19 @@ def xy_analysis(paths,leg_text,title_text):
             idx_daxy[0,1] = 0
         # make the figures
         pc = axy.pcolormesh(1000*dados['x'], 1000*dados['y'], idx_daxy)
-        axy.annotate('y = 1 mm',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
-        fxy.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        axy.annotate('y = 1 mm',(0.01,0.90),fontsize=size_font,color='w',xycoords='axes fraction')
+        axy.set_xlim([dados['x'].min()*1000, dados['x'].max()*1000])
+        axy.set_ylim([dados['y'].min()*1000, dados['y'].max()*1000])
+        ax = fxy.add_axes([0.91,0.10,0.03,0.83])
+        cl = fxy.colorbar(pc, cax = ax, ticks=[0,20,40,60,80,100])
+        cl.set_ticklabels(['100%','80%','60%','40%','20%','0%'])
+        axy.set_position([0.08,0.10,0.82,0.83])
         return fxy
 
     print('\n{0:20s} {1:15s} {2:15s}\n'.format('Config','Dynap XY [mm^2]','Aper@y=0.2 [mm]'))
     for i,path in enumerate(paths):
         area, aper_xy = [],[]
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
         rms_mode = True
         if n_pastas == 0:
@@ -576,8 +596,8 @@ def xy_analysis(paths,leg_text,title_text):
         for k in range(n_pastas):
             pathn = path
             if rms_mode: pathn += _os.path.sep + result[k]
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_xy_out.txt'])):
-                aper, a, *_ = trackcpp_load_dynap_xy(pathn,var_plane)
+            if _os.path.isfile(_full([pathn,'dynap_xy_out.txt'])):
+                aper, a, *_ = load_dynap_xy(pathn,var_plane)
                 area += [a]
                 aper_xy += [aper]
             else:
@@ -608,12 +628,12 @@ def xy_analysis(paths,leg_text,title_text):
         else:
             print('{0:>5.2f}           {1:>5.1f}           '.format(area_ave, neg_ave))
     axy.legend(loc='best')
+    print()
     return fxy
 
 def ex_analysis(paths,leg_text,title_text):
 
-    fex, aex = _plt.subplots()
-    fex.set_size_inches((5,4))
+    fex, aex = _plt.subplots(figsize=(9,6))
     aex.grid(True)
     aex.hold(True)
     aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
@@ -625,13 +645,15 @@ def ex_analysis(paths,leg_text,title_text):
         path = paths[0]
         aper_ex = []
 
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
 
+        idx_daex = None
         for k in range(n_pastas):
-            pathn = _os.path.sep.join([path,result[k]])
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
-                _, dados = trackcpp_load_dynap_ex(pathn)
+            pathn = _full([path,result[k]])
+            if _os.path.isfile(_full([pathn,'dynap_ex_out.txt'])):
+                _, dados = load_dynap_ex(pathn)
+                if idx_daex is None: idx_daex = dados['plane']*0.0
                 if mostra == 0:
                     idx_daex += (dados['plane'] == 0)
                 elif mostra == 1:
@@ -646,15 +668,20 @@ def ex_analysis(paths,leg_text,title_text):
             idx_daex = (n_pastas-idx_daex)/n_pastas*100
             idx_daex[0,0] = 100
             idx_daex[0,1] = 0
-        pc = aex.pcolormesh(100*dados.en, 1000*dados.x, idx_daex)
-        aex.annotate(r'$\delta$ = 0',(0.01,0.95),fontsize=size_font,color='w',xycoords='axes fraction')
-        fex.colorbar(pc, ticks=[0,20,40,60,80,100],ticklabels=['100%','80%','60%','40%','20%','0%'])
+        pc = aex.pcolormesh(100*dados['en'], 1000*dados['x'], idx_daex)
+        aex.annotate(r'$\delta$ = 0',(0.01,0.05),fontsize=size_font,color='w',xycoords='axes fraction')
+        aex.set_xlim([dados['en'].min()*100, dados['en'].max()*100])
+        aex.set_ylim([dados['x'].min()*1000, dados['x'].max()*1000])
+        ax = fex.add_axes([0.91,0.10,0.03,0.83])
+        cl = fex.colorbar(pc, cax=ax, ticks=[0,20,40,60,80,100])
+        cl.set_ticklabels(['100%','80%','60%','40%','20%','0%'])
+        aex.set_position([0.08,0.10,0.82,0.83])
         return fex
 
     for i,path in enumerate(paths):
         aper_ex = []
 
-        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_os.path.sep.join([path,ii]))])
+        result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
         n_pastas = len(result)
         rms_mode = True
         if n_pastas == 0:
@@ -663,8 +690,8 @@ def ex_analysis(paths,leg_text,title_text):
         for k in range(n_pastas):
             pathn = path
             if rms_mode: pathn += _os.path.sep + result[k]
-            if _os.path.isfile(_os.path.sep.join([pathn,'dynap_ex_out.txt'])):
-                aper, *_ = trackcpp_load_dynap_ex(pathn)
+            if _os.path.isfile(_full([pathn,'dynap_ex_out.txt'])):
+                aper, *_ = load_dynap_ex(pathn)
                 aper_ex += [aper]
             else:
                 print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
@@ -687,7 +714,7 @@ def ex_analysis(paths,leg_text,title_text):
     aex.legend(loc='best')
     return fex
 
-def trackcpp_da_ma_lt(inipath=None, save=False, show=True):
+def trackcpp_da_ma_lt(path=None, save=False, show=True):
 
     # users selects submachine
     prompt = ['Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots']
@@ -702,14 +729,13 @@ def trackcpp_da_ma_lt(inipath=None, save=False, show=True):
     ex = True if answer[3].find('ex') >= 0 else False
     ma = True if answer[3].find('ma') >= 0 else False
 
-    if inipath is None:
-        inipath = _os.path.sep.join(['home','fac_files','data',
-                                'sirius',answer[0],'beam_dynamics'])
+    if path is None:
+        path = _full(['','home','fac_files','data','sirius',answer[0],'beam_dynamics'])
     i=0
     leg_text = []
     folders = []
     while i < n_calls:
-        ok, paths = directories_dialog(inipath,'Selecione pasta com os dados')
+        ok, paths = directories_dialog(path,'Selecione pasta com os dados')
         if not ok: return
         paths = find_right_folders(paths)
         for path in paths:
@@ -720,15 +746,16 @@ def trackcpp_da_ma_lt(inipath=None, save=False, show=True):
             i+=1
     title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
 
+    curdir = _os.path.abspath(_os.path.curdir)
     if xy:
         fxy = xy_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
     if ex:
         fex = ex_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
     if ma:
         fma = ma_analysis(folders,leg_text,title_text,answer[0],energy)
-        if save: fxy.savefig(_os.path.sep.join((inipath, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
     if show: _plt.show()
 
 if __name__ == '__main__':
