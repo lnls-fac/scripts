@@ -3,35 +3,32 @@
 import subprocess
 import sys
 import os
+from apsuite.trackcpp_utils import *
 
+if __name__ == "__main__":
 
-default_track_version = 'trackcpp'
+    if len(sys.argv) == 1:
+        subprocess.call([default_track_version])
+        sys.exit()
 
+    if len(sys.argv) > 2:
+        print(sys.argv[0] + ': invalid number of arguments!')
+        sys.exit()
 
-if len(sys.argv) == 1:
-    subprocess.call([default_track_version])
-    sys.exit()
+    # loads config
+    input_file = sys.argv[1]
+    with open(input_file) as f:
+        content = f.readlines()
+    for line in content:
+        exec(line)
 
-if len(sys.argv) > 2:
-    print(sys.argv[0] + ': invalid number of arguments!')
-    sys.exit()
-
-# loads config
-input_file = sys.argv[1]
-with open(input_file) as f:
-    content = f.readlines()
-for line in content:
-    exec(line)
-
-
-# -- dynap_xy --
-
-try:
-    dynap_xy_run
-except:
-    dynap_xy_run = False
-if dynap_xy_run:
-    def dynap_xy(track_version   = default_track_version,
+    # -- dynap_xy --
+    try:
+        dynap_xy_run
+    except:
+        dynap_xy_run = False
+    if dynap_xy_run:
+        dynap_xy(track_version   = default_track_version,
                  flat_filename   = dynap_xy_flatfilename,
                  energy          = ebeam_energy,
                  harmonic_number = harmonic_number,
@@ -46,32 +43,15 @@ if dynap_xy_run:
                  y_nrpts         = dynap_xy_y_nrpts,
                  y_min           = dynap_xy_y_min,
                  y_max           = dynap_xy_y_max,
-                 nr_threads      = dynap_xy_nr_threads):
+                 nr_threads      = dynap_xy_nr_threads)
 
-        args = [track_version, 'dynap_xy',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(de),
-            str(nr_turns),
-            str(x_nrpts), str(x_min), str(x_max),
-            str(y_nrpts), str(y_min), str(y_max),
-            str(nr_threads),
-            ]
-        subprocess.call(args)
-
-
-# -- dynap_ex --
-
-try:
-    dynap_ex_run
-except:
-    dynap_ex_run = False
-if dynap_ex_run:
-    def dynap_ex(track_version   = default_track_version,
+    # -- dynap_ex --
+    try:
+        dynap_ex_run
+    except:
+        dynap_ex_run = False
+    if dynap_ex_run:
+        dynap_ex(track_version   = default_track_version,
                  flat_filename   = dynap_ex_flatfilename,
                  energy          = ebeam_energy,
                  harmonic_number = harmonic_number,
@@ -86,32 +66,15 @@ if dynap_ex_run:
                  x_nrpts         = dynap_ex_x_nrpts,
                  x_min           = dynap_ex_x_min,
                  x_max           = dynap_ex_x_max,
-                 nr_threads      = dynap_ex_nr_threads):
+                 nr_threads      = dynap_ex_nr_threads)
 
-        subprocess.call([track_version, 'dynap_ex',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(y),
-            str(nr_turns),
-            str(e_nrpts), str(e_min), str(e_max),
-            str(x_nrpts), str(x_min), str(x_max),
-            str(nr_threads),
-            ]
-        )
-
-
-# -- dynap_ma --
-
-try:
-    dynap_ma_run
-except:
-    dynap_ma_run = False
-if dynap_ma_run:
-    def dynap_ma(track_version   = default_track_version,
+    # -- dynap_ma --
+    try:
+        dynap_ma_run
+    except:
+        dynap_ma_run = False
+    if dynap_ma_run:
+        dynap_ma(track_version   = default_track_version,
                  flat_filename   = dynap_ma_flatfilename,
                  energy          = ebeam_energy,
                  harmonic_number = harmonic_number,
@@ -128,34 +91,16 @@ if dynap_ma_run:
                  s_min           = dynap_ma_s_min,
                  s_max           = dynap_ma_s_max,
                  nr_threads      = dynap_ma_nr_threads,
-                 fam_names       = dynap_ma_fam_names):
-
-        args = [track_version, 'dynap_ma',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(nr_turns),
-            str(y0),
-            str(e_init), str(e_delta),
-            str(nr_steps_back), str(rescale), str(nr_iterations),
-            str(s_min), str(s_max),
-            str(nr_threads)]
-        for famname in fam_names:
-            args.append(famname)
-        subprocess.call(args)
+                 fam_names       = dynap_ma_fam_names)
 
 
-# -- dynap_pxa --
-
-try:
-    dynap_pxa_run
-except:
-    dynap_pxa_run = False
-if dynap_pxa_run:
-    def dynap_pxa(track_version   = default_track_version,
+    # -- dynap_pxa --
+    try:
+        dynap_pxa_run
+    except:
+        dynap_pxa_run = False
+    if dynap_pxa_run:
+        dynap_pxa(track_version   = default_track_version,
                   flat_filename   = dynap_pxa_flatfilename,
                   energy          = ebeam_energy,
                   harmonic_number = harmonic_number,
@@ -172,158 +117,86 @@ if dynap_pxa_run:
                   s_min           = dynap_pxa_s_min,
                   s_max           = dynap_pxa_s_max,
                   nr_threads      = dynap_pxa_nr_threads,
-                  fam_names       = dynap_pxa_fam_names):
+                  fam_names       = dynap_pxa_fam_names)
 
-        args = [track_version, 'dynap_pxa',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(nr_turns),
-            str(y0),
-            str(e_init), str(e_delta),
-            str(nr_steps_back), str(rescale), str(nr_iterations),
-            str(s_min), str(s_max),
-            str(nr_threads)]
-        for famname in fam_names:
-            args.append(famname)
-        subprocess.call(args)
+    # -- dynap_pya --
+    try:
+        dynap_pya_run
+    except:
+        dynap_pya_run = False
+    if dynap_pya_run:
+        dynap_pya(track_version   = default_track_version,
+                      flat_filename   = dynap_pya_flatfilename,
+                      energy          = ebeam_energy,
+                      harmonic_number = harmonic_number,
+                      cavity_state    = cavity_state,
+                      radiation_state = radiation_state,
+                      vchamber_state  = vchamber_state,
+                      nr_turns        = dynap_pya_nr_turns,
+                      y0              = dynap_pya_y0,
+                      e_init          = dynap_pya_py_init,
+                      e_delta         = dynap_pya_py_delta,
+                      nr_steps_back   = dynap_pya_nr_steps_back,
+                      rescale         = dynap_pya_rescale,
+                      nr_iterations   = dynap_pya_nr_iterations,
+                      s_min           = dynap_pya_s_min,
+                      s_max           = dynap_pya_s_max,
+                      nr_threads      = dynap_pya_nr_threads,
+                      fam_names       = dynap_pya_fam_names)
 
+    # -- dynap_xyfmap --
+    try:
+        dynap_xyfmap_run
+    except:
+        dynap_xyfmap_run = False
+    if dynap_xyfmap_run:
+        dynap_xyfmap(track_version   = default_track_version,
+                         flat_filename   = dynap_xyfmap_flatfilename,
+                         energy          = ebeam_energy,
+                         harmonic_number = harmonic_number,
+                         cavity_state    = cavity_state,
+                         radiation_state = radiation_state,
+                         vchamber_state  = vchamber_state,
+                         de              = dynap_xyfmap_de,
+                         nr_turns        = dynap_xyfmap_nr_turns,
+                         x_nrpts         = dynap_xyfmap_x_nrpts,
+                         x_min           = dynap_xyfmap_x_min,
+                         x_max           = dynap_xyfmap_x_max,
+                         y_nrpts         = dynap_xyfmap_y_nrpts,
+                         y_min           = dynap_xyfmap_y_min,
+                         y_max           = dynap_xyfmap_y_max,
+                         nr_threads      = dynap_xyfmap_nr_threads)
 
-# -- dynap_pya --
+    # -- dynap_exfmap --
+    try:
+        dynap_exfmap_run
+    except:
+        dynap_exfmap_run = False
+    if dynap_exfmap_run:
+        dynap_exfmap(track_version   = default_track_version,
+                         flat_filename   = dynap_exfmap_flatfilename,
+                         energy          = ebeam_energy,
+                         harmonic_number = harmonic_number,
+                         cavity_state    = cavity_state,
+                         radiation_state = radiation_state,
+                         vchamber_state  = vchamber_state,
+                         y               = dynap_exfmap_y,
+                         nr_turns        = dynap_exfmap_nr_turns,
+                         e_nrpts         = dynap_exfmap_e_nrpts,
+                         e_min           = dynap_exfmap_e_min,
+                         e_max           = dynap_exfmap_e_max,
+                         x_nrpts         = dynap_exfmap_x_nrpts,
+                         x_min           = dynap_exfmap_x_min,
+                         x_max           = dynap_exfmap_x_max,
+                         nr_threads      = dynap_exfmap_nr_threads)
 
-try:
-    dynap_pya_run
-except:
-    dynap_pya_run = False
-if dynap_pya_run:
-    def dynap_pya(track_version   = default_track_version,
-                  flat_filename   = dynap_pya_flatfilename,
-                  energy          = ebeam_energy,
-                  harmonic_number = harmonic_number,
-                  cavity_state    = cavity_state,
-                  radiation_state = radiation_state,
-                  vchamber_state  = vchamber_state,
-                  nr_turns        = dynap_pya_nr_turns,
-                  y0              = dynap_pya_y0,
-                  e_init          = dynap_pya_py_init,
-                  e_delta         = dynap_pya_py_delta,
-                  nr_steps_back   = dynap_pya_nr_steps_back,
-                  rescale         = dynap_pya_rescale,
-                  nr_iterations   = dynap_pya_nr_iterations,
-                  s_min           = dynap_pya_s_min,
-                  s_max           = dynap_pya_s_max,
-                  nr_threads      = dynap_pya_nr_threads,
-                  fam_names       = dynap_pya_fam_names):
-
-        args = [track_version, 'dynap_pya',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(nr_turns),
-            str(y0),
-            str(e_init), str(e_delta),
-            str(nr_steps_back), str(rescale), str(nr_iterations),
-            str(s_min), str(s_max),
-            str(nr_threads)]
-        for famname in fam_names:
-            args.append(famname)
-        subprocess.call(args)
-
-
-# -- dynap_xyfmap --
-
-try:
-    dynap_xyfmap_run
-except:
-    dynap_xyfmap_run = False
-if dynap_xyfmap_run:
-    def dynap_xyfmap(track_version   = default_track_version,
-                     flat_filename   = dynap_xyfmap_flatfilename,
-                     energy          = ebeam_energy,
-                     harmonic_number = harmonic_number,
-                     cavity_state    = cavity_state,
-                     radiation_state = radiation_state,
-                     vchamber_state  = vchamber_state,
-                     de              = dynap_xyfmap_de,
-                     nr_turns        = dynap_xyfmap_nr_turns,
-                     x_nrpts         = dynap_xyfmap_x_nrpts,
-                     x_min           = dynap_xyfmap_x_min,
-                     x_max           = dynap_xyfmap_x_max,
-                     y_nrpts         = dynap_xyfmap_y_nrpts,
-                     y_min           = dynap_xyfmap_y_min,
-                     y_max           = dynap_xyfmap_y_max,
-                     nr_threads      = dynap_xyfmap_nr_threads):
-
-        args = [track_version, 'dynap_xyfmap',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(de),
-            str(nr_turns),
-            str(x_nrpts), str(x_min), str(x_max),
-            str(y_nrpts), str(y_min), str(y_max),
-            str(nr_threads)
-            ]
-        subprocess.call(args)
-
-
-# -- dynap_exfmap --
-
-try:
-    dynap_exfmap_run
-except:
-    dynap_exfmap_run = False
-if dynap_exfmap_run:
-    def dynap_exfmap(track_version   = default_track_version,
-                     flat_filename   = dynap_exfmap_flatfilename,
-                     energy          = ebeam_energy,
-                     harmonic_number = harmonic_number,
-                     cavity_state    = cavity_state,
-                     radiation_state = radiation_state,
-                     vchamber_state  = vchamber_state,
-                     y               = dynap_exfmap_y,
-                     nr_turns        = dynap_exfmap_nr_turns,
-                     e_nrpts         = dynap_exfmap_e_nrpts,
-                     e_min           = dynap_exfmap_e_min,
-                     e_max           = dynap_exfmap_e_max,
-                     x_nrpts         = dynap_exfmap_x_nrpts,
-                     x_min           = dynap_exfmap_x_min,
-                     x_max           = dynap_exfmap_x_max,
-                     nr_threads      = dynap_exfmap_nr_threads):
-
-        args = [track_version, 'dynap_exfmap',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(y),
-            str(nr_turns),
-            str(e_nrpts), str(e_min), str(e_max),
-            str(x_nrpts), str(x_min), str(x_max),
-            str(nr_threads)
-            ]
-        subprocess.call(args)
-
-
-# -- track_linepass --
-
-try:
-    track_linepass_run
-except:
-    track_linepass_run = False
-if track_linepass_run:
-    def track_linepass(track_version   = default_track_version,
+    # -- track_linepass --
+    try:
+        track_linepass_run
+    except:
+        track_linepass_run = False
+    if track_linepass_run:
+        track_linepass(track_version   = default_track_version,
                        flat_filename   = track_linepass_flatfilename,
                        energy          = ebeam_energy,
                        harmonic_number = harmonic_number,
@@ -336,59 +209,4 @@ if track_linepass_run:
                        ry0             = track_linepass_ry0,
                        py0             = track_linepass_py0,
                        de0             = track_linepass_de0,
-                       dl0             = track_linepass_dl0):
-
-        args = [track_version, 'track_linepass',
-            str(flat_filename),
-            str(energy),
-            str(harmonic_number),
-            str(cavity_state),
-            str(radiation_state),
-            str(vchamber_state),
-            str(start_element),
-            str(rx0), str(px0),
-            str(ry0), str(py0),
-            str(de0), str(dl0),
-            ]
-        subprocess.call(args)
-
-
-
-
-
-# --- main function ---
-
-if __name__ == "__main__":
-
-
-    ''' dynap_xy '''
-    if dynap_xy_run:
-        dynap_xy()
-
-    ''' dynap_ex '''
-    if dynap_ex_run:
-        dynap_ex()
-
-    ''' dynap_ma '''
-    if dynap_ma_run:
-        dynap_ma()
-
-    ''' dynap_pxa '''
-    if dynap_pxa_run:
-        dynap_pxa()
-
-    ''' dynap_pya '''
-    if dynap_pya_run:
-        dynap_pya()
-
-    ''' dynap_xyfmap '''
-    if dynap_xyfmap_run:
-        dynap_xyfmap()
-
-    ''' dynap_exfmap '''
-    if dynap_exfmap_run:
-        dynap_exfmap()
-
-    ''' track_linepass '''
-    if track_linepass_run:
-        track_linepass()
+                       dl0             = track_linepass_dl0)

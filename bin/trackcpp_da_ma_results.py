@@ -4,16 +4,13 @@ warnings.filterwarnings('ignore')
 import os as _os
 import numpy as _np
 import optparse as _optparse
-from guidata.qt import QtGui, QtCore
 import matplotlib.pyplot as _plt
 
 import sirius, pyaccel
 import mathphys as _mp
-
-# Tabela para interpolar d_touschek
-dic = _mp.utils.load_pickle('/home/fac_files/code/scripts/bin/TouschekDIntegralTable')
-X_TOUS = dic['x']
-Y_TOUS = dic['y']
+from lnls.dialog import input_dialog as _input_dialog
+from lnls.dialog import directories_dialog as _directories_dialog
+from apsuite.trackcpp_utils import load_dynap_ma, load_dynap_xy, load_dynap_ex
 
 # parâmetros para a geração das figuras
 color_vec = ['b','r','g','m','c','k','y']
@@ -27,114 +24,10 @@ mostra = 0  # 0 = porcentagem de part perdidas
             # 2 = posicao em que foram perdidas
             # 3 = plano em que foram perdidas
 plot_loss_rate = True
+
 _full = lambda x: _os.path.sep.join(x)
+CURDIR = _os.path.abspath(_os.path.curdir)
 
-def directories_dialog(path=None,name='Select Directories'):
-    ok = True
-    def _pressed_cancel():
-        nonlocal ok
-        Fi.close()
-        ok &= False
-
-    path = path or _os.path.abspath(_os.path.curdir)
-
-    try:
-        app = QtGui.QApplication([])
-    except RuntimeError:
-        pass
-
-    Fi = QtGui.QFileDialog()
-    Fi.setWindowTitle(name)
-    Fi.setOption(Fi.DontUseNativeDialog, True)
-    qr = Fi.frameGeometry()
-    cp = QtGui.QDesktopWidget().availableGeometry().center()
-    qr.moveCenter(cp)
-    Fi.move(qr.topLeft())
-
-    Fi.setFileMode(Fi.DirectoryOnly)
-    Fi.setDirectory(path)
-    for view in Fi.findChildren(QtGui.QListView):
-        if isinstance(view.model(), QtGui.QFileSystemModel):
-             view.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    for view in Fi.findChildren(QtGui.QTreeView):
-        if isinstance(view.model(), QtGui.QFileSystemModel):
-             view.setSelectionMode(QtGui.QAbstractItemView.MultiSelection)
-    for view in Fi.findChildren(QtGui.QPushButton):
-        if view.text().lower().startswith('cancel'):
-            view.clicked.connect(_pressed_cancel)
-
-    Fi.show()
-    QtCore.QCoreApplication.instance().exec_()
-
-    # The folder selection is also selecting its parent:
-    sel_files = Fi.selectedFiles()
-    sel_files2 = set(sel_files)
-    for fi1 in sel_files:
-        for fi2 in sel_files:
-            if fi2 != fi1 and fi1 in fi2:
-                sel_files2 -= {fi1}
-                break
-
-    return ok, list(sel_files2)
-
-def input_dialog(prompt,def_answer=None,name='Type Parameters'):
-    ok = False
-    def _pressed_ok():
-        nonlocal ok
-        w.close()
-        ok |= True
-    def _pressed_cancel():
-        nonlocal ok
-        w.close()
-        ok &= False
-
-    if isinstance(prompt,str): prompt = [prompt]
-    if def_answer is None: def_answer = len(prompt)*['']
-    if isinstance(def_answer,str): def_answer = [def_answer]
-    if len(prompt) != len(def_answer):
-        raise IndexError("'prompt' and 'def_answer' must be the same length.")
-
-    try:
-        app = QtGui.QApplication([])
-    except RuntimeError:
-        pass
-
-    w = QtGui.QWidget()
-    w.setWindowTitle(name)
-    grid = QtGui.QGridLayout()
-    grid.setSpacing(10)
-    edit = []
-    for i in range(len(prompt)):
-        title  = QtGui.QLabel(prompt[i])
-        edit  += [QtGui.QLineEdit()]
-        if def_answer is not None: edit[i].setText(def_answer[i])
-        grid.addWidget(title, 2*i,  0,1,2)# title, row,col,spanrow,spancol
-        grid.addWidget(edit[i], 2*i+1, 0,1,2)
-    #Ok Button
-    qbtn = QtGui.QPushButton('Ok', w)
-    qbtn.clicked.connect(_pressed_ok)
-    qbtn.resize(qbtn.sizeHint())
-    grid.addWidget(qbtn, 2*(i+1), 0)
-    #Cancel Button
-    qbtn = QtGui.QPushButton('Cancel', w)
-    qbtn.clicked.connect(_pressed_cancel)
-    qbtn.resize(qbtn.sizeHint())
-    grid.addWidget(qbtn, 2*(i+1), 1)
-
-    #Defining the layout of the window:
-    w.setLayout(grid)
-    w.resize(50, i*50)
-    qr = w.frameGeometry()
-    cp = QtGui.QDesktopWidget().availableGeometry().center()
-    qr.moveCenter(cp)
-    w.move(qr.topLeft())
-    w.show()
-    QtCore.QCoreApplication.instance().exec_()
-
-    text = []
-    for ed in edit:
-        text += [ed.text()]
-    return ok, text
 
 def find_right_folders(paths):
     pathnames = []
@@ -154,214 +47,6 @@ def find_right_folders(paths):
         if paths2: pathnames += find_right_folders(paths2)
     return pathnames
 
-def load_dynap_xy(path, var_plane='x'):
-    # Carrego os dados:
-    nr_header_lines = 13
-    fname = _full([path, 'dynap_xy_out.txt'])
-    turn,plane,x,y = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,6),unpack=True)
-
-    # Identifico quantos x e y existem:
-    nx = len(_np.unique(x))
-    ny = x.shape[0]//nx
-
-    # Redimensiono para que todos os x iguais fiquem na mesma coluna:
-    # o flipud é usado porque y é decrescente:
-    fun = lambda x: _np.flipud(x.reshape((nx,ny)).T)
-    turn, plane, x, y = fun(turn), fun(plane), fun(x), fun(y)
-    dados = dict(x=x,y=y,plane=plane,turn=turn)
-
-    # E identifico a borda da DA:
-    if var_plane =='y':
-        lost = plane != 0
-        ind = lost.argmax(axis=0)
-        # Caso a abertura vertical seja maior que o espaço calculado:
-        anyloss = lost.any(axis=0)
-        ind = ind*anyloss + (~anyloss)*(y.shape[0]-1)
-
-        # por fim, defino a DA:
-        h = x[0]
-        v = y[:,0][ind]
-        aper = _np.vstack([h,v])
-        area = _np.trapz(v,x=h)
-    else:
-        idx  = x > 0
-        # para x negativo:
-        x_mi     = _np.fliplr(x[~idx].reshape((ny,-1)))
-        plane_mi = _np.fliplr(plane[~idx].reshape((ny,-1)))
-        lost  = plane_mi != 0
-        ind_neg = lost.argmax(axis=1)
-        # Caso a abertura horizontal seja maior que o espaço calculado:
-        anyloss = lost.any(axis=1)
-        ind_neg = ind_neg*anyloss + (~anyloss)*(x_mi.shape[1]-1)
-
-        h_neg = x_mi[0][ind_neg]
-        v_neg = y[:,0]
-        aper_neg = _np.vstack([h_neg,v_neg])
-        area_neg = _np.trapz(h_neg,x=v_neg)
-
-        #para x positivo
-        x_ma = x[idx].reshape((ny,-1))
-        plane_ma = plane[idx].reshape((ny,-1))
-        lost    = plane_ma != 0
-        ind_pos = lost.argmax(axis=1)
-        # Caso a abertura horizontal seja maior que o espaço calculado:
-        anyloss = lost.any(axis=1)
-        ind_pos = ind_pos*anyloss + (~anyloss)*(x_ma.shape[1]-1)
-
-        # por fim, defino a DA em x positivo:
-        h_pos = x_ma[0][ind_pos]
-        v_pos = y[:,0]
-        aper_pos = _np.fliplr(_np.vstack([h_pos,v_pos]))
-        area_pos = _np.trapz(h_pos,x=v_pos)
-
-        aper = _np.hstack([aper_neg,aper_pos])
-        area = -_np.trapz(aper[0],x=aper[1])
-
-    return aper, area, dados
-
-def load_dynap_ex(path):
-    # Carrego os dados:
-    nr_header_lines = 13
-    fname = _full([path, 'dynap_ex_out.txt'])
-    turn,plane,x,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,3,5,7),unpack=True)
-
-    # Identifico quantos x e y existem:
-    ne = len(_np.unique(x))
-    nx = x.shape[0]//ne
-
-    # Redimensiono para que todos os x iguais fiquem na mesma linha:
-    fun = lambda x: x.reshape((nx,ne)).T
-    turn, plane, x, en = fun(turn), fun(plane), fun(x), fun(en)
-    dados = dict(x=x,en=en,plane=plane,turn=turn)
-
-    lost = plane != 0
-    ind = lost.argmax(axis=0)
-    # Caso a abertura horizontal seja maior que o espaço calculado:
-    anyloss = lost.any(axis=0)
-    ind = ind*anyloss + (~anyloss)*(x.shape[0]-1)
-
-    # por fim, defino a DA:
-    h = en[0]
-    v = x[:,0][ind]
-    aper = _np.vstack([h,v])
-
-    return aper, dados
-
-def load_ma_data(path):
-
-    # Carrego os dados:
-    nr_header_lines = 13
-    fname = _full([path, 'dynap_ma_out.txt'])
-    turn,el,pos,en = _np.loadtxt(fname,skiprows=nr_header_lines,usecols=(1,2,4,7),unpack=True)
-
-    pos  = pos[::2]
-    # the -abs is for cases where the momentum aperture is less than the tolerance
-    accep = _np.vstack([ en[1::2], -_np.abs(en[0::2]) ])
-    nLost = _np.vstack([turn[1::2],turn[0::2]])
-    eLost = _np.vstack([el[1::2],  el[0::2]])
-
-    return pos, accep, nLost, eLost
-
-def lnls_tau_touschek_inverso(Accep,twispos,twiss,emit0,E,N,sigE,sigS,K):
-    """ calcula o inverso do tempo de vida Touschek.
-
-      Saídas:
-          Resp = estrutura com campos:
-              Rate = taxa de perda de elétrons ao longo do anel [1/s]
-              AveRate = Taxa média de perda de elétrons [1/s]
-              Pos  = Posição do anel onde foi calculada a taxa [m]
-              Volume = Volume do feixe ao longo do anel [m^3]
-
-      Entradas:
-          params = estrutura com campos:
-              emit0 = emitância natural [m rad]
-              E     = energia das partículas [eV]
-              N     = número de elétrons por bunch
-              sigE  = dispersão de energia relativa sigE,
-              sigS  = comprimento do bunch [m]
-              K     = fator de acoplamento (emity = K*emitx)
-
-          Accep = estrutura com campos:
-              pos = aceitância positiva para uma seleção de pontos do anel;
-              neg = aceitância negativa para uma seleção de pontos do anel;
-                       (lembrar: min(accep_din, accep_rf))
-              s   = posição longitudinal dos pontos para os quais a
-                       aceitância foi calculada.
-
-          Optics = estrutura com as funções óticas ao longo do trecho
-                  para o qual setá calculado o tempo de vida:
-                       pos,   betax,    betay,  etax,   etay,
-                              alphax,   alphay, etaxl,  etayl
-
-      CUIDADO: os limites de cálculo são definidos pelos pontos
-         inicial e final da Aceitância e não das funções ópticas.
-    """
-
-    c   = _mp.constants.light_speed
-    me  = _mp.constants.electron_mass
-    Qe  = _mp.constants.elementary_charge
-    mu0 = _mp.constants.vacuum_permeability
-    ep0 = _mp.constants.vacuum_permitticity
-    r0  = _mp.constants.electron_radius
-    m0  = _mp.constants.electron_rest_energy * _mp.units.joule_2_eV
-
-    gamma = E/m0
-
-    s    = Accep['s']
-    accp = Accep['pos']
-    accn = Accep['neg']
-    # calcular o tempo de vida a cada 10 cm do anel:
-    npoints = int((s[-1] - s[0])/0.1)
-    s_calc = _np.linspace(s[0], s[-1], npoints)
-
-    d_accp  = _np.interp(s_calc,s, accp)
-    d_accn  = _np.interp(s_calc,s,-accn)
-    # if momentum aperture is 0, set it to 1e-4:
-    d_accp[d_accp==0] = 1e-4
-    d_accn[d_accn==0] = 1e-4
-
-    _, ind = _np.unique(twispos,return_index=True)
-
-    betax  = _np.interp(s_calc, twispos[ind], twiss.betax[ind])
-    alphax = _np.interp(s_calc, twispos[ind], twiss.alphax[ind])
-    etax   = _np.interp(s_calc, twispos[ind], twiss.etax[ind])
-    etaxl  = _np.interp(s_calc, twispos[ind], twiss.etapx[ind])
-    betay  = _np.interp(s_calc, twispos[ind], twiss.betay[ind])
-    etay   = _np.interp(s_calc, twispos[ind], twiss.etay[ind])
-
-    # Volume do bunch
-    sigX = _np.sqrt(betay*(K/(1+K))*emit0 + etay**2*sigE**2)
-    sigY = _np.sqrt(betax*(1/(1+K))*emit0 + etax**2*sigE**2)
-    V = sigS * sigX * sigY
-
-
-    # Tamanho betatron horizontal do bunch
-    Sx2 = 1/(1+K) * emit0 * betax
-
-    fator = betax*etaxl + alphax*etax
-    A1 = 1/(4*sigE**2) + (etax**2 + fator**2)/(4*Sx2)
-    B1 = betax*fator/(2*Sx2)
-    C1 = betax**2/(4*Sx2) - B1**2/(4*A1)
-
-    # Limite de integração inferior
-    ksip = (2*_np.sqrt(C1)/gamma * d_accp)**2
-    ksin = (2*_np.sqrt(C1)/gamma * d_accn)**2
-
-    # Interpola d_touschek
-    Dp = _np.interp(ksip,X_TOUS,Y_TOUS,left=0.0,right=0.0)
-    Dn = _np.interp(ksin,X_TOUS,Y_TOUS,left=0.0,right=0.0)
-
-    # Tempo de vida touschek inverso
-    Ratep = (r0**2*c/8/_np.pi)*N/gamma**2 / d_accp**3 * Dp / V
-    Raten = (r0**2*c/8/_np.pi)*N/gamma**2 / d_accn**3 * Dn / V
-    rate = (Ratep + Raten) / 2
-
-    # Tempo de vida touschek inverso médio
-    ave_rate = _np.trapz(rate,x=s_calc) / ( s_calc[-1] - s_calc[0] )
-    resp = dict(rate=rate,ave_rate=ave_rate,volume=V,pos=s_calc)
-
-    return resp
-
 def ma_analysis(paths,leg_text,title_text,mach,energy):
     if mach.find('bo') >= 0:
         acc = getattr(sirius,'bo')
@@ -378,13 +63,13 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
             nrBun   = 1
         else:
             eqpar = pyaccel.optics.get_equilibrium_parameters(acc)
-            emit0 = eqpar['natural_emittance']
-            sigE  = eqpar['natural_energy_spread']
-            sigS  = eqpar['bunch_length']
+            emit0 = eqpar[0]['natural_emittance']
+            sigE  = eqpar[0]['natural_energy_spread']
+            sigS  = eqpar[0]['bunch_length']
             K     = 0.0002
             I     = 0.6
             nrBun = 1
-            accepRF = eqpar['rf_energy_acceptance']
+            accepRF = eqpar[0]['rf_energy_acceptance']
     else:
         acc = getattr(sirius,'si')
         acc = acc.create_accelerator()
@@ -402,10 +87,10 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
 
     # users selects beam lifetime parameters
     prompt = ['Emitance[nm.rad]', 'Energy spread', 'Bunch length (with IBS) [mm]',
-        'Coupling [{]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [{]']
+        'Coupling [%]', 'Current [mA]', 'Nr bunches', 'RF Energy Acceptance [%]']
     defaultanswer = [str(emit0/1e-9), str(sigE), str(sigS*1000), str(100*K),
                      str(I), str(nrBun), str(accepRF*100)]
-    ok, answer = input_dialog(prompt, defaultanswer, 'Lifetime Parameters')
+    ok, answer = _input_dialog(prompt, defaultanswer, 'Lifetime Parameters')
     if not ok: return
     emit0   = float(answer[0])*1e-9
     sigE    = float(answer[1])
@@ -442,12 +127,12 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         for k in range(n_pastas):
             pathn = _full([path,result[k]])
             if _os.path.isfile(_full([pathn,'dynap_ma_out.txt'])):
-                pos, aceit, *_ = load_ma_data(pathn)
+                pos, aceit, *_ = load_dynap_ma(pathn)
                 accep += [aceit]
                 Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                              neg= _np.maximum(aceit[1], -accepRF))
                 # não estou usando alguns outputs
-                LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
                 rate += [LT['rate']]
                 ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
@@ -466,14 +151,14 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         if plot_loss_rate:
             ama.plot(LT['pos'],limne/2*rate.T/rate.max(),color='k')
 
-        stri = ('{0:10s} = {1:3.1f} GeV\n'.format('Energy',energy/1e9) +
-                '{0:10s} = {1:5.3f} mA\n'.format('I/bunch',I/nrBun*1e3) +
-                '{0:10s} = {1:3.1f} %'.format('Coupling',K*100))
+        stri = ('${0:3s}$ = {1:3.1f} GeV\n'.format('E',energy/1e9) +
+                '${0:3s}$ = {1:5.3f} mA\n'.format('I_b',I/nrBun*1e3) +
+                '${0:3s}$ = {1:3.1f} %'.format('K',K*100))
         ama.annotate(stri,(0.1,0.3),fontsize=12,color='k',xycoords='axes fraction')
 
-        stri = ('${0:10s}$ = {1:5.3f} nm.rad\n'.format('\epsilon_0',emit0*1e9)+
-            '${0:10s}$ = {1:5.3f} % \n'.format('\sigma_{\delta}',sigE*100)+
-            '${0:10s}$ = {1:5.3f} mm'.format('\sigma_L',sigS*1e3))
+        stri =('${0:3s}$ = {1:5.3f} nm.rad\n'.format('\epsilon_0',emit0*1e9)+
+               '${0:3s}$ = {1:5.3f} % \n'.format('\sigma_{\delta}',sigE*100)+
+               '${0:3s}$ = {1:5.3f} mm'.format('\sigma_L',sigS*1e3))
         ama.annotate(stri,(0.4,0.3),fontsize=12,color='k',xycoords='axes fraction')
 
         stri = 'Tousc LT = {0:5.1f} \xb1 {1:3.1f} h'.format(lt_ave,lt_rms)
@@ -496,7 +181,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
             pathn = path
             if rms_mode: pathn += _os.path.sep + result[k]
             if _os.path.isfile(_full([pathn,'dynap_ma_out.txt'])):
-                pos, aceit, *_ = load_ma_data(pathn)
+                pos, aceit, *_ = load_dynap_ma(pathn)
                 if _np.isclose(aceit,0).any():
                     lt_prob += 1
                 else:
@@ -504,7 +189,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                     Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                                  neg= _np.maximum(aceit[1], -accepRF))
                     # não estou usando alguns outputs
-                    LT = lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                    LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
                     ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
                 print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
@@ -533,6 +218,8 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         ama.plot(pos,ma_ave[1],**ave_conf)
         if rms_mode:
             ama.plot(pos,ma_ave[0]+ma_rms[0],**rms_conf)
+            ama.plot(pos,ma_ave[0]-ma_rms[0],**rms_conf)
+            ama.plot(pos,ma_ave[1]+ma_rms[1],**rms_conf)
             ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
     ama.legend(loc='best')
     return fma
@@ -721,7 +408,7 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     prompt = ['Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots']
     defaultanswer = ['si', '3.0', '2','ma xy ex']
     answer = []
-    ok, answer = input_dialog(prompt,defaultanswer, 'Main Parameters')
+    ok, answer = _input_dialog(prompt,defaultanswer, 'Main Parameters')
     if not ok: return
     energy = float(answer[1]) * 1e9
     n_calls = round(float(answer[2]))
@@ -736,29 +423,36 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     leg_text = []
     folders = []
     while i < n_calls:
-        ok, paths = directories_dialog(path,'Selecione pasta com os dados')
+        ok, paths = _directories_dialog(path,'Selecione pastas com dados')
         if not ok: return
         paths = find_right_folders(paths)
         for path in paths:
             if i >= n_calls: break
             folders += [path]
             na = _os.path.abspath(path).split('/')[1:]
-            leg_text += input_dialog('Digite a legenda',na[-3],'Legenda')[1]
+            leg_text += _input_dialog('Digite a legenda',na[-3],'Legenda')[1]
             i+=1
-    title_text = input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
+    title_text = _input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
 
-    curdir = _os.path.abspath(_os.path.curdir)
     if xy:
         fxy = xy_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
     if ex:
         fex = ex_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
     if ma:
         fma = ma_analysis(folders,leg_text,title_text,answer[0],energy)
-        if save: fxy.savefig(_full((curdir, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
     if show: _plt.show()
 
 if __name__ == '__main__':
-    path = _os.path.abspath(_os.path.curdir)
-    trackcpp_da_ma_lt(path)
+
+    # configuration of the parser for the arguments
+    parser = _optparse.OptionParser()
+    parser.add_option('-p','--path',dest='path',type='str',
+                      help="Path to be used as initial guess.", default=CURDIR)
+    parser.add_option('-s','--save',dest='save',action='store_true',
+                      help="Save the figures generated in the current folder.", default=False)
+    (opts, _) = parser.parse_args()
+
+    trackcpp_da_ma_lt(path=opts.path,save=opts.save)
