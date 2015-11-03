@@ -16,6 +16,7 @@ export FACDATA=$FACROOT/data
 # Python
 # ======
 export PYTHONPATH=$PYTHONPATH:$FACCODE/job_manager/src
+export PYTHONPATH=$PYTHONPATH:$FACROOT/hla/plot/src
 
 # FAC scripts
 # ===========
