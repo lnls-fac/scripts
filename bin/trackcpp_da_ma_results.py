@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-
+import warnings
+warnings.filterwarnings('ignore')
 import os as _os
 import numpy as _np
 import optparse as _optparse
