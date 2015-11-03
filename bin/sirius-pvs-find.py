@@ -19,9 +19,7 @@ rnames.update(va.pvs.tb.get_all_record_names())
 rnames.update(va.pvs.bo.get_all_record_names())
 rnames.update(va.pvs.ts.get_all_record_names())
 rnames.update(va.pvs.si.get_all_record_names())
-rnames.update(va.pvs.ti.get_all_record_names())
 pvs = list(rnames.keys())
 for pv in pvs:
     if p.match(pv):
         print(pv)
-
