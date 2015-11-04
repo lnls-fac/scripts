@@ -187,7 +187,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                     Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                                  neg= _np.maximum(aceit[1], -accepRF))
                     # não estou usando alguns outputs
-                    LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twispos,twi,**params)
+                    LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twi,**params)
                     ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
                 print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
