@@ -100,7 +100,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
     nrBun   = int(answer[5])
     accepRF = float(answer[6])/100
     N       = I/nrBun/_mp.constants.elementary_charge*(acc.length/_mp.constants.light_speed)
-    params  = dict(emit0=emit0, sigE=sigE, sigS=sigS, K=K, N=N, E=energy)
+    params  = dict(natural_emittance=emit0, energy_spread=sigE, bunch_length=sigS, coupling=K, n=N, energy=energy)
     twi, *_ = pyaccel.optics.calc_twiss(acc,indices='open')
 
     fma, ama = _plt.subplots(figsize=(11,6))
@@ -130,7 +130,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                 Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                              neg= _np.maximum(aceit[1], -accepRF))
                 # não estou usando alguns outputs
-                LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twi,**params)
+                LT = _mp.beam_lifetime.calc_touschek_loss_rate(Accep,twi,**params)
                 rate += [LT['rate']]
                 ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
@@ -187,7 +187,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                     Accep = dict(s=pos,pos=_np.minimum(aceit[0], accepRF),
                                  neg= _np.maximum(aceit[1], -accepRF))
                     # não estou usando alguns outputs
-                    LT = _mp.beam_lifetime.lnls_tau_touschek_inverso(Accep,twi,**params)
+                    LT = _mp.beam_lifetime.calc_touschek_loss_rate(Accep,twi,**params)
                     ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
                 print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
