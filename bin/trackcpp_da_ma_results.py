@@ -10,6 +10,8 @@ import sirius, pyaccel
 import mathphys as _mp
 from lnls.dialog import input_dialog as _input_dialog
 from lnls.dialog import directories_dialog as _directories_dialog
+from lnls.dialog import radio_dialog as _radio_dialog
+
 from apsuite.trackcpp_utils import load_dynap_ma, load_dynap_xy, load_dynap_ex
 
 # parâmetros para a geração das figuras
@@ -402,21 +404,30 @@ def ex_analysis(paths,leg_text,title_text):
 
 def trackcpp_da_ma_lt(path=None, save=False, show=True):
 
-    # users selects submachine
-    prompt = ['Submachine (bo/si)', 'energy [GeV]', 'Number of plots','Types of plots']
-    defaultanswer = ['si', '3.0', '2','ma xy ex']
-    answer = []
+    # user selects submachine
+    ok, answer = _radio_dialog(['si','bo'], name='Accelerator')
+    if not ok: return
+    submachine = answer
+    if submachine == 'si':
+        defaultanswer = ['3.0', '2','ma xy ex']
+    elif submachine == 'bo':
+        defaultanswer = ['0.150', '2','ma xy ex']
+    else:
+        raise Exception('Invalid submachine name')
+
+    # user selects main parameters
+    prompt = ['energy [GeV]', 'Number of plots','Types of plots']
     ok, answer = _input_dialog(prompt,defaultanswer, 'Main Parameters')
     if not ok: return
-    energy = float(answer[1]) * 1e9
-    n_calls = round(float(answer[2]))
+    energy = float(answer[0]) * 1e9
+    n_calls = round(float(answer[1]))
 
-    xy = True if answer[3].find('xy') >= 0 else False
-    ex = True if answer[3].find('ex') >= 0 else False
-    ma = True if answer[3].find('ma') >= 0 else False
+    xy = True if answer[2].find('xy') >= 0 else False
+    ex = True if answer[2].find('ex') >= 0 else False
+    ma = True if answer[2].find('ma') >= 0 else False
 
     if path is None:
-        path = _full(['','home','fac_files','data','sirius',answer[0],'beam_dynamics'])
+        path = _full(['','home','fac_files','data','sirius',submachine,'beam_dynamics'])
     i=0
     leg_text = []
     folders = []
@@ -439,11 +450,13 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
         fex = ex_analysis(folders,leg_text,title_text)
         if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
     if ma:
-        fma = ma_analysis(folders,leg_text,title_text,answer[0],energy)
+        fma = ma_analysis(folders,leg_text,title_text,submachine,energy)
         if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
     if show: _plt.show()
 
 if __name__ == '__main__':
+
+    if 'beam_dynamics' not in CURDIR: CURDIR=None
 
     # configuration of the parser for the arguments
     parser = _optparse.OptionParser()
