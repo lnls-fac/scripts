@@ -27,6 +27,6 @@ except:
     prefix = ''
 
 record_names = _rname_functions[kingdom]()
-pvs_list = list(record_names.keys())
-pvs_string = prefix + (' '+prefix).join(pvs_list)
+pvs_list = sorted(list(record_names.keys()))
+pvs_string = prefix + ('\n'+prefix).join(pvs_list)
 print(pvs_string, end='')
