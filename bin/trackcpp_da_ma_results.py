@@ -105,6 +105,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
     params  = dict(natural_emittance=emit0, energy_spread=sigE, bunch_length=sigS, coupling=K, n=N, energy=energy)
     twi, *_ = pyaccel.optics.calc_twiss(acc,indices='open')
 
+    ma_text = ''
     fma, ama = _plt.subplots(figsize=(11,6))
     ama.grid(True)
     ama.hold(True)
@@ -136,7 +137,9 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                 rate += [LT['rate']]
                 ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
-                print('{1:5s}: ma nao carregou\n'.format(result[k]))
+                text = '{1:5s}: ma nao carregou\n'.format(result[k])
+                print(text,end='')
+                ma_text += text
         accep  = _np.dstack(accep)*100
         rate   = _np.vstack(rate)
         ma_ave = accep.mean(axis=2)
@@ -165,7 +168,9 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         ama.annotate(stri,(0.67,0.35),fontsize=12,color='k',xycoords='axes fraction')
         return fma
 
-    print('\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]'))
+    text = '\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]')
+    print(text,end='')
+    ma_text += text
     for i,path in enumerate(paths):
         ltime, accep = [],[]
 
@@ -192,7 +197,9 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                     LT = _mp.beam_lifetime.calc_touschek_loss_rate(Accep,twi,**params)
                     ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
-                print('{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k]))
+                text = '{0:02d}-{1:5s}: ma nao carregou\n'.format(i,result[k])
+                print(text,end='')
+                ma_text += text
         accep   = _np.dstack(accep)*100
         ma_ave  = accep.mean(axis=2)
         ltime   = _np.hstack(ltime)
@@ -206,14 +213,22 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
         rms_conf = dict(linewidth=2,color=color,linestyle='--')
         #imprime o tempo de vida
-        print('{0:20s} '.format(leg_text[i].upper()), end='')
+        text = '{0:20s} '.format(leg_text[i].upper())
+        print(text,end='')
+        ma_text += text
         if rms_mode:
-            print('{0:>5.2f} \xB1 {1:5.2f} '.format(lt_ave, lt_rms))
+            text = '{0:>5.2f} \xB1 {1:5.2f} \n'.format(lt_ave, lt_rms)
+            print(text,end='')
+            ma_text += text
             if lt_prob:
-                print('   *{0:02d) máquinas desprezadas'.format(lt_prob)+
-                      ' no cálculo por possuírem aceitancia nula.')
+                text = ('   *{0:02d} máquinas desprezadas'.format(lt_prob)+
+                      ' no cálculo por possuírem aceitancia nula.\n')
+                print(text,end='')
+                ma_text += text
         else:
-            print('{5.2f} ', lt_ave)
+            text = '{0:5.2f} \n'.format(lt_ave)
+            print(text,end='')
+            ma_text += text
         ama.plot(pos,ma_ave[0],label=leg_text[i],**ave_conf)
         ama.plot(pos,ma_ave[1],**ave_conf)
         if rms_mode:
@@ -222,10 +237,11 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
             ama.plot(pos,ma_ave[1]+ma_rms[1],**rms_conf)
             ama.plot(pos,ma_ave[1]-ma_rms[1],**rms_conf)
     ama.legend(loc='best')
-    return fma
+    return fma, ma_text
 
 def xy_analysis(paths,leg_text,title_text):
 
+    xy_text = ''
     fxy, axy = _plt.subplots(figsize=(9,6))
     axy.grid(True)
     axy.hold(True)
@@ -256,7 +272,9 @@ def xy_analysis(paths,leg_text,title_text):
                 elif mostra == 3:
                     idx_daxy += dados['plane']
             else:
-                print('{1:5s}: xy nao carregou\n'.format(result[k]))
+                text = '{1:5s}: xy nao carregou\n'.format(result[k])
+                print(text,end='')
+                xy_text += text
         if mostra == 0:
             idx_daxy = (n_pastas-idx_daxy)/n_pastas*100
             idx_daxy[0,0] = 100
@@ -272,7 +290,9 @@ def xy_analysis(paths,leg_text,title_text):
         axy.set_position([0.08,0.10,0.82,0.83])
         return fxy
 
-    print('\n{0:20s} {1:15s} {2:15s}\n'.format('Config','Dynap XY [mm^2]','Aper@y=0.2 [mm]'))
+    text = '\n{0:20s} {1:15s} {2:15s}\n\n'.format('Config','Dynap XY [mm^2]','Aper@y=0.2 [mm]')
+    print(text,end='')
+    xy_text += text
     for i,path in enumerate(paths):
         area, aper_xy = [],[]
         result = sorted([ii for ii in _os.listdir(path) if _os.path.isdir(_full([path,ii]))])
@@ -289,7 +309,9 @@ def xy_analysis(paths,leg_text,title_text):
                 area += [a]
                 aper_xy += [aper]
             else:
-                print('{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k]))
+                text = '{0:02d}-{1:5s}: xy nao carregou\n'.format(i,result[k])
+                print(text,end='')
+                xy_text += text
         aper_xy = _np.dstack(aper_xy)*1000
         xy_ave  = aper_xy.mean(axis=2)
         neg_ave = xy_ave[0][2]
@@ -305,22 +327,30 @@ def xy_analysis(paths,leg_text,title_text):
         ave_conf = dict(linewidth=esp_lin,color=color,linestyle='-')
         rms_conf = dict(linewidth=2,color=color,linestyle='--')
 
-        print('{0:20s} '.format(leg_text[i].upper()), end='')
+        text = '{0:20s} '.format(leg_text[i].upper())
+        print(text,end='')
+        xy_text += text
 
         axy.plot(xy_ave[0], xy_ave[1],label=leg_text[i],**ave_conf)
         if rms_mode:
-            print('{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   '.format(
-                    area_ave, area_rms, neg_ave, neg_rms))
+            text = '{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   \n'.format(
+                    area_ave, area_rms, neg_ave, neg_rms)
+            print(text,end='')
+            xy_text += text
             axy.plot(xy_ave[0]+xy_rms[0], xy_ave[1]+xy_rms[1],**rms_conf)
             axy.plot(xy_ave[0]-xy_rms[0], xy_ave[1]-xy_rms[1],**rms_conf)
         else:
-            print('{0:>5.2f}           {1:>5.1f}           '.format(area_ave, neg_ave))
+            text = '{0:>5.2f}           {1:>5.1f}           \n'.format(area_ave, neg_ave)
+            print(text,end='')
+            xy_text += text
     axy.legend(loc='best')
     print()
-    return fxy
+    xy_text += '\n'
+    return fxy, xy_text
 
 def ex_analysis(paths,leg_text,title_text):
 
+    ex_text = ''
     fex, aex = _plt.subplots(figsize=(9,6))
     aex.grid(True)
     aex.hold(True)
@@ -351,7 +381,9 @@ def ex_analysis(paths,leg_text,title_text):
                 elif mostra == 3:
                     idx_daex += dados['plane']
             else:
-                print('{1:5s}: ex nao carregou\n'.format(result[k]))
+                text = '{1:5s}: ex nao carregou\n'.format(result[k])
+                print(text,end='')
+                ex_text += text
         if mostra == 0:
             idx_daex = (n_pastas-idx_daex)/n_pastas*100
             idx_daex[0,0] = 100
@@ -382,7 +414,9 @@ def ex_analysis(paths,leg_text,title_text):
                 aper, *_ = load_dynap_ex(pathn)
                 aper_ex += [aper]
             else:
-                print('{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k]))
+                text = '{0:02d}-{1:5s}: ex nao carregou\n'.format(i,result[k])
+                print(text,end='')
+                ex_text += text
         aper_ex = _np.dstack(aper_ex)
         ex_ave  = aper_ex.mean(axis=2)
         if rms_mode:
@@ -400,7 +434,7 @@ def ex_analysis(paths,leg_text,title_text):
             aex.plot(100*(ex_ave[0]-ex_rms[0]),
                      1000*(ex_ave[1]-ex_rms[1]),**rms_conf)
     aex.legend(loc='best')
-    return fex
+    return fex, ex_text
 
 def trackcpp_da_ma_lt(path=None, save=False, show=True):
 
@@ -443,15 +477,22 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
             i+=1
     title_text = _input_dialog('Título',name='Digite um Título para os Gráficos')[1][0]
 
+    text = ''
     if xy:
-        fxy = xy_analysis(folders,leg_text,title_text)
+        fxy, xy_text = xy_analysis(folders,leg_text,title_text)
+        text += xy_text +'\n'
         if save: fxy.savefig(_full((CURDIR, 'XY-'+title_text + '.svg')))
     if ex:
-        fex = ex_analysis(folders,leg_text,title_text)
+        fex,ex_text = ex_analysis(folders,leg_text,title_text)
+        text += ex_text + '\n'
         if save: fex.savefig(_full((CURDIR, 'EX-'+title_text + '.svg')))
     if ma:
-        fma = ma_analysis(folders,leg_text,title_text,submachine,energy)
+        fma, ma_text = ma_analysis(folders,leg_text,title_text,submachine,energy)
+        text += ma_text + '\n'
         if save: fma.savefig(_full((CURDIR, 'MA-'+title_text + '.svg')))
+    if save:
+        with open(_full((CURDIR, 'SUMMARY'+title_text + '.txt')),'w') as fh :
+            fh.write(text)
     if show: _plt.show()
 
 if __name__ == '__main__':
