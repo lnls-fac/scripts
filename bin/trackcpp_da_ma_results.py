@@ -166,9 +166,9 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
 
         stri = 'Tousc LT = {0:5.1f} \xb1 {1:3.1f} h'.format(lt_ave,lt_rms)
         ama.annotate(stri,(0.67,0.35),fontsize=12,color='k',xycoords='axes fraction')
-        return fma
+        return fma, ma_text
 
-    text = '\n{0:20s} {1:15s}\n'.format('Config', 'Lifetime [h]')
+    text = '\n{0:^20s} {1:15s}\n'.format('Configuration', 'Lifetime [h]')
     print(text,end='')
     ma_text += text
     for i,path in enumerate(paths):
@@ -288,9 +288,9 @@ def xy_analysis(paths,leg_text,title_text):
         cl = fxy.colorbar(pc, cax = ax, ticks=[0,20,40,60,80,100])
         cl.set_ticklabels(['100%','80%','60%','40%','20%','0%'])
         axy.set_position([0.08,0.10,0.82,0.83])
-        return fxy
+        return fxy, xy_text
 
-    text = '\n{0:20s} {1:15s} {2:15s}\n\n'.format('Config','Dynap XY [mm^2]','Aper@y=0.2 [mm]')
+    text = '\n{0:^20s} {1:15s} {2:15s}\n'.format('Configuration','Dynap XY [mm^2]','Aper@y=0.2 [mm]')
     print(text,end='')
     xy_text += text
     for i,path in enumerate(paths):
@@ -344,8 +344,6 @@ def xy_analysis(paths,leg_text,title_text):
             print(text,end='')
             xy_text += text
     axy.legend(loc='best')
-    print()
-    xy_text += '\n'
     return fxy, xy_text
 
 def ex_analysis(paths,leg_text,title_text):
@@ -396,7 +394,7 @@ def ex_analysis(paths,leg_text,title_text):
         cl = fex.colorbar(pc, cax=ax, ticks=[0,20,40,60,80,100])
         cl.set_ticklabels(['100%','80%','60%','40%','20%','0%'])
         aex.set_position([0.08,0.10,0.82,0.83])
-        return fex
+        return fex, ex_text
 
     for i,path in enumerate(paths):
         aper_ex = []
@@ -480,18 +478,18 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     text = ''
     if xy:
         fxy, xy_text = xy_analysis(folders,leg_text,title_text)
-        text += xy_text +'\n'
+        text += xy_text
         if save: fxy.savefig(_full((CURDIR, 'XY-'+title_text + '.svg')))
     if ex:
         fex,ex_text = ex_analysis(folders,leg_text,title_text)
-        text += ex_text + '\n'
+        text += ex_text
         if save: fex.savefig(_full((CURDIR, 'EX-'+title_text + '.svg')))
     if ma:
         fma, ma_text = ma_analysis(folders,leg_text,title_text,submachine,energy)
-        text += ma_text + '\n'
+        text += ma_text
         if save: fma.savefig(_full((CURDIR, 'MA-'+title_text + '.svg')))
     if save:
-        with open(_full((CURDIR, 'SUMMARY'+title_text + '.txt')),'w') as fh :
+        with open(_full((CURDIR, 'SUMMARY-'+title_text + '.txt')),'w') as fh :
             fh.write(text)
     if show: _plt.show()
 
