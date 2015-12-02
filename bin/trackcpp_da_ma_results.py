@@ -445,13 +445,13 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
 
     if xy:
         fxy = xy_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'XY-'+title_text + '.svg')))
     if ex:
         fex = ex_analysis(folders,leg_text,title_text)
-        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'EX-'+title_text + '.svg')))
     if ma:
         fma = ma_analysis(folders,leg_text,title_text,submachine,energy)
-        if save: fxy.savefig(_full((CURDIR, 'MA'+title_text + '.svg')))
+        if save: fxy.savefig(_full((CURDIR, 'MA-'+title_text + '.svg')))
     if show: _plt.show()
 
 if __name__ == '__main__':
