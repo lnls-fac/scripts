@@ -94,7 +94,7 @@ function start_module {
       start_instance si_lifetime 38016 $(dir_pcaspy si_lifetime)"/lifetime.py"
     elif [ $1 == "si_ref_orbit" ]; then
       start_instance si_ref_orbit 38017 $(dir_pcaspy si_ref_orbit)"/referenceorbit.py"
-    elif [ $1 == "si_ref_orbit" ]; then
+    elif [ $1 == "si_operations" ]; then
       start_instance si_operations 38018 $(dir_pcaspy si_operations)"/run.py"
     elif [ $1 == "viocs" ]; then
       start_viocs
