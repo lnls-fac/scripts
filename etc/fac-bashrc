@@ -75,7 +75,7 @@ complete -W "--description --exec --inputFiles --workingDirectory --priority --p
 complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
 complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
 complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
-complete -W "--jobs --status --user --description --explicate --choose --help"                                                          pyjob_qstat.py
+complete -W "--jobs --status --user --description --explicate --choose --summary --help"                                                pyjob_qstat.py
 complete -W "--jobs --status --user --description --signal --priority --possibleHosts --help"                                           pyjob_qsig.py
 complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"                                                                 manage_hosts_subnet.py
 
@@ -91,6 +91,7 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 # Completion for binary trackcpp
 # ==============================
 complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap dynap_exfmap track_linepass tests" trackcpp
+complete -W "--path --save --help"  trackcpp_da_ma_results.py
 
 # Aliases
 # =======
