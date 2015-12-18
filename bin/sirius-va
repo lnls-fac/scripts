@@ -3,8 +3,14 @@
 ### This script is supposed to be run at lnls82-linux
 ### It starts the virtual accelerator and addtional experiment scripts
 
-export EPICS_CA_AUTO_ADDR_LIST=NO
-export EPICS_CA_ADDR_LIST=10.0.21.255
+if [ -n "EPICS_CA_AUTO_ADDR_LIST" ] ; then
+  export EPICS_CA_AUTO_ADDR_LIST=NO
+fi
+
+if [ -n "EPICS_CA_ADDR_LIST" ] ; then
+  export EPICS_CA_ADDR_LIST=10.0.21.255
+fi
+
 VIOCS=$FACCODE/va/viocs
 
 function stop_instances {
