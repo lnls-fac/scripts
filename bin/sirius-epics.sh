@@ -8,7 +8,7 @@ if [ "$0" != "bash" ]; then
 fi
 
 IP=$1
-if [ -z $IP ]; then IP="10.0.7.51"; fi
+if [ -z $IP ]; then IP="10.0.7.78"; fi
 
 export EPICS_CA_ADDR_LIST=$IP
 export EPICS_CA_AUTO_ADDR_LIST=no

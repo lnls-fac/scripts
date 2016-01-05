@@ -6,6 +6,7 @@ import numpy as _numpy
 
 _PREFIX = 'VA-'
 
+
 def _get_machine_pvs(machine):
     pv_dict = {'LI':pvs_li,
                'TB':pvs_tb,
@@ -43,18 +44,36 @@ def _get_pvnames(machine, error_type, fam_type):
         rnames = []
     return sorted(list(rnames.keys()))
 
+# --- pvnames ---
+
 def get_pvnames_errorx_dipoles(machine):
     return _get_pvnames(machine, 'ERRORX', 'bend')
+
 def get_pvnames_errory_dipoles(machine):
     return _get_pvnames(machine, 'ERRORY', 'bend')
+
 def get_pvnames_errorr_dipoles(machine):
     return _get_pvnames(machine, 'ERRORR', 'bend')
+
 def get_pvnames_errorx_quadrupoles(machine):
     return _get_pvnames(machine, 'ERRORX', 'quad')
+
 def get_pvnames_errory_quadrupoles(machine):
     return _get_pvnames(machine, 'ERRORY', 'quad')
+
 def get_pvnames_errorr_quadrupoles(machine):
     return _get_pvnames(machine, 'ERRORR', 'quad')
+
+def get_pvnames_errorx_sextupoles(machine):
+    return _get_pvnames(machine, 'ERRORX', 'sext')
+
+def get_pvnames_errory_sextupoles(machine):
+    return _get_pvnames(machine, 'ERRORY', 'sext')
+
+def get_pvnames_errorr_sextupoles(machine):
+    return _get_pvnames(machine, 'ERRORR', 'sext')
+
+# ---
 
 def get_values(pvnames):
     values = []
@@ -67,62 +86,111 @@ def set_values(pvnames, values):
         print(pv_name, value)
         _setpv(pv_name, value)
 
+# ---
+
 def generate_random(std, size=1, avg=0.0):
     if std == 0:
         return [0 for i in range(size)]
     else:
         return _numpy.random.normal(loc=avg, scale=std, size=size)
 
-def generate_random_errorx_dipoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errorx_dipoles(machine)
+def generate_random_errors(pvnames, std, avg):
     values = generate_random(std, len(pvnames), avg)
     _dict = {}
     for pv_name, value in zip(pvnames, values):
         _dict[pv_name] = value
     return _dict
 
+def generate_random_errorx_dipoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorx_dipoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errory_dipoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errory_dipoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errorr_dipoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorr_dipoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errorx_quadrupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorx_quadrupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errory_quadrupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errory_quadrupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errorr_quadrupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorr_quadrupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errorx_sextupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorx_sextupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errory_sextupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errory_sextupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+def generate_random_errorr_sextupoles(machine, std, avg=0.0):
+    pvnames = get_pvnames_errorr_sextupoles(machine)
+    return generate_random_errors(pvnames, std, avg)
+
+# ---
+
 def set_random_errorx_dipoles(machine, std, avg=0.0):
     d = generate_random_errorx_dipoles(machine, std, avg)
     set_values(d.keys(), d.values())
 
 def set_random_errory_dipoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errory_dipoles(machine)
-    values = generate_random(std, len(pvnames), avg)
-    set_values(pvnames, values)
+    d = generate_random_errory_dipoles(machine, std, avg)
+    set_values(d.keys(), d.values())
+
 def set_random_errorr_dipoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errorr_dipoles(machine)
-    values = generate_random(std, len(pvnames), avg)
-    set_values(pvnames, values)
+    d = generate_random_errorr_dipoles(machine, std, avg)
+    set_values(d.keys(), d.values())
 
 def set_random_errorx_quadrupoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errorx_quadrupoles(machine)
-    values = generate_random(std, len(pvnames), avg)
-    set_values(pvnames, values)
+    d = generate_random_errorx_quadrupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
+
 def set_random_errory_quadrupoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errory_quadrupoles(machine)
-    values = generate_random(std, len(pvnames), avg)
-    set_values(pvnames, values)
+    d = generate_random_errory_quadrupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
+
 def set_random_errorr_quadrupoles(machine, std, avg=0.0):
-    pvnames = get_pvnames_errorr_quadrupoles(machine)
-    values = generate_random(std, len(pvnames), avg)
-    set_values(pvnames, values)
+    d = generate_random_errorr_quadrupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
 
-set_random_errorx_dipoles('SI', std=0.2*40e-6, avg=0.0)
-set_random_errorx_quadrupoles('SI', std=0.2*10e-6, avg=0.0)
+def set_random_errorx_sextupoles(machine, std, avg=0.0):
+    d = generate_random_errorx_sextupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
 
-#set_random_errorx_dipoles('TB', std=800e-6, avg=0.0)
-#set_random_errorx_quadrupoles('TB', std=600e-6, avg=0.0)
+def set_random_errory_sextupoles(machine, std, avg=0.0):
+    d = generate_random_errory_sextupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
+
+def set_random_errorr_sextupoles(machine, std, avg=0.0):
+    d = generate_random_errorr_sextupoles(machine, std, avg)
+    set_values(d.keys(), d.values())
+
+# ---
+
+# set_random_errorx_dipoles('SI', std=0.01*40e-6, avg=0.0)
+# set_random_errory_dipoles('SI', std=0.01*40e-6, avg=0.0)
+# set_random_errorr_dipoles('SI', std=0.01*0.2e-3, avg=0.0)
+
+# set_random_errorx_quadrupoles('SI', std=0.01*40e-6,  avg=0.0)
+# set_random_errory_quadrupoles('SI', std=0.01*40e-6,  avg=0.0)
+# set_random_errorr_quadrupoles('SI', std=0.01*0.2e-3, avg=0.0)
+
+set_random_errorx_sextupoles('SI', std=0.01*40e-6,  avg=0.0)
+set_random_errory_sextupoles('SI', std=0.01*40e-6,  avg=0.0)
+set_random_errorr_sextupoles('SI', std=0.01*0.2e-3, avg=0.0)
 
 
-#d = generate_random_errorx_dipoles('SI', std=10e-6, avg=0.0)
-#print(d)
+#set_random_errorx_quadrupoles('SI', std=0.2*10e-6, avg=0.0)
 
-# set_random_errorx_dipoles('SI', std=10e-6, avg=0.0)
-# set_random_errory_dipoles('SI', std=10e-6, avg=0.0)
-# set_random_errorx_quadrupoles('SI', std=10e-6, avg=0.0)
-# set_random_errory_quadrupoles('SI', std=10e-6, avg=0.0)
-
-#_getpv('XVA-SIFK-ERRORX-QFB-16M1')
-#_setpv('XVA-SIFK-ERRORX-QFB-16M1', 0)
 
 _epics.ca.finalize_libca()
