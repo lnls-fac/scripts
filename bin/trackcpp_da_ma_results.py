@@ -8,13 +8,13 @@ import matplotlib.pyplot as _plt
 
 import sirius, pyaccel
 import mathphys as _mp
-import lnls as _lnls
+import lnls.dialog as _dialog
 
 from apsuite.trackcpp_utils import load_dynap_ma, load_dynap_xy, load_dynap_ex
 
-_input_dialog = _lnls.dialog.input_dialog
-_directories_dialog = _lnls.dialog.directories_dialog
-_radio_dialog = _lnls.dialog.radio_dialog
+_input_dialog = _dialog.input_dialog
+_directories_dialog = _dialog.directories_dialog
+_radio_dialog = _dialog.radio_dialog
 
 # parâmetros para a geração das figuras
 color_vec = ['b','r','g','m','c','k','y']
