@@ -3,8 +3,14 @@
 ### This script is supposed to be run at lnls82-linux
 ### It starts the virtual accelerator and addtional experiment scripts
 
-export EPICS_CA_AUTO_ADDR_LIST=NO
-export EPICS_CA_ADDR_LIST=10.0.21.255
+if [ -z "$EPICS_CA_AUTO_ADDR_LIST" ] ; then
+  export EPICS_CA_AUTO_ADDR_LIST=NO
+fi
+
+if [ -z "$EPICS_CA_ADDR_LIST" ] ; then
+  export EPICS_CA_ADDR_LIST=10.0.21.255
+fi
+
 VIOCS=$FACCODE/va/viocs
 
 function stop_instances {
@@ -90,10 +96,14 @@ function start_module {
       cd $(dir_boot ts_bpms); start_instance ts_bpms 38014 $(dir_app ts_bpms) $(dir_boot ts_bpms)"/st.cmd"
     elif [ $1 == "ts_ps" ]; then
       cd $(dir_boot ts_ps); start_instance ts_ps 38015 $(dir_app ts_ps) $(dir_boot ts_ps)"/st.cmd"
+    elif [ $1 == "injection" ]; then
+      cd $(dir_boot injection); start_instance injection 38019 $(dir_app injection) $(dir_boot injection)"/st.cmd"
     elif [ $1 == "si_lifetime" ]; then
       start_instance si_lifetime 38016 $(dir_pcaspy si_lifetime)"/lifetime.py"
     elif [ $1 == "si_ref_orbit" ]; then
       start_instance si_ref_orbit 38017 $(dir_pcaspy si_ref_orbit)"/referenceorbit.py"
+    elif [ $1 == "si_operations" ]; then
+      start_instance si_operations 38018 $(dir_pcaspy si_operations)"/run.py"
     elif [ $1 == "viocs" ]; then
       start_viocs
     else
@@ -136,6 +146,10 @@ function stop_module {
     stop_instances si_lifetime
   elif [ $1 == "si_ref_orbit" ]; then
     stop_instances si_ref_orbit
+  elif [ $1 == "si_operations" ]; then
+    stop_instances si_operations
+  elif [ $1 == "injection" ]; then
+    stop_instances injection
   elif [ $1 == "viocs" ]; then
     stop_viocs
   else
@@ -161,6 +175,8 @@ function start_all {
   start_module ts_ps
   start_module si_lifetime
   start_module si_ref_orbit
+  start_module si_operations
+  start_module injection
 }
 
 function start_viocs {
@@ -180,9 +196,12 @@ function start_viocs {
   start_module ts_ps
   start_module si_lifetime
   start_module si_ref_orbit
+  start_module si_operations
+  start_module injection
 }
 
 function stop_all {
+  stop_instances si_operations
   stop_instances si_beamsize
   stop_instances si_rf
   stop_instances si_tune
@@ -200,9 +219,11 @@ function stop_all {
   stop_instances vaca
   stop_instances si_lifetime
   stop_instances si_ref_orbit
+  stop_instances injection
 }
 
 function stop_viocs {
+  stop_instances si_operations
   stop_instances si_beamsize
   stop_instances si_rf
   stop_instances si_tune
@@ -219,6 +240,7 @@ function stop_viocs {
   stop_instances ts_bpms
   stop_instances si_lifetime
   stop_instances si_ref_orbit
+  stop_instances injection
 }
 
 function list_modules {
@@ -243,8 +265,8 @@ elif [ $# == 2 ]; then
   elif [ $1 == "stop" ]; then
     stop_module $2
   else
-    echo $0": invalid argumnet!"
+    echo $0": invalid argument!"
   fi
 else
-  echo $0": invalid number of argumnets!"
+  echo $0": invalid number of arguments!"
 fi

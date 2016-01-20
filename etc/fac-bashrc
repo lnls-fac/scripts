@@ -96,7 +96,7 @@ complete -W "--path --save --help"  trackcpp_da_ma_results.py
 # Aliases
 # =======
 
-alias gofacroot='cd $FACROOR'
+alias gofacroot='cd $FACROOT'
 
 alias gohla='cd $FACROOT/hla'
 alias gosiriusdb='cd $FACROOT/siriusdb'
@@ -112,7 +112,7 @@ alias goscripts='cd $FACCODE/scripts'
 alias gopyaccel='cd $FACCODE/pyaccel'
 alias gomml='cd $FACCODE/MatlabMiddleLayer/Release'
 alias goapsuite='cd $FACCODE/apsuite'
-
+alias govagrant='cd $FACROOT/hla-vagrant'
 alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
 
 alias goepics='cd $EPICS_DIR'
