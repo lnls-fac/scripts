@@ -38,7 +38,7 @@ def update_hosts_content(minions, hosts_contents):
                     line = line.replace(words[0],ip)
         if not found:
             print('updated ' + name + " with IP '" + ip + "' (added new line)")
-            new_content.append(ip + ' ' + name + '  # by ' + sys.argv[0])
+            new_content.append(ip + ' ' + name + '  # by fac-update-minions-ips.py') 
         else:
             print('updated ' + name + " with IP '" + ip + "'")
     return new_content
@@ -60,7 +60,7 @@ def cmd_list_minions():
         print(name + ' ' + ip)
 
 def cmd_print_help():
-    print('Usage: ' + sys.argv[0] + ' [--list|--help]')
+    print('Usage: fac-update-minions-ips.py  [--list|--help]')
     print('Updates /etc/hosts with current dynamic IP addresses of salt minions')
     print('')
     print('options:')
