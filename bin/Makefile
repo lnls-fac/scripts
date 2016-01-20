@@ -6,7 +6,6 @@ GENERALSCRIPTS = \
 		delete_dups.py\
 		elegant2OPA.py\
 		elegant2AT.py\
-		hosts_update.py\
 		manage_hosts_subnet.py\
 		pytrack.py\
 		run_in_clients.sh\
