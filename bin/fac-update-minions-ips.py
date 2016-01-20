@@ -38,7 +38,7 @@ def update_hosts_content(minions, hosts_contents):
                     line = line.replace(words[0],ip)
         if not found:
             print('updated ' + name + " with IP '" + ip + "' (added new line)")
-            new_content.append(ip + ' ' + name + '  # by update_minion_ips.py')
+            new_content.append(ip + ' ' + name + '  # by ' + sys.argv[0])
         else:
             print('updated ' + name + " with IP '" + ip + "'")
     return new_content
