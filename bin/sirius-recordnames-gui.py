@@ -154,27 +154,27 @@ class RecordNameList(QWidget):
 # LI
 li = _sirius.li.create_accelerator()
 li_fd = _sirius.li.families.get_family_data(li)
-li_rec_name = _sirius.li.record_names.get_record_names
+li_rec_name = _sirius.li.device_names.get_device_names
 li_fk_name = _pvs_li.get_fake_record_names
 # TB
 tb = _sirius.tb.create_accelerator()
 tb_fd = _sirius.tb.families.get_family_data(tb)
-tb_rec_name = _sirius.tb.record_names.get_record_names
+tb_rec_name = _sirius.tb.device_names.get_device_names
 tb_fk_name  = _pvs_tb.get_fake_record_names
 # BO
 bo = _sirius.bo.create_accelerator()
 bo_fd = _sirius.bo.families.get_family_data(bo)
-bo_rec_name = _sirius.bo.record_names.get_record_names
+bo_rec_name = _sirius.bo.device_names.get_device_names
 bo_fk_name  = _pvs_bo.get_fake_record_names
 # TS
 ts = _sirius.ts.create_accelerator()
 ts_fd = _sirius.ts.families.get_family_data(ts)
-ts_rec_name = _sirius.ts.record_names.get_record_names
+ts_rec_name = _sirius.ts.device_names.get_device_names
 ts_fk_name  = _pvs_ts.get_fake_record_names
 # SI
 si = _sirius.si.create_accelerator()
 si_fd = _sirius.si.families.get_family_data(si)
-si_rec_name = _sirius.si.record_names.get_record_names
+si_rec_name = _sirius.si.device_names.get_device_names
 si_fk_name  = _pvs_si.get_fake_record_names
 
 
