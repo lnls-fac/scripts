@@ -7,7 +7,7 @@ import time
 import datetime
 
 _max_pv_name_length = 50
-_pvs_flatlists_folder = os.path.join(lnls.folder_db, 'pvs_flatlists')
+_pvs_flatlists_folder = os.path.join(lnls.folder_db, 'recordnames_flatlists')
 _rname_functions = {
     'li':va.pvs.li.get_all_record_names,
     'tb':va.pvs.tb.get_all_record_names,
@@ -18,7 +18,7 @@ _rname_functions = {
 
 def read_flatlist(machine):
     pvs, lines = {}, []
-    fname = os.path.join(_pvs_flatlists_folder, 'pvs_flatlist_' + machine.lower() + '.txt')
+    fname = os.path.join(_pvs_flatlists_folder, 'recordnames_flatlist_' + machine.lower() + '.txt')
     if os.path.isfile(fname):
         lines = [line.strip() for line in open(fname, encoding='latin-1')]
         for line in lines:
@@ -52,7 +52,7 @@ def set_missing_pv(pv, lines):
             lines[i] = '# [MISSING] ' + line
             break
 
-def update_pvs_flatlist(machine):
+def update_recordnames_flatlist(machine):
 
     pvs_prev, lines = read_flatlist(machine)
     pvs_prev_list = sorted(list(pvs_prev.keys()))
@@ -76,7 +76,7 @@ def update_pvs_flatlist(machine):
     # update timestatmp in file
     tsstr = 'timestamp'
     ts_found = False
-    ts = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '  (by sirius-pvs-generate-flatlist.py)'
+    ts = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '  (by sirius-recordnames-generate-flatlist.py)'
     for i in range(len(lines)):
         line = lines[i]
         idx = len(tsstr) + line.lower().find(tsstr)
@@ -89,7 +89,7 @@ def update_pvs_flatlist(machine):
         lines.insert(0, '')
         lines.insert(0, '# timestamp: ' + ts)
 
-    fname = os.path.join(_pvs_flatlists_folder, 'pvs_flatlist_' + machine.lower() + '.txt')
+    fname = os.path.join(_pvs_flatlists_folder, 'recordnames_flatlist_' + machine.lower() + '.txt')
     try:
         f = open(fname, "w")
         for line in lines:
@@ -99,8 +99,8 @@ def update_pvs_flatlist(machine):
 
 
 
-print('updating LI'); update_pvs_flatlist('li'); print()
-print('updating TB'); update_pvs_flatlist('tb'); print()
-print('updating BO'); update_pvs_flatlist('bo'); print()
-print('updating TS'); update_pvs_flatlist('ts'); print()
-print('updating SI'); update_pvs_flatlist('si'); print()
+print('updating LI'); update_recordnames_flatlist('li'); print()
+print('updating TB'); update_recordnames_flatlist('tb'); print()
+print('updating BO'); update_recordnames_flatlist('bo'); print()
+print('updating TS'); update_recordnames_flatlist('ts'); print()
+print('updating SI'); update_recordnames_flatlist('si'); print()

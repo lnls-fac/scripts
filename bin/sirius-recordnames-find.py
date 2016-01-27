@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Finds pvs"""
+"""Finds record names"""
 
 import sys
 import va
