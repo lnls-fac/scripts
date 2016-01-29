@@ -26,11 +26,11 @@ AVAILABLE_HOSTS = dict(
          'lnls350-1-virtual':'08:00:27:CB:3D:D7',
          'lnls350-2-virtual':'08:00:27:13:93:5D',
          'lnls346-virtual':'08:00:27:3F:9E:DB',
-         'lnls209-linux':'AC:16:2D:34:6A:43',
          'lnls82-linux':'3C:D9:2B:70:D2:D8',
          'lnls54-linux':'1C:C1:DE:66:1B:55'
      },'10.0.21':{
          'lnls210-linux':'AC:16:2D:34:C8:A5',
+         'lnls209-linux':'AC:16:2D:34:6A:43',
          'lnls210-virtual':'08:00:27:2C:94:77',
          'lnls208-linux':'AC:16:2D:34:C8:F3',
          'lnls212-linux':'AC:16:2D:34:BD:C5',
