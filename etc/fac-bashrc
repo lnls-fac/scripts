@@ -81,7 +81,7 @@ complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"         
 
 # Completion for FieldMap analysis functions
 # ==========================================
-complete -W "help clean edit run summary rawfield trajectory multipoles model summary"                                                  fma-analysis.py
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile"                                          fma-analysis.py
 complete -W "--input-file"                                                                                                              fma-rawfield.py
 
 # Completion for VA
@@ -114,5 +114,6 @@ alias gomml='cd $FACCODE/MatlabMiddleLayer/Release'
 alias goapsuite='cd $FACCODE/apsuite'
 alias govagrant='cd $FACROOT/hla-vagrant'
 alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
+alias gofieldmaptrack='cd $FACCODE/fieldmaptrack'
 
 alias goepics='cd $EPICS_DIR'
