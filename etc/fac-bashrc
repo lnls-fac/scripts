@@ -81,7 +81,7 @@ complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"         
 
 # Completion for FieldMap analysis functions
 # ==========================================
-complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile"                                          fma-analysis.py
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fma-analysis.py
 complete -W "--input-file"                                                                                                              fma-rawfield.py
 
 # Completion for VA
