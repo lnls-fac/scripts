@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### This script is supposed to be run at lnls82-linux
-### It starts the virtual accelerator and addtional experiment scripts
+### It starts the virtual accelerator iocs
 
 if [ -z "$EPICS_CA_AUTO_ADDR_LIST" ] ; then
   export EPICS_CA_AUTO_ADDR_LIST=NO
@@ -103,7 +103,7 @@ function start_module {
     elif [ $1 == "si_operations" ]; then
       start_instance si_operations 38018 $(dir_pcaspy si_operations)"/run.py"
     elif [ $1 == "viocs" ]; then
-      start_viocs
+      start_all
     else
       echo $0": module not defined!"
     fi
@@ -147,7 +147,7 @@ function stop_module {
   elif [ $1 == "injection" ]; then
     stop_instances injection
   elif [ $1 == "viocs" ]; then
-    stop_viocs
+    stop_all
   else
     echo $0": module not defined!"
   fi
@@ -174,49 +174,7 @@ function start_all {
   start_module injection
 }
 
-function start_viocs {
-  start_module si_current
-  start_module si_bpms
-  start_module si_ps
-  start_module si_tune
-  start_module si_rf
-  start_module si_beamsize
-  start_module bo_current
-  start_module bo_bpms
-  start_module bo_ps
-  start_module bo_rf
-  start_module tb_bpms
-  start_module tb_ps
-  start_module ts_bpms
-  start_module ts_ps
-  start_module si_lifetime
-  start_module si_ref_orbit
-  start_module si_operations
-  start_module injection
-}
-
 function stop_all {
-  stop_instances si_operations
-  stop_instances si_beamsize
-  stop_instances si_rf
-  stop_instances si_tune
-  stop_instances si_ps
-  stop_instances si_bpms
-  stop_instances si_current
-  stop_instances bo_rf
-  stop_instances bo_ps
-  stop_instances bo_bpms
-  stop_instances bo_current
-  stop_instances tb_ps
-  stop_instances tb_bpms
-  stop_instances ts_ps
-  stop_instances ts_bpms
-  stop_instances si_lifetime
-  stop_instances si_ref_orbit
-  stop_instances injection
-}
-
-function stop_viocs {
   stop_instances si_operations
   stop_instances si_beamsize
   stop_instances si_rf
