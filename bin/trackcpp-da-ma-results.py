@@ -51,7 +51,7 @@ def find_right_folders(paths):
         if paths2: pathnames += find_right_folders(paths2)
     return pathnames
 
-def ma_analysis(paths,leg_text,title_text,mach,energy):
+def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
     if mach.find('bo') >= 0:
         acc = getattr(sirius,'bo')
         acc = acc.create_accelerator()
@@ -76,7 +76,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
             accepRF = eqpar[0]['rf_energy_acceptance']
     else:
         acc = getattr(sirius,'si')
-        acc = acc.create_accelerator()
+        acc = acc.create_accelerator(mode=mode)
         acc.energy = energy
 
         eqpar = pyaccel.optics.get_equilibrium_parameters(acc)
@@ -443,22 +443,23 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     if not ok: return
     submachine = answer
     if submachine == 'si':
-        defaultanswer = ['3.0', '2','ma xy ex']
+        defaultanswer = ['3.0','S10', '2','ma xy ex']
     elif submachine == 'bo':
-        defaultanswer = ['0.150', '2','ma xy ex']
+        defaultanswer = ['0.150','M01', '2','ma xy ex']
     else:
         raise Exception('Invalid submachine name')
 
     # user selects main parameters
-    prompt = ['energy [GeV]', 'Number of plots','Types of plots']
+    prompt = ['energy [GeV]','Optics Mode', 'Number of plots','Types of plots']
     ok, answer = _input_dialog(prompt,defaultanswer, 'Main Parameters')
     if not ok: return
     energy = float(answer[0]) * 1e9
-    n_calls = round(float(answer[1]))
+    mode    = answer[1]
+    n_calls = round(float(answer[2]))
 
-    xy = True if answer[2].find('xy') >= 0 else False
-    ex = True if answer[2].find('ex') >= 0 else False
-    ma = True if answer[2].find('ma') >= 0 else False
+    xy = True if answer[3].find('xy') >= 0 else False
+    ex = True if answer[3].find('ex') >= 0 else False
+    ma = True if answer[3].find('ma') >= 0 else False
 
     if path is None:
         path = _full(['','home','fac_files','data','sirius',submachine,'beam_dynamics'])
@@ -487,7 +488,7 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
         text += ex_text
         if save: fex.savefig(_full((CURDIR, 'EX-'+title_text + '.svg')))
     if ma:
-        fma, ma_text = ma_analysis(folders,leg_text,title_text,submachine,energy)
+        fma, ma_text = ma_analysis(folders,leg_text,title_text,submachine,energy,mode)
         text += ma_text
         if save: fma.savefig(_full((CURDIR, 'MA-'+title_text + '.svg')))
     if save:
