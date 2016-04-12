@@ -113,13 +113,12 @@ def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
     ama.hold(True)
     ama.set_xlabel('Pos [m]',fontsize=size_font)
     ama.set_ylabel(r'$\delta$ [%]',fontsize=size_font)
-    ama.set_xlim([0, 52])
-    ama.set_ylim([-limne-0.2,limpe+0.2])
     ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
             yticks=[-5,-2.5,0,2.5,5], position=[0.10,0.17,0.84,0.73])
     ama.set_title('MA - ' + title_text)
-    pyaccel.graphics.draw_lattice(acc,symmetry=10, offset=0, gca=True,height=0.4)
-
+    pyaccel.graphics.draw_lattice(acc,symmetry=05, offset=0, gca=True,height=0.4)
+    ama.set_xlim([0, 104])
+    ama.set_ylim([-limne-0.2,limpe+0.2])
     if len(paths) == 1:
         path = paths[0]
         ltime, accep, rate = [],[],[]
