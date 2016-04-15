@@ -51,11 +51,13 @@ def find_right_folders(paths):
         if paths2: pathnames += find_right_folders(paths2)
     return pathnames
 
+
 def ma_analysis(paths,leg_text,title_text,mach,energy):
     if mach.find('bo') >= 0:
         acc = getattr(sirius,'bo')
         acc = acc.create_accelerator()
         acc.energy = energy
+        sirius.bo.lattice.set_rf_voltage(acc._accelerator.lattice, energy)
         if energy == 0.15 * 1e9:
             # BOOSTER (equillibirum parameters from LINAC)
             emit0   = 170e-9  # linac
@@ -219,7 +221,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
         print(text,end='')
         ma_text += text
         if rms_mode:
-            text = '{0:>5.2f} \xB1 {1:5.2f} \n'.format(lt_ave, lt_rms)
+            text = '{0:>6.3f} \xB1 {1:6.3f} \n'.format(lt_ave, lt_rms)
             print(text,end='')
             ma_text += text
             if lt_prob:
@@ -228,7 +230,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy):
                 print(text,end='')
                 ma_text += text
         else:
-            text = '{0:5.2f} \n'.format(lt_ave)
+            text = '{0:6.3f} \n'.format(lt_ave)
             print(text,end='')
             ma_text += text
         ama.plot(pos,ma_ave[0],label=leg_text[i],**ave_conf)
@@ -335,14 +337,14 @@ def xy_analysis(paths,leg_text,title_text):
 
         axy.plot(xy_ave[0], xy_ave[1],label=leg_text[i],**ave_conf)
         if rms_mode:
-            text = '{0:>5.2f} \xB1 {1:5.2f}   {2:>5.1f} \xB1 {3:5.1f}   \n'.format(
+            text = '{0:>6.3f} \xB1 {1:6.3f}   {2:>6.3f} \xB1 {3:6.3f}   \n'.format(
                     area_ave, area_rms, neg_ave, neg_rms)
             print(text,end='')
             xy_text += text
             axy.plot(xy_ave[0]+xy_rms[0], xy_ave[1]+xy_rms[1],**rms_conf)
             axy.plot(xy_ave[0]-xy_rms[0], xy_ave[1]-xy_rms[1],**rms_conf)
         else:
-            text = '{0:>5.2f}           {1:>5.1f}           \n'.format(area_ave, neg_ave)
+            text = '{0:>6.3f}           {1:>5.1f}           \n'.format(area_ave, neg_ave)
             print(text,end='')
             xy_text += text
     axy.legend(loc='best')
