@@ -138,7 +138,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
                 rate += [LT['rate']]
                 ltime += [1/LT['ave_rate']/60/60] # em horas
             else:
-                text = '{1:5s}: ma nao carregou\n'.format(result[k])
+                text = '{0:5s}: ma nao carregou\n'.format(result[k])
                 print(text,end='')
                 ma_text += text
         accep  = _np.dstack(accep)*100
@@ -273,7 +273,7 @@ def xy_analysis(paths,leg_text,title_text):
                 elif mostra == 3:
                     idx_daxy += dados['plane']
             else:
-                text = '{1:5s}: xy nao carregou\n'.format(result[k])
+                text = '{0:5s}: xy nao carregou\n'.format(result[k])
                 print(text,end='')
                 xy_text += text
         if mostra == 0:
@@ -380,7 +380,7 @@ def ex_analysis(paths,leg_text,title_text):
                 elif mostra == 3:
                     idx_daex += dados['plane']
             else:
-                text = '{1:5s}: ex nao carregou\n'.format(result[k])
+                text = '{0:5s}: ex nao carregou\n'.format(result[k])
                 print(text,end='')
                 ex_text += text
         if mostra == 0:
