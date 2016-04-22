@@ -444,7 +444,7 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     if not ok: return
     submachine = answer
     if submachine == 'si':
-        defaultanswer = ['3.0','S10', '2','ma xy ex']
+        defaultanswer = ['3.0','S05', '2','ma xy ex']
     elif submachine == 'bo':
         defaultanswer = ['0.150','M01', '2','ma xy ex']
     else:
