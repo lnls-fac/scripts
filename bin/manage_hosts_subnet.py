@@ -33,7 +33,7 @@ AVAILABLE_HOSTS = dict(
          'lnls210-linux':'AC:16:2D:34:C8:A5',
          'lnls212-linux':'AC:16:2D:34:BD:C5',
          'lnls155-virtual':'08:00:27:95:0D:DE',
-         'lnls210-virtual':'08:00:27:2C:94:77',
+         'lnls210-virtual':'08:00:27:16:9E:CE',
          'lnls224-virtual':'08:00:27:84:6E:95'  #Fluka
      },'10.0.3':{
          'lnls340':'08:2E:5F:01:68:3A',
