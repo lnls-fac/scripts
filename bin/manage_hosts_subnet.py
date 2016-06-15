@@ -19,7 +19,7 @@ AVAILABLE_HOSTS = dict(
          'lnls346':'2C:41:38:8E:EF:A2',
          'lnls116':'08:2E:5F:01:58:67',
          'lnls340-virtual':'08:00:27:F8:38:3A',
-         'lnls343-virtual':'08:00:27:86:C6:0F',
+         'lnls343-virtual':'08:00:27:40:A9:3A',
          'lnls138-virtual':'08:00:27:35:25:D6',
          'lnls119-virtual':'08:00:27:10:29:80',
          'lnls116-virtual':'08:00:27:84:59:65',
