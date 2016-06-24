@@ -12,12 +12,12 @@ def update_data_repos(display=True, err=False):
     repos = repos.stdout.decode().splitlines()
 
     msg_commit = 'Automatic Commit: ' + datetime.now().strftime('%y-%m-%d_%H:%M')
-    msg_print = ''
     msg_error = ''
+    if display: print('\nUpdating Working Tree and Syncing repository:')
     for repo in repos:
         rep  = repo.rpartition('/')[0]
         sh.cd(rep)
-        msg_print += '\n' + rep + ': \n'
+        if display: print('\n' + rep + ': ')
         status_repo = sh.git.status(porcelain=True).stdout.decode()
         if status_repo:
             # Add file by file checking if there are conflicts from previous attempts
@@ -34,38 +34,34 @@ def update_data_repos(display=True, err=False):
             # Try to commit the files without conflict. If there are none, generate error message
             try:
                 commit_repo = sh.git.commit(m=msg_commit)
-                msg_print += '\tChanges commited.\n'
+                if display: print('\tChanges commited.')
             except sh.ErrorReturnCode:
-                msg_print += '\tNone of the changes were committed. Solve Conflicts!\n'
+                if display: print('\tNone of the changes were committed. Solve Conflicts!')
 
             #If there are unmerged files from previous attempts:
             if unmerged:
-                msg_print += '\tStill have unmerged files. Solve it!\n'
+                if display: print('\tStill have unmerged files. Solve it!')
                 msg_error += '\n' + rep + 'Still have unmerged files. Solve it!'
                 continue
         else:
-            msg_print += '\tNothing to commit.\n'
+            if display: print('\tNothing to commit.')
 
         # Try to pull the changes if there are no conflicts yet and identify new conflicts
         try:
             pull_repo   = sh.git.pull()
-            msg_print += '\tRepository fetched and merged.\n'
+            if display: print('\tRepository fetched and merged.')
         except sh.ErrorReturnCode as error:
-            msg_print += '\tThere are unmerged files.\n'
+            if display: print('\tThere are unmerged files.')
             msg_error += '\n' + rep + 'There are unmerged files.'
             continue
 
         # If no new conflicts were identified, try to push
         try:
             push_repo   = sh.git.push()
-            msg_print += '\tRepository pushed.\n'
+            if display: print('\tRepository pushed.')
         except sh.ErrorReturnCode as error:
-            msg_print += '\tProblem pushing repository.\n'
+            if display: print('\tProblem pushing repository.')
             msg_error += '\n' + rep + ': Problem pushing repository.'
-
-    if display:
-        print('\nUpdating Working Tree and Syncing repository:\n')
-        print(msg_print)
 
     if err:
         with open(sh.HOME +'/'+ file_name,'w') as fi:
