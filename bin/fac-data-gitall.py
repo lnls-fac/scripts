@@ -5,7 +5,7 @@ from datetime import datetime
 import optparse
 import lnls
 
-file_name = '.fac-data-gitall_sync_log'
+file_name = '/var/log/fac-data-gitall_sync_log'
 
 def update_data_repos(display=True, err=False):
     repos = sh.find(lnls.folder_data,'-name','.git')
@@ -64,7 +64,7 @@ def update_data_repos(display=True, err=False):
             msg_error += '\n' + rep + ': Problem pushing repository.'
 
     if err:
-        with open(sh.HOME +'/'+ file_name,'w') as fi:
+        with open(file_name,'w') as fi:
             fi.write('#'*60 + '\n')
             fi.write('\n RESULTS FROM FAC DATA REPOSITORIES SYNC:\n\n')
             if not msg_error:
