@@ -41,7 +41,7 @@ def update_data_repos(display=True, err=False):
             #If there are unmerged files from previous attempts:
             if unmerged:
                 if display: print('\tStill have unmerged files. Solve it!')
-                msg_error += '\n' + rep + 'Still have unmerged files. Solve it!'
+                msg_error += '\n' + rep + ': Still have unmerged files. Solve it!'
                 continue
         else:
             if display: print('\tNothing to commit.')
@@ -52,7 +52,7 @@ def update_data_repos(display=True, err=False):
             if display: print('\tRepository fetched and merged.')
         except sh.ErrorReturnCode as error:
             if display: print('\tThere are unmerged files.')
-            msg_error += '\n' + rep + 'There are unmerged files.'
+            msg_error += '\n' + rep + ': There are unmerged files.'
             continue
 
         # If no new conflicts were identified, try to push
