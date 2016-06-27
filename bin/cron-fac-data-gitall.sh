@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# Put the name of ther user uyou want to use here:
-su fernando
+if [ ! -d /var/log/fac-data-gitall ]; then
+    mkdir /var/log/fac-data-gitall
+    chmod o+rwx /var/log/fac-data-gitall
+fi
 
-fac-data-gitall.py -e >/dev/null 2>&1
+# Put the name of the user you want to use here:
+su -c "fac-data-gitall.py -e" fernando > /var/log/fac-data-gitall/extended_log 2>&1

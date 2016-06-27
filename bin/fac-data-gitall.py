@@ -5,7 +5,7 @@ from datetime import datetime
 import optparse
 import lnls
 
-file_name = '/var/log/fac-data-gitall_sync_log'
+file_name = '/var/log/fac-data-gitall/sync_log'
 
 def update_data_repos(display=True, err=False):
     repos = sh.find(lnls.folder_data,'-name','.git')
