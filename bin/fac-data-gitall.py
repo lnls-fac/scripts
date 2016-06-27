@@ -11,7 +11,8 @@ def update_data_repos(display=True, err=False):
     repos = sh.find(lnls.folder_data,'-name','.git')
     repos = repos.stdout.decode().splitlines()
 
-    msg_commit = 'Automatic Commit: ' + datetime.now().strftime('%y-%m-%d_%H:%M')
+    agora = datetime.now()
+    msg_commit = 'Automatic Commit: ' + agora.strftime('%y-%m-%d_%H:%M')
     msg_error = ''
     if display: print('\nUpdating Working Tree and Syncing repository:')
     for repo in repos:
@@ -66,11 +67,13 @@ def update_data_repos(display=True, err=False):
     if err:
         with open(file_name,'w') as fi:
             fi.write('#'*60 + '\n')
-            fi.write('\n RESULTS FROM FAC DATA REPOSITORIES SYNC:\n\n')
+            fi.write('\n' + agora.strftime('%y/%m/%d-%H:%M') + 
+                     ' -> RESULTS FROM FAC DATA REPOSITORIES SYNC:\n\n')
             if not msg_error:
                 fi.write('\tAll repositories synced!\n')
             else:
                 fi.write(msg_error)
+            fi.write('#'*60 + '\n')
     return None
 
 if __name__ == '__main__':
