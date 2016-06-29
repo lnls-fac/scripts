@@ -67,13 +67,13 @@ def update_data_repos(display=True, err=False):
     if err:
         with open(file_name,'w') as fi:
             fi.write('#'*60 + '\n')
-            fi.write('\n' + agora.strftime('%y/%m/%d-%H:%M') + 
+            fi.write('\n' + agora.strftime('%y/%m/%d-%H:%M') +
                      ' -> RESULTS FROM FAC DATA REPOSITORIES SYNC:\n\n')
             if not msg_error:
                 fi.write('\tAll repositories synced!\n')
             else:
                 fi.write(msg_error)
-            fi.write('#'*60 + '\n')
+            fi.write('\n'+'#'*60 + '\n')
     return None
 
 if __name__ == '__main__':
