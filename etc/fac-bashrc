@@ -84,12 +84,6 @@ complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"         
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fma-analysis.py
 complete -W "--input-file"                                                                                                              fma-rawfield.py
 
-# Display log of automatic syncing of data repositories
-# ==========================================
-if [ -f /var/log/fac-data-gitall/sync_log ] ; then
-   cat /var/log/fac-data-gitall/sync_log
-fi
-
 # Completion for VA
 # =================
 complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
