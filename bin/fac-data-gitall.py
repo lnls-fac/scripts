@@ -28,9 +28,10 @@ def update_data_repos(display=True, err=False):
                     unmerged = True
                     continue
 
-                idx = line[3:].find('->')
-                if  idx >= 0: add_repo = sh.git.add(line[idx+3:])
-                else:         add_repo = sh.git.add(line[3:])
+                idx = line.find('->')
+                if  idx >= 0:                   add_repo = sh.git.add('-A',line[idx+3:].strip('"'))
+                elif line.startswith(' D'):     add_repo = sh.git.rm(line[3:].strip('"'))
+                elif not line.startswith('D '): add_repo = sh.git.add('-A',line[3:].strip('"'))
 
             # Try to commit the files without conflict. If there are none, generate error message
             try:
