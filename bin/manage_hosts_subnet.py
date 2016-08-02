@@ -11,34 +11,37 @@ from uuid import getnode as get_mac
 STRFORMAT = '{0:18s} {1:6s} {2:15s}'
 AVAILABLE_HOSTS = dict(
     {'10.0.7':{
-         'lnls350':'00:25:90:E7:58:8B',
-         'lnls343':'00:25:90:E7:55:92',
-         'lnls340':'08:2E:5F:01:68:3A',
-         'lnls138':'3C:D9:2B:6F:33:2C',
-         'lnls119':'08:2E:5F:01:67:AE',
-         'lnls346':'2C:41:38:8E:EF:A2',
          'lnls116':'08:2E:5F:01:58:67',
-         'lnls340-virtual':'08:00:27:F8:38:3A',
-         'lnls343-virtual':'08:00:27:86:C6:0F',
-         'lnls138-virtual':'08:00:27:35:25:D6',
-         'lnls119-virtual':'08:00:27:10:29:80',
+         'lnls119':'08:2E:5F:01:67:AE',
+         'lnls138':'3C:D9:2B:6F:33:2C',
+         'lnls343':'00:25:90:E7:55:92',
+         'lnls346':'2C:41:38:8E:EF:A2',
+         'lnls350':'00:25:90:E7:58:8B',
+         'lnls392':'90:B1:1C:87:CF:18',
          'lnls116-virtual':'08:00:27:84:59:65',
+         'lnls119-virtual':'08:00:27:10:29:80',
+         'lnls138-virtual':'08:00:27:35:25:D6',
+         'lnls343-virtual':'08:00:27:40:A9:3A',
+         'lnls346-virtual':'08:00:27:3F:9E:DB',
          'lnls350-1-virtual':'08:00:27:CB:3D:D7',
          'lnls350-2-virtual':'08:00:27:13:93:5D',
-         'lnls346-virtual':'08:00:27:3F:9E:DB',
+         'lnls392-virtual':'08:00:27:93:F1:75',
+         'lnls54-linux':'1C:C1:DE:66:1B:55',
          'lnls82-linux':'3C:D9:2B:70:D2:D8',
-         'lnls54-linux':'1C:C1:DE:66:1B:55'
      },'10.0.21':{
-         'lnls210-linux':'AC:16:2D:34:C8:A5',
-         'lnls209-linux':'AC:16:2D:34:6A:43',
-         'lnls210-virtual':'08:00:27:2C:94:77',
-         'lnls208-linux':'AC:16:2D:34:C8:F3',
-         'lnls212-linux':'AC:16:2D:34:BD:C5',
          'fac8-linux':'00:1E:C9:21:9C:06',
+         'lnls208-linux':'AC:16:2D:34:C8:F3',
+         'lnls209-linux':'AC:16:2D:34:6A:43',
+         'lnls210-linux':'AC:16:2D:34:C8:A5',
+         'lnls212-linux':'AC:16:2D:34:BD:C5',
          'lnls155-virtual':'08:00:27:95:0D:DE',
+         'lnls210-virtual':'08:00:27:16:9E:CE',
          'lnls224-virtual':'08:00:27:84:6E:95'  #Fluka
+     },'10.0.3':{
+         'lnls340':'08:2E:5F:01:68:3A',
+         'lnls340-virtual':'08:00:27:F8:38:3A'
      },'10.0.28':{
-         }})
+       }})
 
 my_mac = str(hex(get_mac()))[2:]
 my_mac = (12-len(my_mac))*'0' + my_mac

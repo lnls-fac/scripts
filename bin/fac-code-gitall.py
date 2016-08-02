@@ -20,6 +20,8 @@ def run_git_clone():
     all_repos = ('apsuite',
                  'collective_effects',
                  'fieldmaptrack',
+                 'idcpp',
+                 'idpy',
                  'job_manager',
                  'lnls',
                  'mathphys',
@@ -32,7 +34,7 @@ def run_git_clone():
                  'trackcpp',
                  'tracy_sirius',
                  'va',
-                 'magfield',
+                 'vacpp'
                  )
 
     for repo in all_repos:

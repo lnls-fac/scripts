@@ -49,7 +49,7 @@ def find_right_folders(paths):
                 if _os.path.isdir(file) and  not file.startswith(('.','..')):
                     paths2 += [file]
         if paths2: pathnames += find_right_folders(paths2)
-    return pathnames
+    return sorted(pathnames)
 
 
 def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
@@ -78,12 +78,12 @@ def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
             accepRF = eqpar[0]['rf_energy_acceptance']
     else:
         acc = getattr(sirius,'si')
-        acc = acc.create_accelerator(mode=mode)
+        acc = acc.create_accelerator(optics_mode=mode)
         acc.energy = energy
 
         eqpar = pyaccel.optics.get_equilibrium_parameters(acc)
         # Data given by Natalia
-        emit0   = 0.240e-9 #eqpar['natural_emittance']
+        emit0   = 0.250e-9 #eqpar['natural_emittance']
         sigE    = 9.4e-4   #eqpar['natural_energy_spread']
         sigS    = 3.0e-3   #3.5e-3 # takes IBS into account #sigS  = eqpar['bunch_length']
         K       = 0.01
