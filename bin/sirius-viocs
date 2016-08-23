@@ -61,7 +61,7 @@ function dir_boot {
 
 function dir_pcaspy {
   local mod=$1
-    local dir=$FACROOT/hla/sirius/iocs/$mod
+    local dir=$FACROOT/hla/sirius/machine_apps/$mod
     echo $dir
 }
 
