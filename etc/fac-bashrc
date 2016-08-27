@@ -26,6 +26,7 @@ export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
 # EPICS
 # =====
 EPICS_DIR=/usr/local/epics
+export EPICS_CA_MAX_ARRAY_BYTES=1048576
 
 if [ -z $EPICS_BASE ] ; then
     export EPICS_BASE=$EPICS_DIR/R3.14/base
