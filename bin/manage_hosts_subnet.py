@@ -89,8 +89,8 @@ def wake_hosts(hosts):
 def control_service(hosts,wt2do='start'):
 
     BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\\{:s}%{:s}'
-    #usuario = input('User on remote host: ')
-    #senha = getpass.getpass('Password on remote host: ')
+    usuario = input('User on remote host: ')
+    senha = getpass.getpass('Password on remote host: ')
 
 
     for host in hosts:
