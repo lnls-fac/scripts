@@ -14,18 +14,18 @@ AVAILABLE_HOSTS = dict(
          'lnls118':'08:2E:5F:01:59:87',
          'lnls119':'08:2E:5F:01:67:AE',
          'lnls138':'3C:D9:2B:6F:33:2C',
+         'lnls155':'E8:39:35:3D:15:09',
          'lnls343':'00:25:90:E7:55:92',
          'lnls346':'2C:41:38:8E:EF:A2',
          'lnls350':'00:25:90:E7:58:8B',
-         'lnls392':'90:B1:1C:87:CF:18',
-         'lnls118-virtual':'08:00:27:A6:42:D0',
-         'lnls119-virtual':'08:00:27:10:29:80',
+         'lnls118-virtual':'08:00:27:54:66:C9',
+         'lnls119-virtual':'08:00:27:3B:2F:4A',
          'lnls138-virtual':'08:00:27:58:AA:DE',
+         'lnls155-virtual':'08:00:27:93:68:7A',
          'lnls343-virtual':'08:00:27:40:A9:3A',
          'lnls346-virtual':'08:00:27:3F:9E:DB',
          'lnls350-1-virtual':'08:00:27:CB:3D:D7',
          'lnls350-2-virtual':'08:00:27:13:93:5D',
-         'lnls392-virtual':'08:00:27:93:F1:75',
          'lnls54-linux':'1C:C1:DE:66:1B:55',
          'lnls82-linux':'3C:D9:2B:70:D2:D8',
      },'10.0.21':{
@@ -89,8 +89,8 @@ def wake_hosts(hosts):
 def control_service(hosts,wt2do='start'):
 
     BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\\{:s}%{:s}'
-    usuario = input('User on remote host: ')
-    senha = getpass.getpass('Password on remote host: ')
+    #usuario = input('User on remote host: ')
+    #senha = getpass.getpass('Password on remote host: ')
 
 
     for host in hosts:
