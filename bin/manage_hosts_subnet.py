@@ -18,7 +18,6 @@ AVAILABLE_HOSTS = dict(
          'lnls343':'00:25:90:E7:55:92',
          'lnls346':'2C:41:38:8E:EF:A2',
          'lnls350':'00:25:90:E7:58:8B',
-         'lnls392':'90:B1:1C:87:CF:18',
          'lnls118-virtual':'08:00:27:54:66:C9',
          'lnls119-virtual':'08:00:27:3B:2F:4A',
          'lnls138-virtual':'08:00:27:58:AA:DE',
@@ -27,7 +26,6 @@ AVAILABLE_HOSTS = dict(
          'lnls346-virtual':'08:00:27:3F:9E:DB',
          'lnls350-1-virtual':'08:00:27:CB:3D:D7',
          'lnls350-2-virtual':'08:00:27:13:93:5D',
-         'lnls392-virtual':'08:00:27:93:F1:75',
          'lnls54-linux':'1C:C1:DE:66:1B:55',
          'lnls82-linux':'3C:D9:2B:70:D2:D8',
      },'10.0.21':{
@@ -93,8 +91,6 @@ def control_service(hosts,wt2do='start'):
     BASESTR = 'net rpc service {:s} VBoxVmService -S {:s} -U ABTLUS\\\{:s}%{:s}'
     #usuario = input('User on remote host: ')
     #senha = getpass.getpass('Password on remote host: ')
-    usuario = 'fernando.sa'    
-    senha   = 'a1B@c3D$'
 
     for host in hosts:
         print(host, ':')
