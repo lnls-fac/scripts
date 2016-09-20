@@ -6,9 +6,13 @@
 if [ -z "$EPICS_CA_AUTO_ADDR_LIST" ] ; then
   export EPICS_CA_AUTO_ADDR_LIST=NO
 fi
-
+   
 if [ -z "$EPICS_CA_ADDR_LIST" ] ; then
-  export EPICS_CA_ADDR_LIST=10.0.21.255
+  if [ "`hostname`" == "lnls82-linux" ] ; then
+  	export EPICS_CA_ADDR_LIST=10.0.7.255
+  else
+ 	export EPICS_CA_ADDR_LIST=10.0.21.255
+  fi
 fi
 
 VIOCS=$FACCODE/va/viocs
