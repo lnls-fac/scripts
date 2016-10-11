@@ -2,14 +2,16 @@
 
 import sh
 from datetime import datetime
-import optparse
+import argparse
 import lnls
 
 file_name = '/var/log/fac-data-gitall/sync_log'
 
-def update_data_repos(display=True, err=False):
+def update_data_repos(display=True, err=False, repo_sel = None):
     repos = sh.find(lnls.folder_data,'-name','.git')
     repos = repos.stdout.decode().splitlines()
+    print(repos)
+    repos = [x for x in repos if [y for y in repo_sel if x.find(y)>=0]]
 
     agora = datetime.now()
     msg_commit = 'Automatic Commit: ' + agora.strftime('%y-%m-%d_%H:%M')
@@ -80,12 +82,13 @@ def update_data_repos(display=True, err=False):
 if __name__ == '__main__':
 
     # configuration of the parser for the arguments
-    parser = optparse.OptionParser()
-    parser.add_option('-p','--print',dest='display',action='store_true',
-                      help="Print summary on the Screen.", default=True)
-    parser.add_option('-e','--error',dest='error',action='store_true',
-                      help="Save file in $HOME/"+file_name,
-                      default=False)
-    (opts, _) = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p','--print',action='store_true',default=True,
+                      help="Print summary on the Screen.",dest='display')
+    parser.add_argument('-e','--error',action='store_true',default=False,
+                      help="Save file in "+file_name)
+    parser.add_argument('-r','--repos',action='store',nargs='+',
+                      help="Select the repositories to sync. Default is all")
+    args = parser.parse_args()
 
-    update_data_repos(display=opts.display,err=opts.error)
+    update_data_repos(display=args.display,err=args.error,repo_sel=args.repos)
