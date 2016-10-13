@@ -10,7 +10,8 @@ file_name = '/var/log/fac-data-gitall/sync_log'
 def update_data_repos(display=True, err=False, repo_sel = None):
     repos = sh.find(lnls.folder_data,'-name','.git')
     repos = repos.stdout.decode().splitlines()
-    repos = [x for x in repos if [y for y in repo_sel if x.find(y)>=0]]
+    if repo_sel is not None:
+        repos = [x for x in repos if [y for y in repo_sel if x.find(y)>=0]]
 
     agora = datetime.now()
     msg_commit = 'Automatic Commit: ' + agora.strftime('%y-%m-%d_%H:%M')
