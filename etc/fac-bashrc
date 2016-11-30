@@ -116,5 +116,5 @@ alias goapsuite='cd $FACCODE/apsuite'
 alias govagrant='cd $FACROOT/hla-vagrant'
 alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
 alias gofieldmaptrack='cd $FACCODE/fieldmaptrack'
-
+alias goima='cd $FACDATA/sirius/lnls-ima'
 alias goepics='cd $EPICS_DIR'
