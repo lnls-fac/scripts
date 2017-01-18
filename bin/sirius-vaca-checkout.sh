@@ -10,9 +10,9 @@ function checkout_release_branches {
   if [ -z "$ans1" -o -z "$ans2" -o -z "$ans3" ]; then
     printf "At least one of the repositories has modifications. bailing out...\n"
   else
-    printf "<va>\n"; cd $FACCODE/va; git checkout release-v0.15.1; sudo python3 ./setup.py develop; printf "\n"
-    printf "<sirius>\n"; cd $FACCODE/sirius; git checkout release-v0.11.2; sudo python3 ./setup.py develop; printf "\n"
-    printf "<siriusdb>\n"; cd $FACROOT/siriusdb; git checkout release-v0.0.1; printf "\n"
+    printf "<va>\n"; cd $FACCODE/va; git fetch --all; git checkout release-v0.15.1; sudo python3 ./setup.py develop; printf "\n"
+    printf "<sirius>\n"; cd $FACCODE/sirius; git fetch --all; git checkout release-v0.11.2; sudo python3 ./setup.py develop; printf "\n"
+    printf "<siriusdb>\n"; cd $FACROOT/siriusdb; git fetch --all; git checkout release-v0.0.1; printf "\n"
   fi
 
 }
