@@ -14,6 +14,9 @@ if [ -z $IP ]; then
     if [ -z "$IP" ]; then
         IP=$( ifconfig | grep -A 2 eth1 | grep "inet add" | cut --delimiter=":" -f 2 | cut --delimiter="B" -f 1 )
     fi
+    if [ -z "$IP" ]; then
+        IP=$( ifconfig | grep -A 2 em1 | grep "inet add" | cut --delimiter=":" -f 2 | cut --delimiter="B" -f 1 )
+    fi
 fi
 
 export EPICS_CA_ADDR_LIST=$IP
