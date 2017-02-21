@@ -13,6 +13,15 @@ fi
 export FACCODE=$FACROOT/code
 export FACDATA=$FACROOT/data
 
+
+# EPICS Support Application Machines
+# ==================================
+
+export SUPAPP_DISCS_RBAC=10.0.7.55:8445
+export SUPAPP_DISCS_NS=10.0.7.55:8080/names
+export SUPAPP_DISCS_CCDB=10.0.7.55:8083
+export SUPAPP_DISCS_CABLES=10.0.7.55:8086
+
 # Python
 # ======
 export PYTHONPATH=$PYTHONPATH:$FACCODE/job_manager/src
