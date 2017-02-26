@@ -1,39 +1,35 @@
-# Paths
-# =====
-if [ -z $FACROOT ] ; then
+# FAC Group Paths
+# ===============
+
+if [ -z $ROOT_FAC ] ; then
     if [ -d /home ] ; then
-        export FACROOT=/home/fac_files
+        export ROOT_FAC=/home/fac_files
     elif [ -d /Users ] ; then
-        export FACROOT=/Users/fac_files
+        export ROOT_FAC=/Users/fac_files
     else
-        echo "FACROOT not defined!"
+        echo "ROOT_FAC not defined!"
     fi
 fi
 
-export FACCODE=$FACROOT/code
-export FACDATA=$FACROOT/data
+export FAC_CODE=$ROOT_FAC/code
+export FAC_DATA=$ROOT_FAC/data
 
 
-# EPICS Support Application Machines
-# ==================================
+# IMA Group Paths
+# ===============
 
-export SUPAPP_DISCS_RBAC=10.0.7.55:8445
-export SUPAPP_DISCS_NS=10.0.7.55:8080/names
-export SUPAPP_DISCS_CCDB=10.0.7.55:8083
-export SUPAPP_DISCS_CABLES=10.0.7.55:8086
+export ROOT_IMA=$ROOT_FAC/lnls-ima
 
-# Python
-# ======
-export PYTHONPATH=$PYTHONPATH:$FACCODE/job_manager/src
-export PYTHONPATH=$PYTHONPATH:$FACROOT/hla/plot/src
 
-# FAC scripts
-# ===========
-export PATH=$PATH:$FACCODE/job_manager/apps
-export PATH=$PATH:$FACCODE/scripts/fieldmap_analysis
+# Definition of ROOT_GROUP
+# ========================
+
+export ROOT_GROUP=$ROOT_FAC
+
 
 # EPICS
 # =====
+
 EPICS_DIR=/usr/local/epics
 export EPICS_CA_MAX_ARRAY_BYTES=1048576
 
@@ -63,6 +59,30 @@ export PVCOMMON=$EV4_BASE/pvCommonCPP
 export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
+
+
+# EPICS Support Application Machines
+# ==================================
+
+export SIRIUS_URL_RBAC=10.0.7.55:8445
+export SIRIUS_URL_NS=10.0.7.55:8080/names
+export SIRIUS_URL_CCDB=10.0.7.55:8083
+export SIRIUS_URL_CABLES=10.0.7.55:8086
+export SIRIUS_URL_WEB=10.0.7.55
+
+
+export ROOT_SIRIUS=$ROOT_GROUP/lnls-sirius
+
+
+# Python
+# ======
+export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
+export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
+
+# FAC scripts
+# ===========
+export PATH=$PATH:$FAC_CODE/job_manager/apps
+export PATH=$PATH:$FAC_CODE/scripts/fieldmap_analysis
 
 # Definitions for elegant rpn
 # ===========================
@@ -103,27 +123,56 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap dynap_exfmap track_linepass tests" trackcpp
 complete -W "--path --save --help"  trackcpp_da_ma_results.py
 
+
 # Aliases
 # =======
 
-alias gofacroot='cd $FACROOT'
+# --- root paths ---
 
-alias gohla='cd $FACROOT/hla'
-alias gosiriusdb='cd $FACROOT/siriusdb'
-alias gocode='cd $FACCODE'
-alias godata='cd $FACDATA'
+alias g-sirius-root='cd $ROOT_SIRIUS'
+alias g-group-root='cd $ROOT_GROUP'
+alias g-fac-root='cd $ROOT_FAC'
+alias g-ima-root='cd $ROOT_IMA'
 
-alias golnls='cd $FACCODE/lnls'
-alias gosirius='cd $FACCODE/sirius'
-alias gotrackcpp='cd $FACCODE/trackcpp'
-alias gomathphys='cd $FACCODE/mathphys'
-alias gova='cd $FACCODE/va'
-alias goscripts='cd $FACCODE/scripts'
-alias gopyaccel='cd $FACCODE/pyaccel'
-alias gomml='cd $FACCODE/MatlabMiddleLayer/Release'
-alias goapsuite='cd $FACCODE/apsuite'
-alias govagrant='cd $FACROOT/hla-vagrant'
-alias gofieldmap='cd $FACDATA/sirius/si/magnet_modelling'
-alias gofieldmaptrack='cd $FACCODE/fieldmaptrack'
-alias goima='cd $FACDATA/sirius/lnls-ima'
-alias goepics='cd $EPICS_DIR'
+# --- code and data folders ---
+
+alias g-code-fac='cd $FAC_CODE'
+alias g-data-fac='cd $FAC_DATA'
+
+# --- repositories ---
+
+alias g-sirius-repo='cd $ROOT_SIRIUS'
+alias g-hla-repo='cd $ROOT_SIRIUS/hla'
+alias g-csslnls-repo='cd $ROOT_SIRIUS/org.csstudio.product'
+alias g-discs-repo='cd $ROOT_SIRIUS/discs-management'
+alias g-csconstants-repo='cd $ROOT_SIRIUS/control-system-constants'
+alias g-apsuite-code-fac-repo='cd $FAC_CODE/apsuite'
+alias g-va-code-fac-repo='cd $FAC_CODE/va'
+alias g-lnls-code-fac-repo='cd $FAC_CODE/lnls'
+alias g-sirius-code-fac-repo='cd $FAC_CODE/sirius'
+alias g-trackcpp-code-fac-repo='cd $FAC_CODE/trackcpp'
+alias g-mathphys-code-fac-repo='cd $FAC_CODE/mathphys'
+alias g-scripts-code-fac-repo='cd $FAC_CODE/scripts'
+alias g-pyjob-code-fac-repo='cd $FAC_CODE/job_manager'
+alias g-mml-code-fac-repo='cd $FAC_CODE/MatlabMiddleLayer/Release'
+alias g-pyaccel-code-fac-repo='cd $FAC_CODE/pyaccel'
+alias g-fieldmaptrack-code-fac-repo='cd $FAC_CODE/fieldmaptrack'
+alias g-epics-base='cd $EPICS_DIR'
+alias g-beamdynamics-data-repo='cd $FAC_DATA/sirius/beam_dynamics'
+
+alias g-bo-correctors-data-repo='cd $ROOT_FAC/lnls-ima/bo-correctors'
+alias g-bo-dipoles-data-repo='cd $ROOT_FAC/lnls-ima/bo-dipoles'
+alias g-bo-quadrupoles-qd-data-repo='cd $ROOT_FAC/lnls-ima/bo-quadrupoles-qd'
+alias g-bo-quadrupoles-qf-data-repo='cd $ROOT_FAC/lnls-ima/bo-quadrupoles-qf'
+alias g-bo-sextupoles-data-repo='cd $ROOT_FAC/lnls-ima/bo-sextupoles'
+alias g-si-dipoles-b1-data-repo='cd $ROOT_FAC/lnls-ima/si-dipoles-b1'
+alias g-si-dipoles-b2-data-repo='cd $ROOT_FAC/lnls-ima/si-dipoles-b2'
+alias g-si-fast-correctors-data-repo='cd $ROOT_FAC/lnls-ima/si-fast-correctors'
+alias g-si-quadrupoles-q14-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q14'
+alias g-si-quadrupoles-q20-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q20'
+alias g-si-quadrupoles-q30-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q30'
+alias g-si-sextupoles-s15-repo='cd $ROOT_FAC/lnls-ima/si-sextupoles-s15'
+alias g-tb-dipoles-data-repo='cd $ROOT_FAC/lnls-ima/tb-dipoles'
+
+
+
