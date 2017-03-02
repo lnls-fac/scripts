@@ -11,7 +11,7 @@ if [ -z $ROOT_FAC ] ; then
     fi
 fi
 
-export FAC_CODE=$ROOT_FAC/code
+export FAC_CODE=$ROOT_FAC/lnls-fac
 export FAC_DATA=$ROOT_FAC/data
 
 
@@ -19,6 +19,12 @@ export FAC_DATA=$ROOT_FAC/data
 # ===============
 
 export ROOT_IMA=$ROOT_FAC/lnls-ima
+
+
+# SIRIUS Group Paths
+# ===============
+
+export ROOT_SIRIUS=$ROOT_FAC/lnls-sirius
 
 
 # Definition of ROOT_GROUP
@@ -69,9 +75,6 @@ export SIRIUS_URL_NS=10.0.7.55:8080/names
 export SIRIUS_URL_CCDB=10.0.7.55:8083
 export SIRIUS_URL_CABLES=10.0.7.55:8086
 export SIRIUS_URL_WEB=10.0.7.55
-
-
-export ROOT_SIRIUS=$ROOT_GROUP/lnls-sirius
 
 
 # Python
