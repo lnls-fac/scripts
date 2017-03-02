@@ -64,12 +64,11 @@ export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 # EPICS Support Application Machines
 # ==================================
 
-export SIRIUS_URL_RBAC=10.0.7.55:8445
-export SIRIUS_URL_NS=10.0.7.55:8080/names
-export SIRIUS_URL_CCDB=10.0.7.55:8083
-export SIRIUS_URL_CABLES=10.0.7.55:8086
-export SIRIUS_URL_WEB=10.0.7.55
-
+export SIRIUS_URL_RBAC=https://10.0.7.55:8445
+export SIRIUS_URL_NS=http://10.0.7.55:8080/names
+export SIRIUS_URL_CCDB=http://10.0.7.55:8083
+export SIRIUS_URL_CABLES=http://10.0.7.55:8086
+export SIRIUS_URL_WEB=http://10.0.7.55
 
 # Python
 # ======
