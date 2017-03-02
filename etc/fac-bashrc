@@ -1,6 +1,5 @@
 # FAC Group Paths
 # ===============
-
 if [ -z $ROOT_FAC ] ; then
     if [ -d /home ] ; then
         export ROOT_FAC=/home/fac_files
@@ -10,27 +9,22 @@ if [ -z $ROOT_FAC ] ; then
         echo "ROOT_FAC not defined!"
     fi
 fi
-
 export FAC_CODE=$ROOT_FAC/lnls-fac
 export FAC_DATA=$ROOT_FAC/data
 
 
-# IMA Group Paths
-# ===============
-
-export ROOT_IMA=$ROOT_FAC/lnls-ima
-
-
-# SIRIUS Group Paths
-# ===============
-
-export ROOT_SIRIUS=$ROOT_FAC/lnls-sirius
-
-
 # Definition of ROOT_GROUP
 # ========================
-
 export ROOT_GROUP=$ROOT_FAC
+
+
+# Definition of Github organizations repos paths
+# ================================================
+export LNLS_SIRIUS=$ROOT_GROUP/lnls-sirius
+export LNLS_FAC=$ROOT_GROUP/lnls-fac
+export LNLS_IMA=$ROOT_GROUP/lnls-ima
+
+
 
 
 # EPICS
@@ -84,8 +78,8 @@ export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
 
 # FAC scripts
 # ===========
-export PATH=$PATH:$FAC_CODE/job_manager/apps
-export PATH=$PATH:$FAC_CODE/scripts/fieldmap_analysis
+export PATH=$PATH:$LNLS_FAC/job_manager/apps
+export PATH=$PATH:$LNLS_FAC/scripts/fieldmap_analysis
 
 # Definitions for elegant rpn
 # ===========================
@@ -130,53 +124,46 @@ complete -W "--path --save --help"  trackcpp_da_ma_results.py
 # Aliases
 # =======
 
-# --- root paths ---
-
-alias g-sirius-root='cd $ROOT_SIRIUS'
-alias g-group-root='cd $ROOT_GROUP'
-alias g-fac-root='cd $ROOT_FAC'
-alias g-ima-root='cd $ROOT_IMA'
-
-# --- code and data folders ---
-
-alias g-code-fac='cd $FAC_CODE'
-alias g-data-fac='cd $FAC_DATA'
-
-# --- repositories ---
-
-alias g-sirius-repo='cd $ROOT_SIRIUS'
-alias g-hla-repo='cd $ROOT_SIRIUS/hla'
-alias g-csslnls-repo='cd $ROOT_SIRIUS/org.csstudio.product'
-alias g-discs-repo='cd $ROOT_SIRIUS/discs-management'
-alias g-csconstants-repo='cd $ROOT_SIRIUS/control-system-constants'
-alias g-dev-packages-repo='cd $ROOT_SIRIUS/dev-packages'
-alias g-apsuite-code-fac-repo='cd $FAC_CODE/apsuite'
-alias g-va-code-fac-repo='cd $FAC_CODE/va'
-alias g-lnls-code-fac-repo='cd $FAC_CODE/lnls'
-alias g-sirius-code-fac-repo='cd $FAC_CODE/sirius'
-alias g-trackcpp-code-fac-repo='cd $FAC_CODE/trackcpp'
-alias g-mathphys-code-fac-repo='cd $FAC_CODE/mathphys'
-alias g-scripts-code-fac-repo='cd $FAC_CODE/scripts'
-alias g-pyjob-code-fac-repo='cd $FAC_CODE/job_manager'
-alias g-mml-code-fac-repo='cd $FAC_CODE/MatlabMiddleLayer/Release'
-alias g-pyaccel-code-fac-repo='cd $FAC_CODE/pyaccel'
-alias g-fieldmaptrack-code-fac-repo='cd $FAC_CODE/fieldmaptrack'
 alias g-epics-base='cd $EPICS_DIR'
-alias g-beamdynamics-data-repo='cd $FAC_DATA/sirius/beam_dynamics'
+alias g-data-fac='cd $ROOT_GROUP/data'
+alias g-beamdynamics-data='cd $ROOT_GROUP/sirius/beam_dynamics'
 
-alias g-bo-correctors-data-repo='cd $ROOT_FAC/lnls-ima/bo-correctors'
-alias g-bo-dipoles-data-repo='cd $ROOT_FAC/lnls-ima/bo-dipoles'
-alias g-bo-quadrupoles-qd-data-repo='cd $ROOT_FAC/lnls-ima/bo-quadrupoles-qd'
-alias g-bo-quadrupoles-qf-data-repo='cd $ROOT_FAC/lnls-ima/bo-quadrupoles-qf'
-alias g-bo-sextupoles-data-repo='cd $ROOT_FAC/lnls-ima/bo-sextupoles'
-alias g-si-dipoles-b1-data-repo='cd $ROOT_FAC/lnls-ima/si-dipoles-b1'
-alias g-si-dipoles-b2-data-repo='cd $ROOT_FAC/lnls-ima/si-dipoles-b2'
-alias g-si-fast-correctors-data-repo='cd $ROOT_FAC/lnls-ima/si-fast-correctors'
-alias g-si-quadrupoles-q14-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q14'
-alias g-si-quadrupoles-q20-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q20'
-alias g-si-quadrupoles-q30-data-repo='cd $ROOT_FAC/lnls-ima/si-quadrupoles-q30'
-alias g-si-sextupoles-s15-repo='cd $ROOT_FAC/lnls-ima/si-sextupoles-s15'
-alias g-tb-dipoles-data-repo='cd $ROOT_FAC/lnls-ima/tb-dipoles'
+# --- organizations aliases ----
+alias g-sirius-lnls='cd $LNLS_SIRIUS'
+alias g-fac-lnls='cd $LNLS_FAC'
+alias g-ima-lnls='cd $LNLS_IMA'
 
+# --- lnls-sirius repo aliases ---
+alias g-csslnls-sirius-lnls='cd $LNLS_SIRIUS/org.csstudio.product'
+alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
+alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
+alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
+alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
 
+# --- lnls-fac repos ---
+alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
+alias g-va-code-fac-lnls='cd $LNLS_FAC/va'
+alias g-lnls-code-fac-lnls='cd $LNLS_FAC/lnls'
+alias g-models-code-fac-lnls='cd $LNLS_FAC/models'
+alias g-trackcpp-code-fac-lnls='cd $LNLS_FAC/trackcpp'
+alias g-mathphys-code-fac-lnls='cd $LNLS_FAC/mathphys'
+alias g-scripts-code-fac-lnls='cd $LNLS_FAC/scripts'
+alias g-pyjob-code-fac-lnls='cd $LNLS_FAC/job_manager'
+alias g-mml-code-fac-lnls='cd $LNLS_FAC/MatlabMiddleLayer/Release'
+alias g-pyaccel-code-fac-lnls='cd $LNLS_FAC/pyaccel'
+alias g-fieldmaptrack-code-fac-lnls='cd $LNLS_FAC/fieldmaptrack'
 
+# --- lnls-ima repos ---
+alias g-tb-dipoles-ima-lnls='cd $LNLS_IMA/tb-dipoles'
+alias g-bo-correctors-ima-lnls='cd $LNLS_IMA/bo-correctors'
+alias g-bo-dipoles-ima-lnls='cd $LNLS_IMA/bo-dipoles'
+alias g-bo-qd-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qd'
+alias g-bo-qf-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qf'
+alias g-bo-sextupoles-ima-lnls='cd $LNLS_IMA/bo-sextupoles'
+alias g-si-b1-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b1'
+alias g-si-b2-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b2'
+alias g-si-fast-correctors-ima-lnls='cd $LNLS_IMA/si-fast-correctors'
+alias g-si-q14-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q14'
+alias g-si-q15-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q20'
+alias g-si-q30-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q30'
+alias g-si-s15-sextupoles-ima-lnls='cd $LNLS_IMA/si-sextupoles-s15'

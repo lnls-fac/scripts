@@ -3,7 +3,6 @@
 import sys
 import os
 import lnls
-#import git
 from termcolor import colored
 import subprocess
 
@@ -38,7 +37,7 @@ def run_git_clone():
                  )
 
     for repo in all_repos:
-        cmd = 'git clone ssh://git@github.com/lnls-fac/' + repo + '.git'
+        cmd = 'git clone git@github.com:lnls-fac/' + repo + '.git'
         os.system(cmd)
 
 def run_git(func):
@@ -46,9 +45,9 @@ def run_git(func):
     if func == 'clone': return run_git_clone()
 
     # repos in /code
-    fnames = os.listdir(lnls.folder_code)
+    fnames = os.listdir(lnls.folder_fac_code)
     for fname in fnames:
-        repo_folder = os.path.join(lnls.folder_code, fname)
+        repo_folder = os.path.join(lnls.folder_fac_code, fname)
         if not os.path.exists(os.path.join(repo_folder,'.git')): continue
         print('processing ' + func + colored(' <'+fname+'>','yellow')+'...')
         cmd = 'cd ' + repo_folder + '; git ' + func
