@@ -1,0 +1,173 @@
+# FAC Group Paths
+# ===============
+if [ -z $ROOT_FAC ] ; then
+    if [ -d /home ] ; then
+        export ROOT_FAC=/home/fac_files
+    elif [ -d /Users ] ; then
+        export ROOT_FAC=/Users/fac_files
+    else
+        echo "ROOT_FAC not defined!"
+    fi
+fi
+export FAC_CODE=$ROOT_FAC/lnls-fac
+export FAC_DATA=$ROOT_FAC/data
+
+
+# Definition of ROOT_GROUP
+# ========================
+export ROOT_GROUP=$ROOT_FAC
+
+
+# Definition of Github organizations repos paths
+# ================================================
+export LNLS_SIRIUS=$ROOT_GROUP/lnls-sirius
+export LNLS_FAC=$ROOT_GROUP/lnls-fac
+export LNLS_IMA=$ROOT_GROUP/lnls-ima
+
+
+
+
+# EPICS
+# =====
+
+EPICS_DIR=/usr/local/epics
+export EPICS_CA_MAX_ARRAY_BYTES=1048576
+
+if [ -z $EPICS_BASE ] ; then
+    export EPICS_BASE=$EPICS_DIR/R3.14/base
+fi
+
+if [ -z $EPICS_HOST_ARCH ] ; then
+    export EPICS_HOST_ARCH=linux-x86_64
+fi
+
+if [ -z $EV4_BASE ] ; then
+    export EV4_BASE=$EPICS_DIR/v4
+fi
+
+if [ -z $EPICS_EXTENSIONS ] ; then
+    export EPICS_EXTENSIONS=$EPICS_DIR/R3.14/extensions
+fi
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
+export PVDATABASE=$EV4_BASE/pvDatabaseCPP
+export PVASRV=$EV4_BASE/pvaSrv
+export PVACCESS=$EV4_BASE/pvAccessCPP
+export NORMATIVETYPES=$EV4_BASE/normativeTypesCPP
+export PVDATA=$EV4_BASE/pvDataCPP
+export PVCOMMON=$EV4_BASE/pvCommonCPP
+export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
+export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
+export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
+
+
+# EPICS Support Application Machines
+# ==================================
+
+export SIRIUS_URL_RBAC=https://10.0.7.55:8445
+export SIRIUS_URL_NS=http://10.0.7.55:8080/names
+export SIRIUS_URL_CCDB=http://10.0.7.55:8083
+export SIRIUS_URL_CABLES=http://10.0.7.55:8086
+export SIRIUS_URL_WEB=http://10.0.7.55
+
+# Python
+# ======
+export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
+export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
+
+# FAC scripts
+# ===========
+export PATH=$PATH:$LNLS_FAC/job_manager/apps
+export PATH=$PATH:$LNLS_FAC/scripts/fieldmap_analysis
+
+# Definitions for elegant rpn
+# ===========================
+export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
+
+# Elegant and related software (including geneticOptimizer)
+# =========================================================
+export HOST_ARCH=linux-x86_64
+export OAG_TOP_DIR=/usr/local/epics_oag
+
+# Elegant and OAG configs
+# =======================
+export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
+export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
+export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
+
+# Completion for JobManager functions
+# ===================================
+complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
+complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
+complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
+complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
+complete -W "--jobs --status --user --description --runninghost --explicate --choose --summary --help"                                  pyjob_qstat.py
+complete -W "--jobs --status --user --description --runninghost --signal --priority --possibleHosts --help"                             pyjob_qsig.py
+complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"                                                                 manage_hosts_subnet.py
+
+# Completion for FieldMap analysis functions
+# ==========================================
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fma-analysis.py
+complete -W "--input-file"                                                                                                              fma-rawfield.py
+
+# Completion for VA
+# =================
+complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
+
+# Completion for binary trackcpp
+# ==============================
+complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap dynap_exfmap track_linepass tests" trackcpp
+complete -W "--path --save --help"  trackcpp_da_ma_results.py
+
+# Completion for sirius-lnls-gitall
+# =================================
+complete -W "--help --pull --status --commit --push --clone" sirius-lnls-gitall.py
+
+
+
+# Aliases
+# =======
+
+alias g-epics-base='cd $EPICS_DIR'
+alias g-data-fac='cd $ROOT_GROUP/data'
+alias g-beamdynamics-data='cd $ROOT_GROUP/sirius/beam_dynamics'
+
+# --- organizations aliases ----
+alias g-sirius-lnls='cd $LNLS_SIRIUS'
+alias g-fac-lnls='cd $LNLS_FAC'
+alias g-ima-lnls='cd $LNLS_IMA'
+
+# --- lnls-sirius repo aliases ---
+alias g-csslnls-sirius-lnls='cd $LNLS_SIRIUS/org.csstudio.product'
+alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
+alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
+alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
+alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
+
+# --- lnls-fac repos ---
+alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
+alias g-va-code-fac-lnls='cd $LNLS_FAC/va'
+alias g-lnls-code-fac-lnls='cd $LNLS_FAC/lnls'
+alias g-models-code-fac-lnls='cd $LNLS_FAC/models'
+alias g-trackcpp-code-fac-lnls='cd $LNLS_FAC/trackcpp'
+alias g-mathphys-code-fac-lnls='cd $LNLS_FAC/mathphys'
+alias g-scripts-code-fac-lnls='cd $LNLS_FAC/scripts'
+alias g-pyjob-code-fac-lnls='cd $LNLS_FAC/job_manager'
+alias g-mml-code-fac-lnls='cd $LNLS_FAC/MatlabMiddleLayer/Release'
+alias g-pyaccel-code-fac-lnls='cd $LNLS_FAC/pyaccel'
+alias g-fieldmaptrack-code-fac-lnls='cd $LNLS_FAC/fieldmaptrack'
+
+# --- lnls-ima repos ---
+alias g-tb-dipoles-ima-lnls='cd $LNLS_IMA/tb-dipoles'
+alias g-bo-correctors-ima-lnls='cd $LNLS_IMA/bo-correctors'
+alias g-bo-dipoles-ima-lnls='cd $LNLS_IMA/bo-dipoles'
+alias g-bo-qd-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qd'
+alias g-bo-qf-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qf'
+alias g-bo-sextupoles-ima-lnls='cd $LNLS_IMA/bo-sextupoles'
+alias g-si-b1-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b1'
+alias g-si-b2-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b2'
+alias g-si-fast-correctors-ima-lnls='cd $LNLS_IMA/si-fast-correctors'
+alias g-si-q14-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q14'
+alias g-si-q15-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q20'
+alias g-si-q30-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q30'
+alias g-si-s15-sextupoles-ima-lnls='cd $LNLS_IMA/si-sextupoles-s15'
