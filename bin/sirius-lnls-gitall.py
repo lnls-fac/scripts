@@ -69,7 +69,7 @@ def run_git_clone(args):
     for org, repo_list in repos.items():
         for repo in repo_list:
             path = os.path.join(siriuspy.envars.org_folders[org], repo)
-            cmd = 'cd ' + siriuspy.envars.org_folders[org] + '; git clone git@gitgub.com:' + org + '/' + repo
+            cmd = 'cd ' + siriuspy.envars.org_folders[org] + '; git clone git@github.com:' + org + '/' + repo
             print(cmd)
             os.system(cmd)
             print('')
