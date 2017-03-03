@@ -129,20 +129,30 @@ def run_git_cmd(cmd,args):
     for org, repo_list in repos.items():
         for repo in repo_list:
             path = os.path.join(siriuspy.envars.org_folders[org], repo)
+            print('['+repo+']')
             if cmd == 'commit':
-                msg = input('commit message for "' + repo + '": ')
-                if not msg:
-                    syscmd = 'cd ' + path + '; git commit -a -m "' + msg + '"'
-                else:
-                    syscmd = ''
+                syscmd = 'cd ' + path + '; git status'
+                p = subprocess.Popen([syscmd], shell=True, stdout=subprocess.PIPE)
+                out,err = p.communicate()
+                syscmd = ''
+                if 'modified:' in str(out):
+                    print(out.decode('ascii'))
+                    msg = input('commit message for "' + repo + '" [empty string to cancel commit]: ')
+                    if msg:
+                        syscmd = 'cd ' + path + '; git commit -a -m "' + msg + '"'
+                    else:
+                        print('cannot commit with empty message')
+                if 'Untracked files:' in str(out):
+                    print('there are untracked files!')
             else:
                 syscmd = 'cd ' + path + '; git ' + cmd
-            print('['+repo+']')
+
             if syscmd:
                 print(syscmd)
-                text = subprocess.call([syscmd], shell=True, stdout=sys.stdout)
-            else:
-                print('cannot commit with empty message')
+                p = subprocess.Popen([syscmd], shell=True, stdout=subprocess.PIPE)
+                out,err = p.communicate()
+                print(out.decode('ascii'))
+
 
 
 def run():
