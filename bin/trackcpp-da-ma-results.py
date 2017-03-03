@@ -6,7 +6,7 @@ import numpy as _np
 import optparse as _optparse
 import matplotlib.pyplot as _plt
 
-import models, pyaccel
+import pymodels, pyaccel
 import mathphys as _mp
 import lnls.dialog as _dialog
 
@@ -54,10 +54,10 @@ def find_right_folders(paths):
 
 def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
     if mach.find('bo') >= 0:
-        acc = getattr(models,'bo')
+        acc = getattr(pymodels,'bo')
         acc = acc.create_accelerator()
         acc.energy = energy
-        models.bo.lattice.set_rf_voltage(acc._accelerator.lattice, energy)
+        pymodels.bo.lattice.set_rf_voltage(acc._accelerator.lattice, energy)
         if energy == 0.15 * 1e9:
             # BOOSTER (equillibirum parameters from LINAC)
             emit0   = 170e-9  # linac
@@ -77,7 +77,7 @@ def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
             nrBun = 1
             accepRF = eqpar[0]['rf_energy_acceptance']
     else:
-        acc = getattr(models,'si')
+        acc = getattr(pymodels,'si')
         acc = acc.create_accelerator(optics_mode=mode)
         acc.energy = energy
 
@@ -463,7 +463,7 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     ma = True if answer[3].find('ma') >= 0 else False
 
     if path is None:
-        path = _full(['','home','fac_files','data','models',submachine,'beam_dynamics'])
+        path = _full(['','home','fac_files','data','pymodels',submachine,'beam_dynamics'])
     i=0
     leg_text = []
     folders = []

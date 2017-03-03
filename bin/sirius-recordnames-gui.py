@@ -4,7 +4,7 @@
 import sys
 from PyQt5.Qt import *
 from functools import partial
-import models as _models
+import pymodels as _pymodels
 from va.pvs import li as _pvs_li
 from va.pvs import tb as _pvs_tb
 from va.pvs import ts as _pvs_ts
@@ -152,29 +152,29 @@ class RecordNameList(QWidget):
 
 
 # LI
-li = _models.li.create_accelerator()
-li_fd = _models.li.families.get_family_data(li)
-li_rec_name = _models.li.device_names.get_device_names
+li = _pymodels.li.create_accelerator()
+li_fd = _pymodels.li.families.get_family_data(li)
+li_rec_name = _pymodels.li.device_names.get_device_names
 li_fk_name = _pvs_li.get_fake_record_names
 # TB
-tb = _models.tb.create_accelerator()
-tb_fd = _models.tb.families.get_family_data(tb)
-tb_rec_name = _models.tb.device_names.get_device_names
+tb = _pymodels.tb.create_accelerator()
+tb_fd = _pymodels.tb.families.get_family_data(tb)
+tb_rec_name = _pymodels.tb.device_names.get_device_names
 tb_fk_name  = _pvs_tb.get_fake_record_names
 # BO
-bo = _models.bo.create_accelerator()
-bo_fd = _models.bo.families.get_family_data(bo)
-bo_rec_name = _models.bo.device_names.get_device_names
+bo = _pymodels.bo.create_accelerator()
+bo_fd = _pymodels.bo.families.get_family_data(bo)
+bo_rec_name = _pymodels.bo.device_names.get_device_names
 bo_fk_name  = _pvs_bo.get_fake_record_names
 # TS
-ts = _models.ts.create_accelerator()
-ts_fd = _models.ts.families.get_family_data(ts)
-ts_rec_name = _models.ts.device_names.get_device_names
+ts = _pymodels.ts.create_accelerator()
+ts_fd = _pymodels.ts.families.get_family_data(ts)
+ts_rec_name = _pymodels.ts.device_names.get_device_names
 ts_fk_name  = _pvs_ts.get_fake_record_names
 # SI
-si = _models.si.create_accelerator()
-si_fd = _models.si.families.get_family_data(si)
-si_rec_name = _models.si.device_names.get_device_names
+si = _pymodels.si.create_accelerator()
+si_fd = _pymodels.si.families.get_family_data(si)
+si_rec_name = _pymodels.si.device_names.get_device_names
 si_fk_name  = _pvs_si.get_fake_record_names
 
 

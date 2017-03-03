@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import models
+import pymodels
 import pyaccel
 import sys
 
@@ -8,7 +8,7 @@ def run_test_si():
 
     f = open('si-linepass.txt', 'w'); sys.stdout = f
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
-    latt = models.si.create_accelerator()
+    latt = pymodels.si.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
@@ -21,7 +21,7 @@ def run_test_si():
 def run_test_ts():
     f = open('ts-linepass.txt', 'w'); sys.stdout = f
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
-    latt = models.ts.create_accelerator()
+    latt = pymodels.ts.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
@@ -34,7 +34,7 @@ def run_test_ts():
 def run_test_bo():
     f = open('bo-linepass.txt', 'w'); sys.stdout = f
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
-    latt = models.bo.create_accelerator()
+    latt = pymodels.bo.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
@@ -47,7 +47,7 @@ def run_test_bo():
 def run_test_tb():
     f = open('tb-linepass.txt', 'w'); sys.stdout = f
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
-    latt = models.tb.create_accelerator()
+    latt = pymodels.tb.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
