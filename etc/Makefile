@@ -2,7 +2,7 @@
 DEST_DIR = /usr/local/etc
 
 GENERALSCRIPTS = \
-		fac-bashrc
+		bashrc-sirius
 
 SCRIPTS = $(GENERALSCRIPTS)
 
