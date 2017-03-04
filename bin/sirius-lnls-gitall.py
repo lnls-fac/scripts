@@ -122,7 +122,7 @@ def run_git_cmd(cmd,args):
                                     else:
                                         pass
                 if not found:
-                    print('invalid: "' + repo_sel + '"!')
+                    print('invalid: "' + arg + '"!')
         return repos
 
     repos = get_repos(args)
