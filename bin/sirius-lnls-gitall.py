@@ -129,6 +129,7 @@ def run_git_cmd(cmd,args):
     for org, repo_list in repos.items():
         for repo in repo_list:
             path = os.path.join(siriuspy.envars.org_folders[org], repo)
+            print('\n' + 70*'#')
             print('['+repo+']')
             if cmd == 'commit':
                 syscmd = 'cd ' + path + '; git status'
@@ -152,27 +153,24 @@ def run_git_cmd(cmd,args):
                 p = subprocess.Popen([syscmd], shell=True, stdout=subprocess.PIPE)
                 out,err = p.communicate()
                 print(out.decode('ascii'))
+            print(70*'#'+'\n')
 
 
 
 def run():
     parser = argparse.ArgumentParser(description="Run git commands for sets of repositories")
-    parser.add_argument("--clone", type=str, nargs='+', help="clone repositories")
-    parser.add_argument("--status", type=str, nargs='+', help="pull repositories")
-    parser.add_argument("--pull", type=str, nargs='+', help="pull repositories")
-    parser.add_argument("--commit", type=str, nargs='+', help="pull repositories")
-    parser.add_argument("--push", type=str, nargs='+', help="pull repositories")
+    parser.add_argument('action', help='Which git command to perform on repositories',choices=('clone','status','pull','commit','push'))
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--repos", nargs='+', help="List of repositories to perform 'action'",default=[])
+    group.add_argument("--orgs", nargs='+', help="Perform 'action' on repositories of the organizations listed",choices=('all','lnls-fac','lnls-sirius','lnls-ima'),default=[])
     args = parser.parse_args()
-    if args.clone:
+    option = args.repos.copy()
+    option += args.orgs
+    if not option: option = ['all']
+    if 'clone' == args.action.lower():
         run_git_clone(args.clone)
-    if args.pull:
-        run_git_cmd('pull', args.pull)
-    if args.status:
-        run_git_cmd('status', args.status)
-    if args.commit:
-        run_git_cmd('commit', args.commit)
-    if args.push:
-        run_git_cmd('push', args.push)
+    else:
+        run_git_cmd(args.action.lower(), args.repos)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, stop_now)
