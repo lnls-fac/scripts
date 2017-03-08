@@ -121,7 +121,7 @@ complete -W "--path --save --help"  trackcpp_da_ma_results.py
 
 # Completion for sirius-lnls-gitall
 # =================================
-complete -W "--help --pull --status --commit --push --clone" sirius-lnls-gitall.py
+complete -W "--help pull status commit push clone all lnls-sirius lnls-fac lnls-ima --repos --orgs" sirius-lnls-gitall.py
 
 
 
