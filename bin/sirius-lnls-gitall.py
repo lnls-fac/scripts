@@ -168,7 +168,7 @@ def run():
     option += args.orgs
     if not option: option = ['all']
     if 'clone' == args.action.lower():
-        run_git_clone(args.clone)
+        run_git_clone(args.action.lower())
     else:
         run_git_cmd(args.action.lower(), args.repos)
 
