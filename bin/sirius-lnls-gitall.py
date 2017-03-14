@@ -168,9 +168,9 @@ def run():
     option += args.orgs
     if not option: option = ['all']
     if 'clone' == args.action.lower():
-        run_git_clone(args.action.lower())
+        run_git_clone(option)
     else:
-        run_git_cmd(args.action.lower(), args.repos)
+        run_git_cmd(args.action.lower(), option)
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, stop_now)
