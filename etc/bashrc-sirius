@@ -128,6 +128,8 @@ complete -W "--help pull status commit push clone all lnls-sirius lnls-fac lnls-
 # Aliases
 # =======
 
+alias g-root='cd $ROOT_GROUP'
+
 alias g-epics-base='cd $EPICS_DIR'
 alias g-data-fac='cd $ROOT_GROUP/data'
 alias g-beamdynamics-data='cd $ROOT_GROUP/sirius/beam_dynamics'
@@ -143,6 +145,7 @@ alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
 alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
 alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
 alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
+alias g-macapp-si-fam-ma='cd $LNLS_SIRIUS/hla/machine_apps/si-fam-ma'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
