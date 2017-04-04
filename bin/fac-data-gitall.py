@@ -3,12 +3,12 @@
 import sh
 from datetime import datetime
 import argparse
-import lnls
 
+folder_data = '/home/fac_files/data'
 file_name = '/var/log/fac-data-gitall/sync_log'
 
 def update_data_repos(display=True, err=False, repo_sel = None):
-    repos = sh.find(lnls.folder_data,'-name','.git')
+    repos = sh.find(folder_data,'-name','.git')
     repos = repos.stdout.decode().splitlines()
     if repo_sel is not None:
         repos = [x for x in repos if [y for y in repo_sel if x.find(y)>=0]]
