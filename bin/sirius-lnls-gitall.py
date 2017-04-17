@@ -159,7 +159,7 @@ def run_git_cmd(cmd,args):
 
 def run():
     parser = argparse.ArgumentParser(description="Run git commands for sets of repositories")
-    parser.add_argument('action', help='Which git command to perform on repositories',choices=('clone','status','pull','commit','push'))
+    parser.add_argument('action', help='Which git command to perform on repositories',choices=('clone','status','pull','commit','fetch','push'))
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--repos", nargs='+', help="List of repositories to perform 'action'",default=[])
     group.add_argument("--orgs", nargs='+', help="Perform 'action' on repositories of the organizations listed",choices=('all','lnls-fac','lnls-sirius','lnls-ima'),default=[])
