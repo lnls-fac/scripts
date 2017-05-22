@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-import siriuspy
+import siriuspy.envars as _envars
 import argparse
 import signal
 import sys
@@ -16,12 +16,12 @@ def run_git_clone(args):
 
     def get_all(args):
         repos = {}
-        for org, folder in siriuspy.envars.org_folders.items():
+        for org, folder in _envars.org_folders.items():
             repos[org] = []
             if not os.path.exists(folder):
                 print('sirius-lnls-gitall.py: please create ' + folder + ' folder with correct permissions first!')
                 continue
-            for repo in siriuspy.envars.repo_names[org]:
+            for repo in _envars.repo_names[org]:
                 path = os.path.join(folder,repo)
                 if os.path.exists(path):
                     #print('skipping: folder {0:s} already exists.'.format(path))
@@ -41,12 +41,12 @@ def run_git_clone(args):
                 if arg.lower() == 'all':
                     return get_all(args)
                 else:
-                    for org, folder in siriuspy.envars.org_folders.items():
+                    for org, folder in _envars.org_folders.items():
                         res_ = repos.get(org)
                         if res_ is None: repos[org] = []
                         if arg.lower() == org:
                             found = True
-                            for repo in siriuspy.envars.repo_names[org]:
+                            for repo in _envars.repo_names[org]:
                                 path = os.path.join(folder,repo)
                                 if os.path.exists(path):
                                     print('skipping: folder {0:s} already exists.'.format(path))
@@ -54,7 +54,7 @@ def run_git_clone(args):
                                     print('including: folder {0:s}.'.format(path))
                                     repos[org].append(repo)
                         else:
-                            for repo in siriuspy.envars.repo_names[org]:
+                            for repo in _envars.repo_names[org]:
                                 if arg.lower() == repo:
                                     found = True
                                     path = os.path.join(folder,repo)
@@ -69,8 +69,8 @@ def run_git_clone(args):
     repos = get_repos(args)
     for org, repo_list in repos.items():
         for repo in repo_list:
-            path = os.path.join(siriuspy.envars.org_folders[org], repo)
-            cmd = 'cd ' + siriuspy.envars.org_folders[org] + '; git clone git@github.com:' + org + '/' + repo
+            path = os.path.join(_envars.org_folders[org], repo)
+            cmd = 'cd ' + _envars.org_folders[org] + '; git clone git@github.com:' + org + '/' + repo
             print(cmd)
             os.system(cmd)
             print('')
@@ -80,12 +80,12 @@ def run_git_cmd(cmd,args, complement):
 
     def get_all(args):
         repos = {}
-        for org, folder in siriuspy.envars.org_folders.items():
+        for org, folder in _envars.org_folders.items():
             repos[org] = []
             if not os.path.exists(folder):
                 print('sirius-lnls-gitall.py: please create ' + folder + ' folder with correct permissions first!')
                 continue
-            for repo in siriuspy.envars.repo_names[org]:
+            for repo in _envars.repo_names[org]:
                 path = os.path.join(folder,repo)
                 if os.path.exists(path):
                     repos[org].append(repo)
@@ -103,19 +103,19 @@ def run_git_cmd(cmd,args, complement):
                 if arg.lower() == 'all':
                     return get_all(args)
                 else:
-                    for org, folder in siriuspy.envars.org_folders.items():
+                    for org, folder in _envars.org_folders.items():
                         res_ = repos.get(org)
                         if res_ is None: repos[org] = []
                         if arg.lower() == org:
                             found = True
-                            for repo in siriuspy.envars.repo_names[org]:
+                            for repo in _envars.repo_names[org]:
                                 path = os.path.join(folder,repo)
                                 if os.path.exists(path):
                                     repos[org].append(repo)
                                 else:
                                     pass
                         else:
-                            for repo in siriuspy.envars.repo_names[org]:
+                            for repo in _envars.repo_names[org]:
                                 if arg.lower() == repo:
                                     found = True
                                     path = os.path.join(folder,repo)
@@ -130,7 +130,7 @@ def run_git_cmd(cmd,args, complement):
     repos = get_repos(args)
     for org, repo_list in repos.items():
         for repo in repo_list:
-            path = os.path.join(siriuspy.envars.org_folders[org], repo)
+            path = os.path.join(_envars.org_folders[org], repo)
             print('\n' + 70*'#')
             print('['+repo+']')
             if cmd == 'commit':
