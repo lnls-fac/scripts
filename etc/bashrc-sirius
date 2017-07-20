@@ -74,6 +74,7 @@ export SIRIUS_URL_WEB=http://10.0.7.55
 # ======
 export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
 export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/pydm
 
 # FAC scripts
 # ===========
