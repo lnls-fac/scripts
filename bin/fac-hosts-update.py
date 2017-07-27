@@ -1,8 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-sirius
 
 import subprocess
 import os
 import sys
+
+
+fac_server = 'lnls82-linux'
+
 
 def get_ip_address():
 	output = subprocess.check_output(['ifconfig'])
@@ -26,7 +30,7 @@ def get_hostname():
 def import_hosts():
 
 	hostname   = get_hostname()
-	output = subprocess.check_output(['ssh', '-X', 'lnls82-linux', 'cat /etc/hosts'])
+	output = subprocess.check_output(['ssh', '-X', fac_server, 'cat /etc/hosts'])
 	text  = output.decode('utf-8')
 	lines = text.split('\n')
 	new_text = []
