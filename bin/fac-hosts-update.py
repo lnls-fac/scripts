@@ -5,7 +5,7 @@ import os
 import sys
 
 
-fac_server = 'lnls82-linux'
+fac_server = 'lnls449-linux' # (ximenes' workstation): temporary!
 
 
 def get_ip_address():
@@ -21,7 +21,7 @@ def get_ip_address():
 
 
 def get_hostname():
-	output = subprocess.check_output(['cat', '/etc/hostname'])	
+	output = subprocess.check_output(['cat', '/etc/hostname'])
 	text   = output.decode('utf-8')
 	lines  = text.split('\n')
 	return lines[0].strip()
@@ -36,7 +36,7 @@ def import_hosts():
 	new_text = []
 	for line in lines:
 		line = line.strip()
-		if ('lnls82-linux' in line) and ('127.0.1.1' in line):
+		if (fac_server in line) and ('127.0.1.1' in line):
 			line = '#' + line
 		if (hostname in line) and ('127.0.1.1' in line):
 			line = line[1:]
@@ -52,5 +52,3 @@ def save_hosts(text):
 
 hosts = import_hosts()
 save_hosts(hosts)
-
-
