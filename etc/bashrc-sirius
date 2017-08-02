@@ -150,6 +150,7 @@ alias g-macapp-si-fam-ma='cd $LNLS_SIRIUS/hla/machine_apps/si-fam-ma'
 alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/pydm'
 alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriuspy'
 alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriusdm'
+alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
