@@ -19,3 +19,6 @@ uninstall:
 develop: uninstall $(SCRIPTS)
 	ln -srf $(SCRIPTS) $(DEST_DIR)
 	ln -sf $(DEST_DIR)/bashrc-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
+
+hosts:
+	ln -s ./hosts /etc/
