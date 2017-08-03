@@ -62,13 +62,13 @@ export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 # EPICS Support Application Machines
 # ==================================
 
-export VACA_PREFIX=VAFAC-$(hostname)-
+export VACA_PREFIX=VAFAC-$(hostname)- # This line should be commented when in sirius computers
 
-export SIRIUS_URL_RBAC=https://10.0.7.55:8445
-export SIRIUS_URL_NS=http://10.0.7.55:8089/names
-export SIRIUS_URL_CCDB=http://10.0.7.55:8083
-export SIRIUS_URL_CABLES=http://10.0.7.55:8086
-export SIRIUS_URL_WEB=http://10.0.7.55
+export SIRIUS_URL_RBAC=https://rbac:8445
+export SIRIUS_URL_NS=http://naming-service-wildfly:8089/names
+export SIRIUS_URL_CCDB=http://ccdb:8083
+export SIRIUS_URL_CABLES=http://cable:8086
+export SIRIUS_URL_WEB=http://sirius-consts.lnls.br
 
 # Python
 # ======
@@ -146,11 +146,15 @@ alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
 alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
 alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
 alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
+<<<<<<< HEAD
 alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
 alias g-macapp-si-fam-ma='cd $LNLS_SIRIUS/hla/machine_apps/si-fam-ma'
+=======
+>>>>>>> 5f626ab08caa0de99909f67d4b2bafe27fc5714b
 alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/pydm'
 alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriuspy'
 alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriusdm'
+alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
