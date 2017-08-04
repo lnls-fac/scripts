@@ -43,10 +43,9 @@ def _add_and_commit_files(status_repo):
     # If there are none, generate error message
     try:
         sh.git.commit(m=msg_commit)
-        _log.info('\tChanges commited.')
+        _log.warning('\tChanges commited.')
     except sh.ErrorReturnCode:
-        _log.info('\tNone of the changes were committed.' +
-                  ' Solve Conflicts!')
+        _log.warning('\tNone of the changes were committed. Solve Conflicts!')
     return unmerged
 
 
@@ -58,35 +57,35 @@ def update_data_repos(repo_sel=None):
         repos = [x for x in repos if [y for y in repo_sel if x.find(y) >= 0]]
 
     msg_error = ''
-    _log.info('\nUpdating Working Tree and Syncing repository:')
+    _log.warning('\nUpdating Working Tree and Syncing repository:')
     for repo in repos:
         rep = repo.rpartition('/')[0]
         sh.cd(rep)
-        _log.info('\n' + rep + ': ')
+        _log.warning('\n' + rep + ': ')
         status_repo = sh.git.status(porcelain=True).stdout.decode()
         if not status_repo:
-            _log.info('\tNothing to commit.')
+            _log.warning('\tNothing to commit.')
             # If there are unmerged files from previous attempts:
         if status_repo and _add_and_commit_files(status_repo):
-            _log.info('\tStill have unmerged files. Solve it!')
+            _log.warning('\tStill have unmerged files. Solve it!')
             msg_error += '\n' + rep + ': Still have unmerged files. Solve it!'
             continue
         # Try to pull the changes if there are no conflicts
         # yet and identify new conflicts
         try:
             sh.git.pull()
-            _log.info('\tRepository fetched and merged.')
+            _log.warning('\tRepository fetched and merged.')
         except sh.ErrorReturnCode as error:
-            _log.info('\tThere are unmerged files.')
+            _log.warning('\tThere are unmerged files.')
             msg_error += '\n' + rep + ': There are unmerged files.'
             continue
 
         # If no new conflicts were identified, try to push
         try:
             sh.git.push()
-            _log.info('\tRepository pushed.')
+            _log.warning('\tRepository pushed.')
         except sh.ErrorReturnCode as error:
-            _log.info('\tProblem pushing repository.')
+            _log.warning('\tProblem pushing repository.')
             msg_error += '\n' + rep + ': Problem pushing repository.'
 
     return msg_error
@@ -103,9 +102,9 @@ if __name__ == '__main__':
                         help="Select the repositories to sync. Default is all")
     args = parser.parse_args()
 
-    level = _log.INFO if args.display else _log.WARNING
+    level = _log.WARNING if args.display else _log.ERROR
     _log.basicConfig(format='%(message)s', level=level, stream=_sys.stdout)
 
     msg_error = update_data_repos(repo_sel=args.repos)
-    if args.err:
+    if args.error:
         _print_log_file(msg_error)
