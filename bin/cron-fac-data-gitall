@@ -2,7 +2,7 @@
 
 if [ ! -d /var/log/fac-data-gitall ]; then
     mkdir /var/log/fac-data-gitall
-    chmod o+rwx /var/log/fac-data-gitall
+    chmod -R o+rwx /var/log/fac-data-gitall
 fi
 
 # Put the name of the user you want to use here:
