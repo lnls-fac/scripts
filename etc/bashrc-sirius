@@ -146,11 +146,6 @@ alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
 alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
 alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
 alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
-<<<<<<< HEAD
-alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
-alias g-macapp-si-fam-ma='cd $LNLS_SIRIUS/hla/machine_apps/si-fam-ma'
-=======
->>>>>>> 5f626ab08caa0de99909f67d4b2bafe27fc5714b
 alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/pydm'
 alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriuspy'
 alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriusdm'
