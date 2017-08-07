@@ -26,7 +26,7 @@ ff02::2 ip6-allrouters
 10.0.21.92   lnls350-linux # needs updating!
 10.0.21.65   lnls209-linux
 10.0.21.122  lnls208-linux
-10.0.21.96   fac8-linux glauber-linux
+#10.0.21.96   fac8-linux glauber-linux (IP needs updating)
 
 # EPICS support applications
 
