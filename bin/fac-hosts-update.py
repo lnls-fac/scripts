@@ -5,7 +5,8 @@ import os
 import sys
 
 
-fac_server = '10.0.7.55' # (lnls350-linux)
+fac_server_ip = '10.0.7.55' 
+fac_server_name = 'lnls350-linux'
 
 
 def get_ip_address():
@@ -30,13 +31,13 @@ def get_hostname():
 def import_hosts():
 
 	hostname   = get_hostname()
-	output = subprocess.check_output(['ssh', '-X', fac_server, 'cat /etc/hosts'])
+	output = subprocess.check_output(['ssh', '-X', fac_server_ip, 'cat /etc/hosts'])
 	text  = output.decode('utf-8')
 	lines = text.split('\n')
 	new_text = []
 	for line in lines:
 		line = line.strip()
-		if (fac_server in line) and ('127.0.1.1' in line):
+		if (fac_server_name in line) and ('127.0.1.1' in line):
 			line = '#' + line
 		if (hostname in line) and ('127.0.1.1' in line):
 			line = line[1:]
