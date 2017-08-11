@@ -1,4 +1,5 @@
 127.0.0.1 localhost
+#127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
 127.0.1.1 lnls449-linux.abtlus.org.br lnls449-linux
 #127.0.1.1 lnls451-linux.abtlus.org.br lnls451-linux
 #127.0.1.1 lnls452-linux.abtlus.org.br lnls452-linux
@@ -15,6 +16,7 @@ ff02::2 ip6-allrouters
 
 # FAC members' workstations
 
+10.0.7.55   lnls350-linux 
 10.0.21.92  lnls449-linux ximenes-linux
 10.0.21.150 lnls451-linux liulin-linux
 10.0.21.93  lnls452-linux fernando-linux
@@ -23,10 +25,10 @@ ff02::2 ip6-allrouters
 
 # FAC computers
 
-10.0.21.92   lnls350-linux # needs updating!
+10.0.7.55    lnls350-linux # needs updating!
 10.0.21.65   lnls209-linux
 10.0.21.122  lnls208-linux
-#10.0.21.96   fac8-linux glauber-linux (IP needs updating)
+10.0.21.55   fac8-linux glauber-linux (fixed IP?)
 
 # EPICS support applications
 
