@@ -5,7 +5,7 @@ import os
 import sys
 
 
-fac_server = 'lnls449-linux' # (ximenes' workstation): temporary!
+fac_server = '10.0.7.55' # (lnls350-linux)
 
 
 def get_ip_address():
