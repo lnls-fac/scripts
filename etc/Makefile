@@ -21,4 +21,4 @@ develop: uninstall $(SCRIPTS)
 	ln -sf $(DEST_DIR)/bashrc-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
 hosts:
-	ln -s ./hosts /etc/
+	ln -sf ./hosts-lnls350 /etc/hosts

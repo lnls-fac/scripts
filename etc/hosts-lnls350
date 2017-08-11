@@ -1,0 +1,41 @@
+# locahost definitions
+
+127.0.0.1 localhost
+#127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
+127.0.1.1 lnls449-linux.abtlus.org.br lnls449-linux
+#127.0.1.1 lnls451-linux.abtlus.org.br lnls451-linux
+#127.0.1.1 lnls452-linux.abtlus.org.br lnls452-linux
+#127.0.1.1 lnls454-linux.abtlus.org.br lnls454-linux
+#127.0.1.1 lnls455-linux.abtlus.org.br lnls455-linux
+
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+
+# FAC members' desktops
+
+10.0.21.92  lnls449-linux ximenes-linux    # (static) HWaddr 0c:c4:7a:dc:0f:6a
+10.0.21.150 lnls451-linux liulin-linux     # (static) HWaddr 0c:c4:7a:dc:04:2e
+10.0.21.93  lnls452-linux fernando-linux   # (static) HWaddr 0c:c4:7a:dc:04:73
+10.0.21.66  lnls454-linux ana-linux        # (static) HWaddr 0c:c4:7a:d9:7f:70
+10.0.21.138 lnls455-linux guilherme-linux  # (static) HWaddr 0c:c4:7a:dc:0f:69
+
+# FAC workstations
+
+10.0.7.55   lnls350-linux                  # (static) HWaddr 00:25:90:e7:58:8b 
+#10.0.21.65  lnls209-linux                  # (static?) 
+10.0.21.122 lnls208-linux                  # (static) HWaddr ac:16:2d:34:c8:f3
+10.0.21.55  fac8-linux glauber-linux       # (static?) HWaddr 00:1e:c9:21:9c:06
+
+# EPICS support applications
+
+10.0.21.92 naming-service-wildfly sirius-ns.lnls.br
+10.0.21.92 rbac sirius-rbac.lnls.br
+10.0.21.92 ccdb sirius-ccdb.lnls.br
+10.0.21.92 sirius-consts.lnls.br
+10.0.21.92 cable sirius-cable.lnls.br
+
