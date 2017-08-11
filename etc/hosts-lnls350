@@ -1,8 +1,8 @@
 # locahost definitions
 
 127.0.0.1 localhost
-#127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
-127.0.1.1 lnls449-linux.abtlus.org.br lnls449-linux
+127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
+#127.0.1.1 lnls449-linux.abtlus.org.br lnls449-linux
 #127.0.1.1 lnls451-linux.abtlus.org.br lnls451-linux
 #127.0.1.1 lnls452-linux.abtlus.org.br lnls452-linux
 #127.0.1.1 lnls454-linux.abtlus.org.br lnls454-linux
