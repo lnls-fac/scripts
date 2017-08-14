@@ -36,6 +36,6 @@ ff02::2 ip6-allrouters
 10.0.21.92 naming-service-wildfly sirius-ns.lnls.br
 10.0.21.92 rbac sirius-rbac.lnls.br
 10.0.21.92 ccdb sirius-ccdb.lnls.br
-10.0.21.92 sirius-consts.lnls.br
+10.0.21.122 sirius-consts.lnls.br
 10.0.21.92 cable sirius-cable.lnls.br
 
