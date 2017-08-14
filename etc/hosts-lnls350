@@ -40,3 +40,6 @@ ff02::2 ip6-allrouters
 10.0.21.92 sirius-consts.lnls.br
 10.0.21.92 cable sirius-cable.lnls.br
 
+# IOCS
+
+10.0.21.72 bbb-test                       # (not static!) HWaddr b0:d5:cc:ad:09:7c (test black beagle-bone IOC)
