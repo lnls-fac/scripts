@@ -5,6 +5,10 @@ function services_ps_cmd {
 	sudo systemctl $1 ioc-as-ps-test
 }
 
+function services_vaca_cmd {
+	sudo systemctl $1 ioc-as-vaca.service
+}
+
 function services_ma_cmd {
 	# tb
 	sudo systemctl $1 ioc-tb-ma-dipole-fam
@@ -33,16 +37,31 @@ function services_posang_cmd {
 	sudo systemctl $1 ioc-ts-ap-posang
 }
 
+function services_ti_cmd {
+  sudo systemctl $1 ioc-as-ti-bo-mags.service
+  sudo systemctl $1 ioc-as-ti-clocks.service
+  sudo systemctl $1 ioc-as-ti-events.service
+  sudo systemctl $1 ioc-as-ti-li-all.service
+  sudo systemctl $1 ioc-as-ti-others.service
+  sudo systemctl $1 ioc-as-ti-si-bo-bpms.service
+  sudo systemctl $1 ioc-as-ti-si-corrs.service
+  sudo systemctl $1 ioc-as-ti-si-dig.service
+  sudo systemctl $1 ioc-as-ti-si-dip-quads.service
+  sudo systemctl $1 ioc-as-ti-si-sexts-skews.service
+}
 
 if [ "$1" = "start" ]; then
+	services_vaca_cmd start
 	services_ps_cmd start
 	services_ma_cmd start
 	services_posang_cmd start
+	services_ti_cmd start
 elif [ "$1" = "stop" ]; then
+	services_vaca_cmd stop
 	services_posang_cmd stop
 	services_ma_cmd stop
 	services_ps_cmd stop
+	services_ti_cmd stop
 elif [ "$1" = "status" ]; then
 	sudo systemctl status ioc-*
 fi
-
