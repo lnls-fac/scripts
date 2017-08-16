@@ -3,6 +3,9 @@ if [ -f "$SIRIUSBASHRC" ] ; then
     source "$SIRIUSBASHRC"
 fi
 
+
+# export VACA_PREFIX=
+
 # export SIRIUS_URL_RBAC=http://rbac:8445
 # export SIRIUS_URL_NS=http://naming-service-wildfly:8089/names
 # export SIRIUS_URL_CCDB=http://ccdb:8083
