@@ -50,18 +50,25 @@ function services_ti_cmd {
   sudo systemctl $1 ioc-as-ti-si-sexts-skews.service
 }
 
+function services_sofb_cmd {
+	sudo systemctl $1 ioc-si-ap-orbit.service
+	sudo systemctl $1 ioc-si-ap-sofb.service
+}
+
 if [ "$1" = "start" ]; then
 	services_vaca_cmd start
 	services_ps_cmd start
 	services_ma_cmd start
-	services_posang_cmd start
 	services_ti_cmd start
+	services_posang_cmd start
+	services_sofb_cmd start
 elif [ "$1" = "stop" ]; then
 	services_vaca_cmd stop
-	services_posang_cmd stop
-	services_ma_cmd stop
 	services_ps_cmd stop
+	services_ma_cmd stop
 	services_ti_cmd stop
+	services_posang_cmd stop
+	services_sofb_cmd stop
 elif [ "$1" = "status" ]; then
 	sudo systemctl status ioc-*
 fi
