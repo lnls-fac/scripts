@@ -28,11 +28,11 @@ export LNLS_IMA=$ROOT_GROUP/lnls-ima
 # EPICS
 # =====
 
-EPICS_DIR=/usr/local/epics
+EPICS_DIR=/opt/epics
 export EPICS_CA_MAX_ARRAY_BYTES=1048576
 
 if [ -z $EPICS_BASE ] ; then
-    export EPICS_BASE=$EPICS_DIR/R3.14/base
+    export EPICS_BASE=$EPICS_DIR/base
 fi
 
 if [ -z $EPICS_HOST_ARCH ] ; then
@@ -44,7 +44,7 @@ if [ -z $EV4_BASE ] ; then
 fi
 
 if [ -z $EPICS_EXTENSIONS ] ; then
-    export EPICS_EXTENSIONS=$EPICS_DIR/R3.14/extensions
+    export EPICS_EXTENSIONS=$EPICS_DIR/extensions
 fi
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
