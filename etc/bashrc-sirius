@@ -81,26 +81,13 @@ export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/pydm
 export PATH=$PATH:$LNLS_FAC/job_manager/apps
 export PATH=$PATH:$LNLS_FAC/scripts/fieldmap_analysis
 
-# Definitions for elegant rpn
-# ===========================
-export RPN_DEFNS=/usr/local/epics_oag/defns.rpn
-
-# Elegant and related software (including geneticOptimizer)
-# =========================================================
-export HOST_ARCH=linux-x86_64
-export OAG_TOP_DIR=/usr/local/epics_oag
-
-# Elegant and OAG configs
-# =======================
-export PATH=$PATH:/usr/local/epics_oag/epics/base/bin/linux-x86_64:/usr/local/epics_oag/epics/extensions/bin/linux-x86_64:/usr/local/epics_oag/oag/apps/bin/linux-x86_64
-export TCLLIBPATH="/usr/local/epics_oag/oag/apps/lib/linux-x86_64 /usr/local/epics_oag/epics/extensions/lib/linux-x86_64 /usr/local/epics_oag/oag/apps/lib/linux-x86_64/sdds /usr/local/epics_oag/oag/apps/lib/linux-x86_64/os /usr/local/epics_oag/oag/apps/lib/linux-x86_64/ca /usr/local/epics_oag/oag/apps/lib/linux-x86_64/rpn"
-export PYTHONPATH=$PYTHONPATH:/usr/local/epics_oag/oag/apps/lib/linux-x86_64:/usr/local/epics_oag/epics/extensions/lib/linux-x86_64
-
 # Completion for JobManager functions
 # ===================================
 complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
 complete -W "--clients --showCalendar --help"                                                                                           pyjob_configs_get.py
-complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc --calendar --weekday --initial --final --num_proc --help" pyjob_configs_set.py
+complete -W "--clients --niceness --shutdown --remove --MoreJobs --defnumproc \
+             --calendar --weekday --initial --final --num_proc --help" \
+             pyjob_configs_set.py
 complete -W "--sure --help"                                                                                                             pyjob_shutdown.py
 complete -W "--jobs --status --user --description --runninghost --explicate --choose --summary --help"                                  pyjob_qstat.py
 complete -W "--jobs --status --user --description --runninghost --signal --priority --possibleHosts --help"                             pyjob_qsig.py
@@ -117,12 +104,15 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 
 # Completion for binary trackcpp
 # ==============================
-complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap dynap_exfmap track_linepass tests" trackcpp
+complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap \
+                  dynap_exfmap track_linepass tests" trackcpp
 complete -W "--path --save --help"  trackcpp_da_ma_results.py
 
 # Completion for sirius-lnls-gitall
 # =================================
-complete -W "--help --complement pull status commit branch checkout log fetch push clone all lnls-sirius lnls-fac lnls-ima --repos --orgs" sirius-lnls-gitall.py
+complete -W "--help --complement pull status commit branch checkout log fetch \
+                                 push clone all lnls-sirius lnls-fac lnls-ima \
+                    --repos --orgs" sirius-lnls-gitall.py
 
 
 
