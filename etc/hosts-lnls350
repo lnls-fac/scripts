@@ -3,6 +3,7 @@
 127.0.0.1 localhost
 127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
 #127.0.1.1 lnls208-linux.abtlus.org.br lnls208-linux
+#127.0.1.1 lnls210-linux.abtlus.org.br lnls210-linux
 #127.0.1.1 lnls449-linux.abtlus.org.br lnls449-linux
 #127.0.1.1 lnls451-linux.abtlus.org.br lnls451-linux
 #127.0.1.1 lnls452-linux.abtlus.org.br lnls452-linux
@@ -19,6 +20,8 @@ ff02::2 ip6-allrouters
 
 # FAC members' desktops
 
+10.0.21.122 lnls208-linux sirius-test      # (static) HWaddr ac:16:2d:34:c8:f3
+10.0.21.133 lnls210-linux alexandre-linux  # (static) HWaddr ac:16:2d:34:c8:a5
 10.0.21.92  lnls449-linux ximenes-linux    # (static) HWaddr 0c:c4:7a:dc:0f:6a
 10.0.21.150 lnls451-linux liulin-linux     # (static) HWaddr 0c:c4:7a:dc:04:2e
 10.0.21.93  lnls452-linux fernando-linux   # (static) HWaddr 0c:c4:7a:dc:04:73
@@ -29,7 +32,6 @@ ff02::2 ip6-allrouters
 
 10.0.7.55   lnls350-linux                  # (static) HWaddr 00:25:90:e7:58:8b 
 #10.0.21.65  lnls209-linux                  # (static?) 
-10.0.21.122 lnls208-linux                  # (static) HWaddr ac:16:2d:34:c8:f3
 10.0.21.55  fac8-linux glauber-linux       # (static?) HWaddr 00:1e:c9:21:9c:06
 
 # EPICS support applications
