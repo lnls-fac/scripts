@@ -46,6 +46,7 @@ ff02::2 ip6-allrouters
 10.0.7.76  lnls346-virtual
 
 
+10.0.21.151 lnls116-virtual  # Ricardo's computer virtual machine
 
 # EPICS support applications
 
