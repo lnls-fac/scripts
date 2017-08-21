@@ -34,15 +34,30 @@ ff02::2 ip6-allrouters
 #10.0.21.65  lnls209-linux                  # (static?) 
 10.0.21.55  fac8-linux glauber-linux       # (static?) HWaddr 00:1e:c9:21:9c:06
 
+# Mechanical design Group PCs
+10.0.7.62  lnls118        
+10.0.7.65  lnls118-virtual
+10.0.7.50  lnls119        
+10.0.7.88  lnls119-virtual
+10.0.7.66  lnls138        
+10.0.7.40  lnls155        
+10.0.7.70  lnls155-virtual
+10.0.7.54  lnls346        
+10.0.7.76  lnls346-virtual
+
+
+
 # EPICS support applications
 
 10.0.7.55 sirius-rbac-auth.lnls.br
 10.0.7.55 rbac sirius-rbac.lnls.br
 10.0.7.55 naming-service-wildfly sirius-ns.lnls.br
 10.0.7.55 ccdb sirius-ccdb.lnls.br
-10.0.21.122 sirius-consts.lnls.br
+10.0.7.55 sirius-consts.lnls.br
 10.0.7.55 cable sirius-cable.lnls.br
 
 # IOCS
 
 10.0.21.72 bbb-test                       # (not static!) HWaddr b0:d5:cc:ad:09:7c (test black beagle-bone IOC)
+
+
