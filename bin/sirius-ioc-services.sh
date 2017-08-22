@@ -65,7 +65,7 @@ if [ "$1" = "start" ]; then
 	if [ "$ps_server" = "vaca" ]; then
 		services_vaca_cmd start
 		echo "waiting for VACA..."
-		sleep 30.0
+		sleep 65.0
 	else
 		services_ps_cmd start
 	fi
