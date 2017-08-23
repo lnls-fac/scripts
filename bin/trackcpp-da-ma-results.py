@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-sirius
 import warnings
 warnings.filterwarnings('ignore')
 import os as _os
