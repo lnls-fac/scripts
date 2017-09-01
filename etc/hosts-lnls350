@@ -48,7 +48,7 @@ ff02::2 ip6-allrouters
 
 10.0.21.151 lnls116-virtual  # Ricardo's computer virtual machine
 
-# EPICS support applications
+# EPICS support applications (temporary, while entried are not in DNS)
 
 10.0.7.55 rbac-auth sirius-rbac-auth.lnls.br
 10.0.7.55 rbac sirius-rbac.lnls.br
