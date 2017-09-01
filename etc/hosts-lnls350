@@ -11,6 +11,7 @@
 #127.0.1.1 lnls455-linux.abtlus.org.br lnls455-linux
 
 # The following lines are desirable for IPv6 capable hosts
+
 ::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
@@ -35,6 +36,7 @@ ff02::2 ip6-allrouters
 10.0.21.55  fac8-linux glauber-linux       # (static?) HWaddr 00:1e:c9:21:9c:06
 
 # Mechanical design Group PCs
+
 10.0.7.62  lnls118
 10.0.7.65  lnls118-virtual
 10.0.7.50  lnls119
@@ -45,10 +47,11 @@ ff02::2 ip6-allrouters
 10.0.7.54  lnls346
 10.0.7.76  lnls346-virtual
 
+# Ricardo's computer virtual machine
 
-10.0.21.151 lnls116-virtual  # Ricardo's computer virtual machine
+10.0.21.151 lnls116-virtual 
 
-# EPICS support applications (temporary, while entried are not in DNS)
+# EPICS support applications (temporary, while entries are not in DNS)
 
 10.0.7.55 rbac-auth sirius-rbac-auth.lnls.br
 10.0.7.55 rbac sirius-rbac.lnls.br
