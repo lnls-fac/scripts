@@ -70,6 +70,8 @@ export SIRIUS_URL_NS=http://naming-service-wildfly:8089/names
 export SIRIUS_URL_CCDB=http://ccdb:8083
 export SIRIUS_URL_CABLES=http://cable:8086
 export SIRIUS_URL_CONSTS=http://sirius-consts.lnls.br
+export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
+
 
 # Python
 # ======
@@ -96,8 +98,8 @@ complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"         
 
 # Completion for FieldMap analysis functions
 # ==========================================
-complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fma-analysis.py
-complete -W "--input-file"                                                                                                              fma-rawfield.py
+complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fac-fma-analysis.py
+complete -W "--input-file"                                                                                                              fac-fma-rawfield.py
 
 # Completion for VA
 # =================
@@ -107,7 +109,7 @@ complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune t
 # ==============================
 complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap \
                   dynap_exfmap track_linepass tests" trackcpp
-complete -W "--path --save --help"  trackcpp_da_ma_results.py
+complete -W "--path --save --help"  trackcpp-da-ma-results.py
 
 # Completion for sirius-lnls-gitall
 # =================================
@@ -124,7 +126,7 @@ alias g-root='cd $ROOT_GROUP'
 
 alias g-epics-base='cd $EPICS_DIR'
 alias g-data-fac='cd $ROOT_GROUP/data'
-alias g-beamdynamics-data='cd $ROOT_GROUP/sirius/beam_dynamics'
+alias g-beamdynamics-data='cd $ROOT_GROUP/data/sirius/beam_dynamics'
 
 # --- organizations aliases ----
 alias g-sirius-lnls='cd $LNLS_SIRIUS'

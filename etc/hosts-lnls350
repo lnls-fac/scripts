@@ -11,6 +11,7 @@
 #127.0.1.1 lnls455-linux.abtlus.org.br lnls455-linux
 
 # The following lines are desirable for IPv6 capable hosts
+
 ::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
@@ -30,35 +31,39 @@ ff02::2 ip6-allrouters
 
 # FAC workstations
 
-10.0.7.55   lnls350-linux                  # (static) HWaddr 00:25:90:e7:58:8b 
-#10.0.21.65  lnls209-linux                  # (static?) 
+10.0.7.55   lnls350-linux                  # (static) HWaddr 00:25:90:e7:58:8b
+#10.0.21.65  lnls209-linux                  # (static?)
 10.0.21.55  fac8-linux glauber-linux       # (static?) HWaddr 00:1e:c9:21:9c:06
 
 # Mechanical design Group PCs
-10.0.7.62  lnls118        
+
+10.0.7.62  lnls118
 10.0.7.65  lnls118-virtual
-10.0.7.50  lnls119        
+10.0.7.50  lnls119
 10.0.7.88  lnls119-virtual
-10.0.7.66  lnls138        
-10.0.7.40  lnls155        
+10.0.7.66  lnls138
+10.0.7.40  lnls155
 10.0.7.70  lnls155-virtual
-10.0.7.54  lnls346        
+10.0.7.54  lnls346
 10.0.7.76  lnls346-virtual
 
+# Ricardo's computer virtual machine
 
-10.0.21.151 lnls116-virtual  # Ricardo's computer virtual machine
+10.0.21.151 lnls116-virtual 
 
-# EPICS support applications
+# EPICS support applications (temporary, while entries are not in DNS)
 
-10.0.7.55 sirius-rbac-auth.lnls.br
+10.0.7.55 rbac-auth sirius-rbac-auth.lnls.br
 10.0.7.55 rbac sirius-rbac.lnls.br
 10.0.7.55 naming-service-wildfly sirius-ns.lnls.br
 10.0.7.55 ccdb sirius-ccdb.lnls.br
 10.0.7.55 sirius-consts.lnls.br
 10.0.7.55 cable sirius-cable.lnls.br
+10.0.4.57 logbook sirius-logbook.lnls.br
 
 # IOCS
 
 10.0.21.72 bbb-test                       # (not static!) HWaddr b0:d5:cc:ad:09:7c (test black beagle-bone IOC)
+
 
 
