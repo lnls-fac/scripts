@@ -18,6 +18,7 @@ function services_ma_cmd {
 	sudo systemctl $1 ioc-bo-ma-dipole-fam
 	sudo systemctl $1 ioc-bo-ma-corrector
 	sudo systemctl $1 ioc-bo-ma-multipole-fam
+	sudo systemctl $1 ioc-bo-ma-quadrupole-skew
 	# ts
 	sudo systemctl $1 ioc-ts-ma-dipole-fam
 	sudo systemctl $1 ioc-ts-ma-corrector
@@ -28,8 +29,9 @@ function services_ma_cmd {
 	sudo systemctl $1 ioc-si-ma-corrector-fast
 	sudo systemctl $1 ioc-si-ma-multipole-fam
 	sudo systemctl $1 ioc-si-ma-quadrupole-trim
+	sudo systemctl $1 ioc-si-ma-quadrupole-skew
 	# pm
-	#sudo systemctl $1 ioc-as-pm # Need improvement so that service does not trigger error without ps ioc.
+	sudo systemctl $1 ioc-as-pm # Need improvement so that service does not trigger error without ps ioc.
 }
 
 function services_posang_cmd {
@@ -64,8 +66,6 @@ if [ "$1" = "start" ]; then
 	sudo systemctl daemon-reload
 	if [ "$ps_server" = "vaca" ]; then
 		services_vaca_cmd start
-		echo "waiting for VACA..."
-		sleep 65.0
 	else
 		services_ps_cmd start
 	fi
