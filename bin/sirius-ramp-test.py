@@ -46,10 +46,12 @@ def test_start():
 def test_stop():
     sync_disable()
 
-if __MAIN__ == '__main__':
-    if sys.argv[1] == 'start':
-        test_start()
-    elif sys.arv[1] == 'stop':
-        test_stop()
-    elif sys.argv[2] == 'plot':
-        ramp_plot()
+if __name__ == '__main__':
+    actions = {'start': test_start,
+               'stop': test_stop,
+               'plot': ramp_plot}
+    if len(sys.argv) != 2 or sys.argv[1] not in actions.keys():
+        print('Invalid syntax! Please specify action.')
+        print('Valid actions:', list(actions.keys()))
+    else:
+        actions[sys.argv[1]]()
