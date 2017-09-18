@@ -143,6 +143,7 @@ alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/pydm'
 alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriuspy'
 alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriusdm'
 alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
+alias g-epics-dev='cd $LNLS_SIRIUS/epics-dev'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
