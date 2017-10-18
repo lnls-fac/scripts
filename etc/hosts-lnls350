@@ -59,7 +59,9 @@ ff02::2 ip6-allrouters
 10.0.7.55 ccdb sirius-ccdb.lnls.br
 10.0.7.55 sirius-consts.lnls.br
 10.0.7.55 cable sirius-cable.lnls.br
+10.0.7.55 configdb sirius-configdb.lnls.br
 10.0.4.57 logbook sirius-logbook.lnls.br
+
 
 # IOCS
 
