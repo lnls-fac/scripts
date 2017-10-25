@@ -62,7 +62,8 @@ export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 # EPICS Support Application Machines
 # ==================================
 
-export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
+# export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
+export VACA_PREFIX=fac-$(hostname)-
 
 export SIRIUS_URL_RBAC_AUTH=https://sirius-rbac-auth.lnls.br
 export SIRIUS_URL_RBAC=https://rbac:8445
@@ -77,7 +78,7 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 # ======
 export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
 export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
-export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/pydm
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps/
 
 # FAC scripts
 # ===========
