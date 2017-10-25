@@ -71,6 +71,7 @@ export SIRIUS_URL_NS=http://naming-service-wildfly:8089/names
 export SIRIUS_URL_CCDB=http://ccdb:8083
 export SIRIUS_URL_CABLES=http://cable:8086
 export SIRIUS_URL_CONSTS=http://sirius-consts.lnls.br
+export SIRIUS_URL_CONFIGDB=http://sirius-configdb.lnls.br
 export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 
 
@@ -78,7 +79,7 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 # ======
 export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
 export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
-export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps/
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps
 
 # FAC scripts
 # ===========

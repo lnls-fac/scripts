@@ -53,13 +53,15 @@ ff02::2 ip6-allrouters
 
 # EPICS support applications (temporary, while entries are not in DNS)
 
-10.0.7.55 rbac-auth sirius-rbac-auth.lnls.br
-10.0.7.55 rbac sirius-rbac.lnls.br
-10.0.7.55 naming-service-wildfly sirius-ns.lnls.br
-10.0.7.55 ccdb sirius-ccdb.lnls.br
-10.0.7.55 sirius-consts.lnls.br
-10.0.7.55 cable sirius-cable.lnls.br
-10.0.4.57 logbook sirius-logbook.lnls.br
+10.0.7.55   rbac-auth sirius-rbac-auth.lnls.br
+10.0.7.55   rbac sirius-rbac.lnls.br
+10.0.7.55   naming-service-wildfly sirius-ns.lnls.br
+10.0.7.55   ccdb sirius-ccdb.lnls.br
+10.0.7.55   sirius-consts.lnls.br
+10.0.7.55   cable sirius-cable.lnls.br
+10.0.21.138 configdb sirius-configdb.lnls.br
+10.0.4.57   logbook sirius-logbook.lnls.br
+
 
 # IOCS
 
