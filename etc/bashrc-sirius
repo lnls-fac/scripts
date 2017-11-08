@@ -62,8 +62,7 @@ export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 # EPICS Support Application Machines
 # ==================================
 
-# export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
-export VACA_PREFIX=fac-$(hostname)-
+export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
 
 export SIRIUS_URL_RBAC_AUTH=https://sirius-rbac-auth.lnls.br
 export SIRIUS_URL_RBAC=https://rbac:8445
