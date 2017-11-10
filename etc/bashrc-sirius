@@ -78,7 +78,7 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 # ======
 export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
 export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
-export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/pydm
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps
 
 # FAC scripts
 # ===========
