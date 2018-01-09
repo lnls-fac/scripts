@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-sirius
 
 """Test lattice models.
 
@@ -15,10 +15,13 @@ import sys
 
 def run_test_si():
 
-    f = open('si-linepass.txt', 'w'); sys.stdout = f
+    f = open('si-linepass.txt', 'w')
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
+    print('si initial condition: ', p0)
+    sys.stdout = f
     latt = pymodels.si.create_accelerator()
-    girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
+    girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name',
+                                           value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
     r = pyaccel.tracking.line_pass(latt, p0, indices='open')
@@ -28,12 +31,14 @@ def run_test_si():
     f.close()
 
 def run_test_ts():
-    f = open('ts-linepass.txt', 'w'); sys.stdout = f
+    f = open('ts-linepass.txt', 'w')
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
+    print('ts initial condition: ', p0)
+    sys.stdout = f
     latt = pymodels.ts.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
-    latt = latt[non_girders]
+    latt, twiss0 = latt[non_girders]
     r = pyaccel.tracking.line_pass(latt, p0, indices='open')
     traj = r[0]
     for i in range(traj.shape[1]):
@@ -41,8 +46,10 @@ def run_test_ts():
     f.close()
 
 def run_test_bo():
-    f = open('bo-linepass.txt', 'w'); sys.stdout = f
+    f = open('bo-linepass.txt', 'w')
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
+    print('bo initial condition: ', p0)
+    sys.stdout = f
     latt = pymodels.bo.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
@@ -54,9 +61,11 @@ def run_test_bo():
     f.close()
 
 def run_test_tb():
-    f = open('tb-linepass.txt', 'w'); sys.stdout = f
+    f = open('tb-linepass.txt', 'w')
     p0 = [0.001, 0, 0.0002, 0, 0.0003, 0.0]
-    latt = pymodels.tb.create_accelerator()
+    print('tb initial condition: ', p0)
+    sys.stdout = f
+    latt, twiss0 = pymodels.tb.create_accelerator()
     girders = pyaccel.lattice.find_indices(latt, attribute_name='fam_name', value='girder')
     non_girders = list(set(range(len(latt))) - set(girders))
     latt = latt[non_girders]
