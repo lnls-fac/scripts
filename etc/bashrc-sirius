@@ -79,6 +79,7 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
 export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
 export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps
+export PYEPICS_LIBCA=/opt/epics/base-3.14.12.5/lib/linux-x86_64/libca.so
 
 # FAC scripts
 # ===========
