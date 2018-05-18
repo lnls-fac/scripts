@@ -156,6 +156,7 @@ alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
 alias g-epics-dev='cd $LNLS_SIRIUS/epics-dev'
 alias g-ps-tests='cd $LNLS_SIRIUS/ps-tests'
 alias g-pru-serial485='cd $LNLS_SIRIUS/pru-serial485'
+alias g-linac-opi='cd $LNLS_SIRIUS/linac-opi'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
