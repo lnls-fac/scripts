@@ -58,6 +58,14 @@ export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 
+# for EDM to work
+export EDMPVOBJECTS=$EPICS_EXTENSIONS/src/edm/setup
+export EDMOBJECTS=$EPICS_EXTENSIONS/src/edm/setup
+export EDMHELPFILES=$EPICS_EXTENSIONS/src/edm/helpFiles
+export EDMFILES=$EPICS_EXTENSIONS/src/edm/edmMain
+export EDMLIBS=$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH
+export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EDMLIBS
 
 # EPICS Support Application Machines
 # ==================================
@@ -149,6 +157,7 @@ alias g-epics-dev='cd $LNLS_SIRIUS/epics-dev'
 alias g-ps-tests='cd $LNLS_SIRIUS/ps-tests'
 alias g-pru-serial485='cd $LNLS_SIRIUS/pru-serial485'
 alias g-matlab-middle-layer='cd $LNLS_SIRIUS/matlab-middle-layer'
+alias g-linac-opi='cd $LNLS_SIRIUS/linac-opi'
 
 # --- lnls-fac repos ---
 alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
