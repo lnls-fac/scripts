@@ -74,7 +74,7 @@ export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when i
 
 export SIRIUS_URL_RBAC_AUTH=https://sirius-rbac-auth.lnls.br
 export SIRIUS_URL_RBAC=https://rbac:8445
-export SIRIUS_URL_NS=http://naming-service-wildfly:8089/names
+export SIRIUS_URL_NS=http://naming-service-wildfly:8089
 export SIRIUS_URL_CCDB=http://ccdb:8083
 export SIRIUS_URL_CABLES=http://cable:8086
 export SIRIUS_URL_CONSTS=http://sirius-consts.lnls.br
@@ -111,6 +111,13 @@ complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"         
 complete -W "help clean edit run summary rawfield trajectory multipoles model summary profile multifunctional-sextupole"                fac-fma-analysis.py
 complete -W "--input-file"                                                                                                              fac-fma-rawfield.py
 
+# Completion for sirius-hla-docker
+complete -W "as-ma-launcher as-ps-cycle as-ps-launcher as-ti-control \
+             bo-ap-chromcorr bo-ap-currlt bo-ap-ramp bo-ap-tunecorr bo-config-manager bo-ma-control \
+             si-ap-chromcorr si-ap-currlt si-ap-sofb si-ap-tunecorr si-config-manager si-ma-control si-ps-control \
+             tb-ap-control tb-ap-posang tb-ma-control \
+             ts-ap-control ts-ap-posang ts-ma-control" sirius-hla-docker.sh
+
 # Completion for VA
 # =================
 complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
@@ -126,8 +133,6 @@ complete -W "--path --save --help"  trackcpp-da-ma-results.py
 complete -W "--help --complement pull status commit branch checkout log fetch \
                                  push clone all lnls-sirius lnls-fac lnls-ima \
                     --repos --orgs" sirius-lnls-gitall.py
-
-
 
 # Aliases
 # =======
