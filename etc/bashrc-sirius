@@ -70,7 +70,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EDMLIBS
 # EPICS Support Application Machines
 # ==================================
 
-export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
+#export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
+export VACA_PREFIX=
 
 export SIRIUS_URL_RBAC_AUTH=https://sirius-rbac-auth.lnls.br
 export SIRIUS_URL_RBAC=https://rbac:8445
