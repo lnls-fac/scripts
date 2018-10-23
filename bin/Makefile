@@ -14,7 +14,8 @@ GENERALSCRIPTS = \
 		update_ip_on_workstation.sh\
 		trackcpp-da-ma-results.py\
 		sshsudo\
-		virtual-accelerator.py
+		virtual-accelerator.py\
+                sirius-bbb-setup.sh
 
 FACSCRIPTS = $(shell ls fac-*)
 
