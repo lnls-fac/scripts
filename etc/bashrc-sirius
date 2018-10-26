@@ -90,6 +90,11 @@ export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
 export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps
 export PYEPICS_LIBCA=/opt/epics/base/lib/linux-x86_64/libca.so
 
+# PyDM
+# ====
+export PYDM_DEFAULT_PROTOCOL="ca"
+export PYDM_EPICS_LIB="PYEPICS"  # PYEPICS, PYCA, CAPROTO
+
 # FAC scripts
 # ===========
 export PATH=$PATH:$LNLS_FAC/job_manager/apps
