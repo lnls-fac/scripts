@@ -5,4 +5,6 @@ develop:
 install:
 	$(MAKE) install -C bin/
 	$(MAKE) install -C etc/
-	
+
+install-bbb:
+	$(MAKE) install-bbb -C etc/

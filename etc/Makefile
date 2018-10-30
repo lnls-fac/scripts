@@ -13,6 +13,10 @@ install: uninstall $(SCRIPTS)
 	cp $(SCRIPTS) $(DEST_DIR)
 	ln -sf $(DEST_DIR)/bashrc-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
+install-bbb: uninstall $(SCRIPTS)
+	cp $(SCRIPTS) $(DEST_DIR)
+	ln -sf $(DEST_DIR)/bashrc-sirius /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
+
 uninstall:
 	-rm -rf $(FULLSCRIPTS)
 
