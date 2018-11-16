@@ -70,9 +70,14 @@ ff02::2 ip6-allrouters
 10.0.4.57   logbook sirius-logbook.lnls.br
 
 
-# IOCS
 
-10.0.21.72 bbb-test                       # (not static!) HWaddr b0:d5:cc:ad:09:7c (test black beagle-bone IOC)
+# Sirius network machines
 
+10.0.38.29   sirius-desktop1          # previously fernando's desktop. it is also in sirius linac's subnet
+
+10.128.1.230 bbb-tb-dipoles
+10.128.1.232 bbb-tb-quadrupoles
+10.128.1.233 bbb-tb-correctors
+10.128.1.231 bbb-as-dclinks
 
 
