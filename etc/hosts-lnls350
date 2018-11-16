@@ -1,4 +1,5 @@
 # locahost definitions
+# ====================
 127.0.0.1 localhost
 127.0.1.1 lnls350-linux.abtlus.org.br lnls350-linux
 #127.0.1.1 lnls208-linux.abtlus.org.br lnls208-linux
@@ -10,35 +11,36 @@
 #127.0.1.1 lnls455-linux.abtlus.org.br lnls455-linux
 
 # The following lines are desirable for IPv6 capable hosts
+# ========================================================
 ::1 ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
-# LINAC control network
-10.128.1.35 linacopi1 # user:phyuser, passwors:phyuser
-10.128.1.36 linacopi2 # user:phyuser, password:phyuser
-
 # FAC members' desktops
-10.0.38.21 lnls209-linux linac-ctrl # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
-10.0.38.24 lnls208-linux linac-qg # HWaddr ac:16:2d:34:c8:f3 (in our qg)
-10.0.21.133 lnls210-linux murilo-linux # (static)  HWaddr ac:16:2d:34:c8:a5
-10.0.21.92 lnls449-linux ximenes-linux # (static)  HWaddr 0c:c4:7a:dc:0f:6a
-10.0.21.150 lnls451-linux liulin-linux # (static)  HWaddr 0c:c4:7a:dc:04:2e
-10.0.21.93 lnls452-linux fernando-linux # (static)  HWaddr 0c:c4:7a:dc:04:73
-10.0.21.66 lnls454-linux ana-linux # (static)  HWaddr 0c:c4:7a:d9:7f:70
+# =====================
+10.0.38.21  lnls209-linux linac-ctrl      # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
+10.0.38.24  lnls208-linux linac-qg        # HWaddr ac:16:2d:34:c8:f3 (in our qg)
+10.0.21.133 lnls210-linux murilo-linux    # (static)  HWaddr ac:16:2d:34:c8:a5
+10.0.21.92  lnls449-linux ximenes-linux   # (static)  HWaddr 0c:c4:7a:dc:0f:6a
+10.0.21.150 lnls451-linux liulin-linux    # (static)  HWaddr 0c:c4:7a:dc:04:2e
+10.0.21.93  lnls452-linux fernando-linux  # (static)  HWaddr 0c:c4:7a:dc:04:73
+10.0.21.66  lnls454-linux ana-linux       # (static)  HWaddr 0c:c4:7a:d9:7f:70
 10.0.21.138 lnls455-linux guilherme-linux # (static)  HWaddr 0c:c4:7a:dc:0f:69
-10.0.21.172 fac8-linux alexandre-linux # (static?) HWaddr 00:1e:c9:21:9c:06
-
-# Laptop test-control room
-10.0.21.219 lnls377-linux
+10.0.21.172 fac8-linux    alexandre-linux # (static?) HWaddr 00:1e:c9:21:9c:06
 
 # FAC workstations
+# ================
 10.0.7.55 lnls350-linux.abtlus.org.br lnls350-linux # (static) HWaddr 00:25:90:e7:58:8b
-#10.0.21.65  lnls209-linux                  # (static?)
+#10.0.21.65  lnls209-linux                          # (static?)
+
+# Laptop test-control room
+# ========================
+10.0.21.219 lnls377-linux
 
 # Mechanical design Group PCs
+# ===========================
 10.0.7.62 lnls118
 10.0.7.77 lnls118-virtual
 10.0.7.50 lnls119
@@ -50,9 +52,11 @@ ff02::2 ip6-allrouters
 10.0.7.76 lnls346-virtual
 
 # Ricardo's computer virtual machine
+# ==================================
 10.0.21.157 lnls116-virtual
 
 # EPICS support applications (temporary, while entries are not in DNS)
+# ====================================================================
 10.0.7.55 rbac-auth sirius-rbac-auth.lnls.br
 10.0.7.55 rbac sirius-rbac.lnls.br
 10.0.7.55 naming-service-wildfly sirius-ns.lnls.br
@@ -62,23 +66,16 @@ ff02::2 ip6-allrouters
 10.0.7.55 configdb sirius-configdb.lnls.br
 10.0.4.57 logbook sirius-logbook.lnls.br
 
-10.0.7.55   rbac-auth sirius-rbac-auth.lnls.br
-10.0.7.55   rbac sirius-rbac.lnls.br
-10.0.7.55   naming-service-wildfly sirius-ns.lnls.br
-10.0.7.55   ccdb sirius-ccdb.lnls.br
-10.0.7.55   sirius-consts.lnls.br
-10.0.7.55   cable sirius-cable.lnls.br
-10.0.7.55   configdb sirius-configdb.lnls.br
-10.0.4.57   logbook sirius-logbook.lnls.br
+# LINAC control network
+# =====================
+10.128.1.35  linacopi1       # user:phyuser, passwors:phyuser
+10.128.1.36  linacopi2       # user:phyuser, password:phyuser
+10.0.38.29   sirius-desktop1 # previously fernando's desktop.
+10.128.1.225 desktop1        # previously fernando's desktop.
 
-
-
-# Sirius network machines
-
-10.0.38.29   sirius-desktop1          # previously fernando's desktop. it is also in sirius linac's subnet
-
+# Sirius network beaglebones
+# ==========================
 10.128.1.230 bbb-tb-dipoles
 10.128.1.232 bbb-tb-quadrupoles
 10.128.1.233 bbb-tb-correctors
 10.128.1.231 bbb-as-dclinks
-
