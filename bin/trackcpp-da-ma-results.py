@@ -481,25 +481,25 @@ def ex_analysis(paths, leg_text, title_text):
 def trackcpp_da_ma_lt(path=None, save=False, show=True):
     """."""
     # user selects submachine
-    # ok, answer = _radio_dialog(['si', 'bo'], name='Accelerator')
-    # if not ok:
-    #     return
-    # submachine = answer
-    submachine = 'si'
+    ok, answer = _radio_dialog(['si', 'bo'], name='Accelerator')
+    if not ok:
+        return
+    submachine = answer
+    # submachine = 'si'
 
-    # if submachine == 'si':
-    #     defaultanswer = ['3.0', 'S05.01', '2', 'ma xy ex']
-    # elif submachine == 'bo':
-    #     defaultanswer = ['0.150', 'M01', '2', 'ma xy ex']
-    # else:
-    #     raise Exception('Invalid submachine name')
-    #
-    # user selects main parameters
-    # prompt = ['energy [GeV]', 'Optics Mode', 'Number of plots',
-    #           'Types of plots']
-    # ok, answer = _input_dialog(prompt, defaultanswer, 'Main Parameters')
-    # if not ok:
-    #     return
+    if submachine == 'si':
+        defaultanswer = ['3.0', 'S05.01', '2', 'ma xy ex']
+    elif submachine == 'bo':
+        defaultanswer = ['0.150', 'M01', '2', 'ma xy ex']
+    else:
+        raise Exception('Invalid submachine name')
+
+    user selects main parameters
+    prompt = ['energy [GeV]', 'Optics Mode', 'Number of plots',
+              'Types of plots']
+    ok, answer = _input_dialog(prompt, defaultanswer, 'Main Parameters')
+    if not ok:
+        return
     answer = ['3.0', 'S05.01', '2', 'ma xy ex']
 
     energy = float(answer[0]) * 1e9
