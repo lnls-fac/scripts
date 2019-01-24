@@ -94,6 +94,8 @@ export PYEPICS_LIBCA=/opt/epics/base/lib/linux-x86_64/libca.so
 # ====
 export PYDM_DEFAULT_PROTOCOL="ca"
 export PYDM_EPICS_LIB="PYEPICS"  # PYEPICS, PYCA, CAPROTO
+export LC_NUMERIC=en_US.UTF-8
+
 
 # FAC scripts
 # ===========

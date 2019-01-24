@@ -3,7 +3,8 @@ DEST_DIR = /usr/local/etc
 
 GENERALSCRIPTS = \
 		bashrc-sirius \
-                bashrc-facuser
+                bashrc-facuser \
+                bashrc-sirius-bbb-facuser
 
 SCRIPTS = $(GENERALSCRIPTS)
 
@@ -15,7 +16,7 @@ install: uninstall $(SCRIPTS)
 
 install-bbb: uninstall $(SCRIPTS)
 	cp $(SCRIPTS) $(DEST_DIR)
-	ln -sf $(DEST_DIR)/bashrc-sirius /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
+	ln -sf $(DEST_DIR)/bashrc-sirius-bbb-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
 uninstall:
 	-rm -rf $(FULLSCRIPTS)

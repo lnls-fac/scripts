@@ -1,0 +1,14 @@
+
+SIRIUSBASHRC=/usr/local/etc/bashrc-sirius
+if [ -f "$SIRIUSBASHRC" ] ; then
+    source "$SIRIUSBASHRC"
+fi
+
+
+# EPICS env variables specific to BeagleBones
+# ===========================================
+export PATH=/opt/epics-R3.15.5/base/bin/linux-arm:$PATH
+export EPICS_BASE=/opt/epics-R3.15.5/base
+export EPICS_HOST_ARCH=linux-arm
+export EPICS_CA_MAX_ARRAY_BYTES=1048576
+export PYEPICS_LIBCA=/opt/epics-R3.15.5/base/lib/linux-arm/libca.so
