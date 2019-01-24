@@ -494,13 +494,13 @@ def trackcpp_da_ma_lt(path=None, save=False, show=True):
     else:
         raise Exception('Invalid submachine name')
 
-    user selects main parameters
+    # user selects main parameters
     prompt = ['energy [GeV]', 'Optics Mode', 'Number of plots',
               'Types of plots']
     ok, answer = _input_dialog(prompt, defaultanswer, 'Main Parameters')
     if not ok:
         return
-    answer = ['3.0', 'S05.01', '2', 'ma xy ex']
+    # answer = ['3.0', 'S05.01', '2', 'ma xy ex']
 
     energy = float(answer[0]) * 1e9
     mode = answer[1]
