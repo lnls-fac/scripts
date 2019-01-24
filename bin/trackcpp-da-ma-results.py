@@ -112,7 +112,6 @@ def ma_analysis(paths,leg_text,title_text,mach,energy,mode):
     ma_text = ''
     fma, ama = _plt.subplots(figsize=(11,6))
     ama.grid(True)
-    ama.hold(True)
     ama.set_xlabel('Pos [m]',fontsize=size_font)
     ama.set_ylabel(r'$\delta$ [%]',fontsize=size_font)
     ama.set(yticklabels=['-5','-2.5','0','2.5','5'],
@@ -247,7 +246,6 @@ def xy_analysis(paths,leg_text,title_text):
     xy_text = ''
     fxy, axy = _plt.subplots(figsize=(9,6))
     axy.grid(True)
-    axy.hold(True)
     axy.set_xlabel('x [mm]',fontsize=size_font)
     axy.set_ylabel('y [mm]',fontsize=size_font)
     axy.set_title('DAXY - ' + title_text)
@@ -354,7 +352,6 @@ def ex_analysis(paths,leg_text,title_text):
     ex_text = ''
     fex, aex = _plt.subplots(figsize=(9,6))
     aex.grid(True)
-    aex.hold(True)
     aex.set_xlabel(r'$\delta$ [%]',fontsize=size_font)
     aex.set_ylabel('x [mm]',fontsize=size_font)
     aex.set_xlim([-limne, limpe])
