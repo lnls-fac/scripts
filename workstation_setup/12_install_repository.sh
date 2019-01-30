@@ -70,8 +70,8 @@ elif [ $repo == 'trackcpp' ]; then
 	change_directory '/home/fac_files/lnls-fac'
 	clone_repo ssh://git@github.com/lnls-fac/trackcpp.git
 	change_directory '/home/fac_files/lnls-fac/trackcpp'
-	make -j32 PYTHON=python3.6 PYTHON_VERSION=python3.6
-	make $action PYTHON=python3.6 PYTHON_VERSION=python3.6
+	make -j32 PYTHON=python-sirius PYTHON_VERSION=python-sirius
+	make install PYTHON=python-sirius PYTHON_VERSION=python-sirius
 elif [ $repo == 'pyaccel' ]; then
 	dir='/home/fac_files/lnls-fac/'
 	repo='pyaccel'
@@ -99,8 +99,8 @@ elif [ $repo == 'hla' ]; then
 	change_directory '/home/fac_files/lnls-sirius'
 	clone_repo ssh://git@github.com/lnls-sirius/hla.git
 	change_directory "/home/fac_files/lnls-sirius/hla/pyqt-apps"
-	#python3.6 setup.py build
-	#python3.6 setup.py $action
+	#python-sirius setup.py build
+	#python-sirius setup.py $action
 	make install-resources
 	make develop
 elif [ $repo == 'machine-applications' ]; then

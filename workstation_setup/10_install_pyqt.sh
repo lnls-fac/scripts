@@ -14,7 +14,7 @@ tar xzf "PyQt5_gpl-$pyqt_rel.tar.gz"
 cd ~/Downloads
 cd "PyQt5_gpl-$pyqt_rel"/
 mkdir -p "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"
-python3.6 configure.py --"qmake=/opt/Qt/$pyqt_rel/gcc_64/bin/qmake" \
+python-sirius configure.py --"qmake=/opt/Qt/$pyqt_rel/gcc_64/bin/qmake" \
                         --sip-incdir=/usr/include/python3.6m \
                         --"designer-plugindir=/opt/Qt/$pyqt_rel/gcc_64/plugins/designer" \
                         --"qml-plugindir=/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5" \
