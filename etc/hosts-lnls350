@@ -75,7 +75,24 @@ ff02::2 ip6-allrouters
 
 # Sirius network beaglebones
 # ==========================
-10.128.1.230 bbb-tb-dipoles
-10.128.1.232 bbb-tb-quadrupoles
-10.128.1.233 bbb-tb-correctors
-10.128.1.231 bbb-as-dclinks
+
+# --- TB ---
+10.128.121.101 bbb-tb-dipoles        LA-RaPS02--CO-PSCtrl-TB
+10.128.121.103 bbb-tb-quadrupoles    LA-RaCtrl--CO-PSCtrl-TB1
+10.128.121.104 bbb-tb-correctors     LA-RaCtrl--CO-PSCtrl-TB2
+10.128.121.102 bbb-as-dclinks        LA-RaCtrl--CO-DCLinkCtrl
+
+# --- BO ---
+10.128.101.105 bbb-bo-correctors-01  IA-01RaCtrl--CO-PSCtrl-BO   # BO-01U:PS-CH BO-01U:PS-CV BO-02D:PS-QS
+10.128.102.105 bbb-bo-correctors-02  IA-02RaCtrl--CO-PSCtrl-BO   # BO-03U:PS-CH BO-03U:PS-CV BO-05U:PS-CH BO-05U:PS-CV
+10.128.104.105 bbb-bo-correctors-03  IA-04RaCtrl--CO-PSCtrl-BO   # BO-07U:PS-CH BO-07U:PS-CV BO-09U:PS-CH BO-09U:PS-CV
+10.128.105.105 bbb-bo-correctors-04  IA-05RaCtrl--CO-PSCtrl-BO   # BO-11U:PS-CH BO-11U:PS-CV BO-13U:PS-CH BO-13U:PS-CV
+10.128.107.105 bbb-bo-correctors-05  IA-07RaCtrl--CO-PSCtrl-BO   # BO-15U:PS-CH BO-15U:PS-CV BO-17U:PS-CH BO-17U:PS-CV
+10.128.108.105 bbb-bo-correctors-06  IA-08RaCtrl--CO-PSCtrl-BO   # BO-19U:PS-CH BO-19U:PS-CV BO-21U:PS-CH BO-21U:PS-CV
+10.128.110.105 bbb-bo-correctors-07  IA-10RaCtrl--CO-PSCtrl-BO   # BO-23U:PS-CH BO-23U:PS-CV BO-25U:PS-CH BO-25U:PS-CV
+10.128.111.105 bbb-bo-correctors-08  IA-11RaCtrl--CO-PSCtrl-BO   # BO-27U:PS-CH BO-27U:PS-CV BO-29U:PS-CH BO-29U:PS-CV
+10.128.113.105 bbb-bo-correctors-09  IA-13RaCtrl--CO-PSCtrl-BO   # BO-31U:PS-CH BO-31U:PS-CV BO-33U:PS-CH BO-33U:PS-CV
+10.128.114.105 bbb-bo-correctors-10  IA-14RaCtrl--CO-PSCtrl-BO   # BO-35U:PS-CH BO-35U:PS-CV BO-37U:PS-CH BO-37U:PS-CV
+10.128.116.105 bbb-bo-correctors-11  IA-16RaCtrl--CO-PSCtrl-BO   # BO-39U:PS-CH BO-39U:PS-CV BO-41U:PS-CH BO-41U:PS-CV
+10.128.117.105 bbb-bo-correctors-12  IA-17RaCtrl--CO-PSCtrl-BO   # BO-43U:PS-CH BO-43U:PS-CV BO-45U:PS-CH BO-45U:PS-CV
+10.128.120.105 bbb-bo-correctors-13  IA-20RaCtrl--CO-PSCtrl-BO   # BO-47U:PS-CH BO-47U:PS-CV BO-49D:PS-CH BO-49U:PS-CV
