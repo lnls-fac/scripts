@@ -43,13 +43,22 @@ function clone_and_develop {
 	change_directory $1
 	clone_repo $3
 	change_directory "$1/$2"
-	python3.6 setup.py build
-	python3.6 setup.py $action
+	python-sirius setup.py build
+	python-sirius setup.py $action
 }
 
 
 if [ $repo == 'MML' ]; then
-	echo "$action MML"
+	change_directory '/home/fac_files/lnls-fac'
+	clone_repo ssh://git@github.com/lnls-fac/MatlabMiddleLayer.git
+	echo 'Repo clone. Please follow instructions:'
+	echo '1 - open matlab as root: sudo matlab'
+	echo '2 - Edit the path to include the folder: /home/fac_files/lnls-fac/MatlabMiddleLayer/Release/lnls/startup_scripts'
+	echo '3 - Close matlab and open matlab in user mode: matlab'
+	echo '4 - Compile the .mex files in matlab: '
+	echo '	>> sirius;
+		  	>> atmexall;
+          	>> naff_cc;'
 elif [ $repo == 'apsuite' ]; then
 	dir='/home/fac_files/lnls-fac/'
 	repo='apsuite'
