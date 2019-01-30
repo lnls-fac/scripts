@@ -11,6 +11,7 @@ if [ -z $1 ]; then
 	echo 'lnls'
 	echo 'mathphys'
 	echo 'trackcpp'
+	echo 'pyjob'
 	echo 'pyaccel'
 	echo 'pymodels'
 	echo 'control-system-constants'
@@ -120,7 +121,7 @@ elif [ $repo == 'va' ]; then
 	repo='va'
 	link="ssh://git@github.com/lnls-fac/va.git"
 	clone_and_develop $dir $repo $link
-elif [ $repo == 'pyjob ']; then 
+elif [ $repo == 'pyjob ']; then
 	change_directory '/home/fac_files/lnls-fac'
 	clone_repo ssh://git@github.com/lnls-fac/job_manager.git
 	change_directory '/home/fac_files/lnls-fac/job_manager/apps'
@@ -130,4 +131,3 @@ elif [ $repo == 'pyjob ']; then
 	systemctl start pyjob_run.service
 
 fi
-
