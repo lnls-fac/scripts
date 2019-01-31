@@ -42,21 +42,18 @@ function clone_repo {
 
 function clone_and_develop {
 	dir="$1/$2"
-	if [ -d $dir ]; then
-		change_directory $dir
-	else
+	if [ ! -d $dir ]; then
 		change_directory $1
 		clone_repo $3
 	fi
+	change_directory $dir
 	python-sirius setup.py build
 	sudo python-sirius setup.py $action
 }
 
 
 if [ $repo == 'MML' ]; then
-	if [ -d '/home/fac_files/lnls-fac/trackcpp/MatlabMiddleLayer' ]; then
-		echo "Repository $repo already exists"
-	else
+	if [ ! -d '/home/fac_files/lnls-fac/trackcpp/MatlabMiddleLayer' ]; then
 		change_directory '/home/fac_files/lnls-fac'
 		clone_repo ssh://git@github.com/lnls-fac/MatlabMiddleLayer.git
 	fi
@@ -85,12 +82,11 @@ elif [ $repo == 'mathphys' ]; then
 	clone_and_develop $dir $repo $link
 elif [ $repo == 'trackcpp' ]; then
 	sudo apt-get install -y g++ libgsl0-dev swig liblapack-dev
-	if [ -d '/home/fac_files/lnls-fac/trackcpp' ]; then
-		change_directory '/home/fac_files/lnls-fac/trackcpp'
-	else
+	if [ ! -d '/home/fac_files/lnls-fac/trackcpp' ]; then
 		change_directory '/home/fac_files/lnls-fac'
 		clone_repo ssh://git@github.com/lnls-fac/trackcpp.git
 	fi
+	change_directory '/home/fac_files/lnls-fac/trackcpp'
 	sudo make clean
 	sudo make -j8 PYTHON=python-sirius PYTHON_VERSION=python3.6
 	sudo make install PYTHON=python-sirius PYTHON_VERSION=python3.6
@@ -105,9 +101,7 @@ elif [ $repo == 'pymodels' ]; then
 	link="ssh://git@github.com/lnls-fac/$repo.git"
 	clone_and_develop $dir $repo $link
 elif [ $repo == 'control-system-constants' ]; then
-	if [ -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
-		echo "Repository $repo already exists"
-	else
+	if [ ! -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
 		change_directory '/home/fac_files/lnls-sirius'
 		clone_repo ssh://git@github.com/lnls-sirius/control-system-constants.git
 	fi
@@ -122,18 +116,23 @@ elif [ $repo == 'pydm' ]; then
 	link="ssh://git@github.com/lnls-sirius/pydm.git"
 	clone_and_develop $dir $repo $link
 elif [ $repo == 'hla' ]; then
-	if [ -d '/home/fac_files/lnls-sirius/hla' ]; then
-		change_directory "/home/fac_files/lnls-sirius/hla/pyqt-apps"
-	else
+	if [ ! -d '/home/fac_files/lnls-sirius/hla' ]; then
 		change_directory '/home/fac_files/lnls-sirius'
 		clone_repo ssh://git@github.com/lnls-sirius/hla.git
 	fi
+	change_directory "/home/fac_files/lnls-sirius/hla/pyqt-apps"
 	make install-resources
 	sudo make develop
+elif [ $repo == 'pruserial485' ]; then
+	if [ ! -d '/home/fac_files/lnls-sirius/pru-serial485' ]; then
+		change_directory '/home/fac_files/lnls-sirius/'
+		clone_repo ssh://git@github.com:/lnls-sirius/pru-serial485.git
+	fi
+	change_directory '/home/fac_files/lnls-sirius/pru-serial485/src'
+	sudo ./library_build.sh
+	sudo ./overlay.sh
 elif [ $repo == 'machine-applications' ]; then
-	if [ -d '/home/fac_files/lnls-sirius/machine-applications' ]; then
-		echo "Repository $repo already exists"
-	else
+	if [ ! -d '/home/fac_files/lnls-sirius/machine-applications' ]; then
 		change_directory '/home/fac_files/lnls-sirius'
 		clone_repo ssh://git@github.com/lnls-sirius/machine-applications.git
 	fi
@@ -142,16 +141,16 @@ elif [ $repo == 'va' ]; then
 	repo='va'
 	link="ssh://git@github.com/lnls-fac/va.git"
 	clone_and_develop $dir $repo $link
-elif [ $repo == 'pyjob ']; then
-	if [ -d '/home/fac_files/lnls-fac' ]; then
-		change_directory '/home/fac_files/lnls-fac/job_manager/apps'
-	else
+elif [ $repo == 'pyjob' ]; then
+	if [ ! -d '/home/fac_files/lnls-fac/job_manager' ]; then
 		change_directory '/home/fac_files/lnls-fac'
 		clone_repo ssh://git@github.com/lnls-fac/job_manager.git
 	fi
+	change_directory '/home/fac_files/lnls-fac/job_manager/apps'
 	sudo make install
 	cd ..
 	sudo ./install_services.py
 	sudo systemctl start pyjob_run.service
-
+else
+	echo "Repository $repo not found"
 fi
