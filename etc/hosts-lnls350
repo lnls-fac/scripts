@@ -20,20 +20,16 @@ ff02::2 ip6-allrouters
 
 # FAC members' desktops
 # =====================
-10.0.38.21  lnls209-linux linac-ctrl      # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
-10.0.38.24  lnls208-linux linac-qg        # HWaddr ac:16:2d:34:c8:f3 (in our qg)
 10.0.21.133 lnls210-linux murilo-linux    # (static)  HWaddr ac:16:2d:34:c8:a5
 10.0.21.92  lnls449-linux ximenes-linux   # (static)  HWaddr 0c:c4:7a:dc:0f:6a
-10.0.21.150 lnls451-linux liulin-linux    # (static)  HWaddr 0c:c4:7a:dc:04:2e
-10.0.21.93  lnls452-linux fernando-linux  # (static)  HWaddr 0c:c4:7a:dc:04:73
+10.0.21.150 lnls451-linux guilherme-linux # (static)  HWaddr 0c:c4:7a:dc:04:2e
 10.0.21.66  lnls454-linux ana-linux       # (static)  HWaddr 0c:c4:7a:d9:7f:70
-10.0.21.113 lnls455-linux guilherme-linux # (static)  HWaddr 0c:c4:7a:dc:0f:69
+10.0.21.138 lnls455-linux fernando-linux  # (static)  HWaddr 0c:c4:7a:dc:0f:69
 10.0.21.172 fac8-linux    alexandre-linux # (static?) HWaddr 00:1e:c9:21:9c:06
 
 # FAC workstations
 # ================
 10.0.7.55 lnls350-linux.abtlus.org.br lnls350-linux # (static) HWaddr 00:25:90:e7:58:8b
-#10.0.21.65  lnls209-linux                          # (static?)
 
 # Laptop test-control room
 # ========================
@@ -53,7 +49,7 @@ ff02::2 ip6-allrouters
 
 # Ricardo's computer virtual machine
 # ==================================
-10.0.21.157 lnls116-virtual
+10.0.21.131 lnls116-virtual
 
 # EPICS support applications (temporary, while entries are not in DNS)
 # ====================================================================
@@ -70,12 +66,31 @@ ff02::2 ip6-allrouters
 # =====================
 10.128.1.35  linacopi1       # user:phyuser, passwors:phyuser
 10.128.1.36  linacopi2       # user:phyuser, password:phyuser
-10.0.38.29   sirius-desktop1 # previously fernando's desktop.
+10.0.38.29   lnls452-linux sirius-desktop1 # previously fernando's desktop.
 10.128.1.225 desktop1        # previously fernando's desktop.
+10.0.38.20   lnls209-linux linac-ctrl      # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
+#10.0.38.24  lnls208-linux linac-qg        # HWaddr ac:16:2d:34:c8:f3 (in our qg)
 
 # Sirius network beaglebones
 # ==========================
-10.128.1.230 bbb-tb-dipoles
-10.128.1.232 bbb-tb-quadrupoles
-10.128.1.233 bbb-tb-correctors
-10.128.1.231 bbb-as-dclinks
+
+# --- TB ---
+10.128.121.101 bbb-tb-dipoles        LA-RaPS02--CO-PSCtrl-TB
+10.128.121.103 bbb-tb-quadrupoles    LA-RaCtrl--CO-PSCtrl-TB1
+10.128.121.104 bbb-tb-correctors     LA-RaCtrl--CO-PSCtrl-TB2
+10.128.121.102 bbb-as-dclinks        LA-RaCtrl--CO-DCLinkCtrl
+
+# --- BO ---
+10.128.101.105 bbb-bo-correctors-01  IA-01RaCtrl--CO-PSCtrl-BO   # BO-01U:PS-CH BO-01U:PS-CV BO-02D:PS-QS
+10.128.102.105 bbb-bo-correctors-02  IA-02RaCtrl--CO-PSCtrl-BO   # BO-03U:PS-CH BO-03U:PS-CV BO-05U:PS-CH BO-05U:PS-CV
+10.128.104.105 bbb-bo-correctors-03  IA-04RaCtrl--CO-PSCtrl-BO   # BO-07U:PS-CH BO-07U:PS-CV BO-09U:PS-CH BO-09U:PS-CV
+10.128.105.105 bbb-bo-correctors-04  IA-05RaCtrl--CO-PSCtrl-BO   # BO-11U:PS-CH BO-11U:PS-CV BO-13U:PS-CH BO-13U:PS-CV
+10.128.107.105 bbb-bo-correctors-05  IA-07RaCtrl--CO-PSCtrl-BO   # BO-15U:PS-CH BO-15U:PS-CV BO-17U:PS-CH BO-17U:PS-CV
+10.128.108.105 bbb-bo-correctors-06  IA-08RaCtrl--CO-PSCtrl-BO   # BO-19U:PS-CH BO-19U:PS-CV BO-21U:PS-CH BO-21U:PS-CV
+10.128.110.105 bbb-bo-correctors-07  IA-10RaCtrl--CO-PSCtrl-BO   # BO-23U:PS-CH BO-23U:PS-CV BO-25U:PS-CH BO-25U:PS-CV
+10.128.111.105 bbb-bo-correctors-08  IA-11RaCtrl--CO-PSCtrl-BO   # BO-27U:PS-CH BO-27U:PS-CV BO-29U:PS-CH BO-29U:PS-CV
+10.128.113.105 bbb-bo-correctors-09  IA-13RaCtrl--CO-PSCtrl-BO   # BO-31U:PS-CH BO-31U:PS-CV BO-33U:PS-CH BO-33U:PS-CV
+10.128.114.105 bbb-bo-correctors-10  IA-14RaCtrl--CO-PSCtrl-BO   # BO-35U:PS-CH BO-35U:PS-CV BO-37U:PS-CH BO-37U:PS-CV
+10.128.116.105 bbb-bo-correctors-11  IA-16RaCtrl--CO-PSCtrl-BO   # BO-39U:PS-CH BO-39U:PS-CV BO-41U:PS-CH BO-41U:PS-CV
+10.128.117.105 bbb-bo-correctors-12  IA-17RaCtrl--CO-PSCtrl-BO   # BO-43U:PS-CH BO-43U:PS-CV BO-45U:PS-CH BO-45U:PS-CV
+10.128.120.105 bbb-bo-correctors-13  IA-20RaCtrl--CO-PSCtrl-BO   # BO-47U:PS-CH BO-47U:PS-CV BO-49D:PS-CH BO-49U:PS-CV
