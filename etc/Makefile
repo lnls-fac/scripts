@@ -15,6 +15,7 @@ install: uninstall $(SCRIPTS)
 	ln -sf $(DEST_DIR)/bashrc-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
 install-bbb: uninstall $(SCRIPTS)
+	mkdir -p $(DEST_DIR)
 	cp $(SCRIPTS) $(DEST_DIR)
 	ln -sf $(DEST_DIR)/bashrc-sirius-bbb-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
