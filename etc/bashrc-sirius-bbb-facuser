@@ -12,3 +12,4 @@ export EPICS_BASE=/opt/epics-R3.15.5/base
 export EPICS_HOST_ARCH=linux-arm
 export EPICS_CA_MAX_ARRAY_BYTES=1048576
 export PYEPICS_LIBCA=/opt/epics-R3.15.5/base/lib/linux-arm/libca.so
+export RSYNC_SERVER="10.0.6.49"
