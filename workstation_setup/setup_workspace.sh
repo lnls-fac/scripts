@@ -18,10 +18,10 @@ sudo ./9_install_sip.sh
 sudo ./10_install_pyqt.sh
 sudo ./11_install_fac_deps.sh
 
-sudo ./12_install_repository.sh trackcpp
-sudo ./12_install_repository.sh control-system-constants
-sudo ./12_install_repository.sh dev-packages
-sudo ./12_install_repository.sh pydm
-sudo ./12_install_repository.sh hla
-sudo ./12_install_repository.sh machine-applications
-sudo ./12_install_repository.sh pyjob
+./12_install_repository.sh trackcpp
+./12_install_repository.sh control-system-constants
+./12_install_repository.sh dev-packages
+./12_install_repository.sh pydm
+./12_install_repository.sh hla
+./12_install_repository.sh machine-applications
+./12_install_repository.sh pyjob
