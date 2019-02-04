@@ -20,6 +20,7 @@ if [ -z $1 ]; then
 	echo 'hla'
 	echo 'machine-applications'
 	echo 'va'
+	echo 'pyjob'
 	exit 1
 fi
 
