@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt-get install libffi6 libffi-dev libfreetype6 \
+apt-get install -y libffi6 libffi-dev libfreetype6 \
 	libfreetype6-dev libpng3 nmap dvipng
 pip3 install python-nmap wakeonlan requests pyqtgraph pandas \
 	psutil termcolor sh cairocffi matplotlib scipy jupyter
