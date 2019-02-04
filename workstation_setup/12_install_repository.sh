@@ -56,6 +56,11 @@ fac_home='/home/fac'
 sirius_home='/home/sirius'
 
 
+if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
+	echo 'No ssh key found. Please create one using ssh-keygen and add it to your github account.'
+	exit 1
+fi
+
 if [ $repo == 'MML' ]; then
 	if [ ! -d "$fac_home/trackcpp/MatlabMiddleLayer" ]; then
 		change_directory "$fac_home"
