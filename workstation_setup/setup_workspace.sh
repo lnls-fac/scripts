@@ -6,7 +6,7 @@ sudo ./1_create_users.sh
 # Optional args
 sudo ./2_install_git.sh
 
-sudo ./3_fac_directories.sh
+# sudo ./3_fac_directories.sh
 sudo ./4_install_bashrc.sh
 sudo ./5_install_python.sh
 sudo ./6_install_epics.sh
