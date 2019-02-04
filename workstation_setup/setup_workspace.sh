@@ -3,7 +3,11 @@
 # User interaction
 sudo ./1_create_users.sh
 
-# Optional args
+if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
+	echo 'In order to continue please log as a user with a ssh key configured in GitHub.'
+	exit 1
+fi
+
 sudo ./2_install_git.sh
 
 # sudo ./3_fac_directories.sh
