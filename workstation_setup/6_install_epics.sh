@@ -10,7 +10,7 @@ if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
 	exit 1
 fi
 # Instal epics base
-dir=/home/fac_files/lnls-sirius/
+dir=/home/sirius
 if [ -d $dir ]; then
 	cd $dir
 	git clone ssh://git@github.com/lnls-sirius/epics-dev.git
