@@ -10,8 +10,8 @@ if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
 	exit 1
 fi
 # Check if bashrc is already installed
-if [ -f '/usr/local/etc/bashrc-siruis' ]; then
-	echo 'bashrc-sirius already installed.'
+if [ -f '/usr/local/etc/bashrc-sirius' ]; then
+	echo 'bashrc-sirius already installed. Passing.'
 	exit 0
 fi
 

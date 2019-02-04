@@ -106,7 +106,7 @@ elif [ $repo == 'pymodels' ]; then
 	clone_and_develop $fac_home $repo $link
 elif [ $repo == 'control-system-constants' ]; then
 	if [ ! -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
-		change_directory '/home/fac_files/lnls-sirius'
+		change_directory $sirius_home
 		clone_repo ssh://git@github.com/lnls-sirius/control-system-constants.git
 	fi
 elif [ $repo == 'dev-packages' ]; then

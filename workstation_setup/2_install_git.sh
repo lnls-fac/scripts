@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if git is already installed
-! command -v git >/dev/null 2>&1 || { echo >&2 "Git already installed. Aborting."; exit 1; }
+! command -v git >/dev/null 2>&1 || { echo >&2 "Git already installed."; exit 0; }
 
 sudo apt-get install -y git
 

@@ -9,6 +9,11 @@ if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
 	echo 'No ssh key found. Please create one using ssh-keygen and add it to your github account.'
 	exit 1
 fi
+# Check epics already installed
+if [ -d '/opt/epics/base-3.15.5' ]; then
+	echo 'Epics base folder found. Passing.'
+	exit 0
+fi
 # Instal epics base, TODO: check if already installed
 dir=/home/sirius
 if [ -d $dir ]; then
