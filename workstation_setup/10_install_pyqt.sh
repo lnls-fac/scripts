@@ -4,9 +4,9 @@
 
 pyqt_rel='5.11.3'
 
-apt-get install -y checkinstall libreadline-gplv2-dev libncursesw5-dev \
-                   libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev \
-                   libbz2-dev swig liblapack-dev libdbus-1-3 libglu1-mesa-dev
+sudo apt-get install -y checkinstall libreadline-gplv2-dev libncursesw5-dev \
+                        libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev \
+                        libbz2-dev swig liblapack-dev libdbus-1-3 libglu1-mesa-dev
 
 # cd ~/Downloads
 wget "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-$pyqt_rel/PyQt5_gpl-$pyqt_rel.tar.gz"
@@ -25,5 +25,4 @@ make -j32
 sudo make install
 
 cd ..
-rm -rf "PyQt5_gpl-$pyqt_rel.tar.gz" "PyQt5_gpl-$pyqt_rel"
-
+sudo rm -rf "PyQt5_gpl-$pyqt_rel.tar.gz" "PyQt5_gpl-$pyqt_rel"

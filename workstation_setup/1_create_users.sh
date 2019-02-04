@@ -29,8 +29,8 @@ for user in ${groups[@]}; do
 		echo $user' user already exists'
 	else
 		# TODO: problem when group already exists
-		adduser $user --gecos '' --disabled-password
-		usermod -aG sudo $user
+		sudo adduser $user --gecos '' --disabled-password
+		sudo usermod -aG sudo $user
 		echo "$user:boo500mev" | sudo chpasswd
 	fi
 done
@@ -40,8 +40,10 @@ for user in ${users[@]}; do
 	if [ $(user_exists $user) -eq 0 ]; then
 		echo $user' user already exists'
 	else
-		adduser $user --ingroup fac --gecos '' --disabled-password
-		usermod -aG sudo sirius $user
+		sudo adduser $user --ingroup fac --gecos '' --disabled-password
+		sudo usermod -aG sudo sirius $user
 		echo "$user:boo500mev" | sudo chpasswd
 	fi
 done
+
+exit 0

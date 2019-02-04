@@ -1,31 +1,41 @@
 #!/bin/bash
 
+function execute {
+    echo "Executing $1"
+    if "./$1"; then
+        echo "Finished $1 with sucess."
+    else
+        echo "$1 failed. Aborting."
+        exit 1
+    fi
+}
+
 # User interaction
-sudo ./1_create_users.sh
+execute 1_create_users.sh
 
 if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-	echo 'In order to continue please log as a user with a ssh key configured in GitHub.'
+	echo 'In order to continue please log as a user with a ssh key configured in GitHub. Aborting.'
 	exit 1
 fi
 
-sudo ./2_install_git.sh
+execute 2_install_git.sh
 
 # sudo ./3_fac_directories.sh
-sudo ./4_install_bashrc.sh
-sudo ./5_install_python.sh
-sudo ./6_install_epics.sh
-sudo -HE ./7_install_python_deps.sh
+execute 4_install_bashrc.sh
+execute 5_install_python.sh
+execute 6_install_epics.sh
+execute 7_install_python_deps.sh
 # User interaction
-sudo ./8_intall_qt.sh
+execute 8_intall_qt.sh
 
-sudo ./9_install_sip.sh
-sudo ./10_install_pyqt.sh
-sudo ./11_install_fac_deps.sh
+execute 9_install_sip.sh
+execute 10_install_pyqt.sh
+execute 11_install_fac_deps.sh
 
-./12_install_repository.sh trackcpp
-./12_install_repository.sh control-system-constants
-./12_install_repository.sh dev-packages
-./12_install_repository.sh pydm
-./12_install_repository.sh hla
-./12_install_repository.sh machine-applications
-./12_install_repository.sh pyjob
+execute '12_install_repository.sh trackcpp'
+execute '12_install_repository.sh control-system-constants'
+execute '12_install_repository.sh dev-packages'
+execute '12_install_repository.sh pydm'
+execute '12_install_repository.sh hla'
+execute '12_install_repository.sh machine-applications'
+execute '12_install_repository.sh pyjob'

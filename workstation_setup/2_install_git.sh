@@ -3,7 +3,7 @@
 # Check if git is already installed
 ! command -v git >/dev/null 2>&1 || { echo >&2 "Git already installed. Aborting."; exit 1; }
 
-apt-get install -y git
+sudo apt-get install -y git
 
 if [ $# -ne 2 ]; then
 	git config --global core.editor vim
@@ -15,4 +15,5 @@ else
 	git config --global user.name "$2"
 fi
 
+exit 0
 

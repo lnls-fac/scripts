@@ -155,3 +155,5 @@ elif [ $repo == 'pyjob' ]; then
 else
 	echo "Repository $repo not found"
 fi
+
+exit 0

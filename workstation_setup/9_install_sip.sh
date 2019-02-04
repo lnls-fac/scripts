@@ -18,7 +18,8 @@ tar -xvf $sip.tar.gz
 cd $sip
 python-sirius configure.py --sip-module=PyQt5.sip --no-tools
 make -j32
-make install
+sudo make install
 # Remove SIP source
 cd ..
-rm -rf "$sip" "$sip.tar.gz"
+sudo rm -rf "$sip" "$sip.tar.gz"
+exit 0
