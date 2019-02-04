@@ -10,7 +10,8 @@ if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
 	exit 1
 fi
 
-dir=/home/fac_files/lnls-fac
+# dir=/home/fac_files/lnls-fac
+dir=/home/fac
 if [ -d $dir ]; then
 	cd $dir
 	git clone ssh://git@github.com/lnls-fac/scripts
