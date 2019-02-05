@@ -24,7 +24,9 @@ wget "https://sourceforge.net/projects/pyqt/files/PyQt5/PyQt-$pyqt_rel/PyQt5_gpl
 tar xzf "PyQt5_gpl-$pyqt_rel.tar.gz"
 # cd ~/Downloads
 cd "PyQt5_gpl-$pyqt_rel"/
-mkdir -p "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"
+if [ ! d "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"]; then
+	mkdir "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"
+fi
 python-sirius configure.py --"qmake=/opt/Qt/$pyqt_rel/gcc_64/bin/qmake" \
                         --sip-incdir=/usr/include/python3.6m \
                         --"designer-plugindir=/opt/Qt/$pyqt_rel/gcc_64/plugins/designer" \
