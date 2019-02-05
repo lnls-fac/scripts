@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 # Install SIP
 sip='sip-4.19.13'
 # Check wether to install SIP

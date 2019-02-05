@@ -2,14 +2,18 @@
 
 # Install PyQt
 
+set -e
+set -x
+
 pyqt_rel='5.11.3'
 
-pyqt_cur=$(pip3 freeze | grep PyQt5==)
+# pyqt_cur=$(pip3 freeze | grep PyQt4==)
 
-if [[ $pyqt_cur == "PyQt==$pyqt_rel" ]]; then
-	echo "PyQt$pyqt_rel already installed. Passing."
+if [ "$(pip3 freeze | grep PyQt5==)" == "PyQt5==$pyqt_rel" ]; then
+	echo "PyQt5-$pyqt_rel already installed. Passing."
 	exit 0
 fi
+
 
 sudo apt-get install -y checkinstall libreadline-gplv2-dev libncursesw5-dev \
                         libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev \
@@ -33,3 +37,4 @@ sudo make install
 
 cd ..
 sudo rm -rf "PyQt5_gpl-$pyqt_rel.tar.gz" "PyQt5_gpl-$pyqt_rel"
+

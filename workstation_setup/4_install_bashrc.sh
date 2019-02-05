@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 # Clone scripts repository and intall sirius-bashrc
 
 # Check if git is installed
@@ -19,7 +22,9 @@ fi
 dir=/home/fac
 if [ -d $dir ]; then
 	cd $dir
-	git clone ssh://git@github.com/lnls-fac/scripts
+	if [ ! -d $dir/scripts ];
+		git clone ssh://git@github.com/lnls-fac/scripts
+	fi
 	sudo apt-get install -y make
 	cd scripts
 	sudo make develop
@@ -30,8 +35,6 @@ if [ -d $dir ]; then
 	sudo sed -i -e '9i fi\n' ~/.bashrc
 
 	echo 'sirius-bashrc install please source run the following command.'
-	echo 'source ~/.bashrc'
-	source ~/.bashrc
 	exit 0
 else
 	echo "$dir not found please run fac_directories.sh. Aborting."

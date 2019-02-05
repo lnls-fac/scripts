@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 # Install Epics base
 
 # Check if git is installed
@@ -18,7 +21,9 @@ fi
 dir=/home/sirius
 if [ -d $dir ]; then
 	cd $dir
-	git clone ssh://git@github.com/lnls-sirius/epics-dev.git
+	if [ -d $dir/epics-dev ]; then
+		git clone ssh://git@github.com/lnls-sirius/epics-dev.git
+	fi
 	cd epics-dev/
 	git checkout base-3.15
 	sudo ./run-all.sh -a no -e yes -x no -s yes -i -o -c

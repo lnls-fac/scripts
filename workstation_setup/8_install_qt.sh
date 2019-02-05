@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 # Install Qt (change to 5.12!!! when there is matching pyqt)
 
 # Needs user interaction

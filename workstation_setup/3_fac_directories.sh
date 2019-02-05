@@ -14,6 +14,9 @@
 # cd /home/fac_files/
 # mkdir lnls-fac lnls-sirius lnls-ima
 
+set -e
+set -x
+
 if [ -d /home/fac ]; then
     sudo setfacl -Rdm u::rwx,g:fac:rwx,o::r /home/fac
     sudo setfacl -Rm u::rwx,g:fac:rwx,o::r /home/fac

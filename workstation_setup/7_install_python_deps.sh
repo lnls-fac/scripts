@@ -4,6 +4,9 @@
 
 # Run with sudo -HE
 
+set -e
+set -x
+
 sudo apt-get install -y python3-pip swig
 
 export EPICS_BASE=/opt/epics/base
