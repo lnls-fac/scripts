@@ -6,7 +6,7 @@ pyqt_rel='5.11.3'
 
 pyqt_cur=$(pip3 freeze | grep PyQt5==)
 
-if [ pyqt_cur=="PyQt==$pyqt_rel" ]; then
+if [[ $pyqt_cur == "PyQt==$pyqt_rel" ]]; then
 	echo "PyQt$pyqt_rel already installed. Passing."
 	exit 0
 fi
