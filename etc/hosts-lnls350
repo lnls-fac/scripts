@@ -9,7 +9,7 @@
 #127.0.1.1 lnls452-linux.abtlus.org.br lnls452-linux # desktop3
 #127.0.1.1 lnls454-linux.abtlus.org.br lnls454-linux # desktop4
 #127.0.1.1 lnls455-linux.abtlus.org.br lnls455-linux # desktop5
-#127.0.1.1 lnls557-linux.abtlus.org.br lnls556-linux # fac-XXX
+#127.0.1.1 lnls557-linux.abtlus.org.br lnls556-linux # fac-fernando
 #127.0.1.1 lnls557-linux.abtlus.org.br lnls557-linux # fac-liu
 #127.0.1.1 lnls557-linux.abtlus.org.br lnls558-linux # fac-murilo
 
@@ -93,8 +93,8 @@ ff02::2 ip6-allrouters
 # =====================
 
 # --- lnls556-linux --- MAC d0:94:66:ae:7d:58
-#10.128.254.215 lnls556-linux fac-XXX
-#10.0.38.47     sirius-fac-XXX
+10.128.254.215 lnls556-linux fac-fernando
+10.0.38.47     sirius-fac-fernando
 
 # --- lnls557-linux --- MAC d0:94:66:ae:7d:98
 10.128.254.210 lnls557-linux fac-liu
