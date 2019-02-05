@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/bin/bash -i
+
+set -e
+set -x
 
 function execute {
     echo "Executing $1"
@@ -9,6 +12,11 @@ function execute {
         exit 1
     fi
 }
+# Check write permission
+if [ -w ./ ]; then
+	echo 'You do not have write permission for the current directory. Aborting.'
+	exit 1
+fi
 
 # User interaction
 execute 1_create_users.sh
