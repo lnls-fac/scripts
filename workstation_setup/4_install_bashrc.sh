@@ -22,7 +22,7 @@ fi
 dir=/home/fac
 if [ -d $dir ]; then
 	cd $dir
-	if [ ! -d $dir/scripts ];
+	if [ ! -d $dir/scripts ]; then
 		git clone ssh://git@github.com/lnls-fac/scripts
 	fi
 	sudo apt-get install -y make
