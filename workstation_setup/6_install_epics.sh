@@ -21,7 +21,7 @@ fi
 dir=/home/sirius
 if [ -d $dir ]; then
 	cd $dir
-	if [ -d $dir/epics-dev ]; then
+	if [ ! -d $dir/epics-dev ]; then
 		git clone ssh://git@github.com/lnls-sirius/epics-dev.git
 	fi
 	cd epics-dev/
