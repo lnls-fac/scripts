@@ -13,7 +13,7 @@ function execute {
     fi
 }
 # Check write permission
-if [ -w ./ ]; then
+if [ ! -w ./ ]; then
 	echo 'You do not have write permission for the current directory. Aborting.'
 	exit 1
 fi
@@ -28,7 +28,7 @@ fi
 
 execute 2_install_git.sh
 
-# sudo ./3_fac_directories.sh
+sudo ./3_fac_directories.sh
 execute 4_install_bashrc.sh
 execute 5_install_python.sh
 execute 6_install_epics.sh
