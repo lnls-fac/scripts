@@ -44,7 +44,7 @@ ff02::2 ip6-allrouters
 10.0.38.36     sirius-desktop1
 
 # --- lnls451-linux --- MAC 0c:c4:7a:dc:04:2f
-#10.128.254.XXX lnls451-linux dekstop2
+#10.128.254.XXX lnls451-linux desktop2
 #10.0.38.XXX   sirius-desktop2
 
 # --- lnls452-linux --- MAC 0c:c4:7a:dc:04:73
@@ -52,11 +52,11 @@ ff02::2 ip6-allrouters
 10.0.38.29     sirius-desktop3
 
 # --- lnls454-linux --- MAC 0c:c4:7a:d9:7f:70
-10.128.254.205 lnls454-linux dekstop4
+10.128.254.205 lnls454-linux desktop4
 10.0.38.38     sirius-dekstop4
 
 # --- lnls455-linux --- MAC 0c:c4:7a:dc:0f:68
-10.128.254.202 lnls455-linux dekstop5
+10.128.254.202 lnls455-linux desktop5
 10.0.38.39     sirius-dekstop5
 
 # --- linacopi1 --- MAC 40:a8:f0:5f:25:06
