@@ -7,9 +7,7 @@ set -x
 
 pyqt_rel='5.11.3'
 
-# pyqt_cur=$(pip3 freeze | grep PyQt4==)
-
-if [ "$(pip3 freeze | grep PyQt5==)" == "PyQt5==$pyqt_rel" ]; then
+if [ "$(pip-sirius freeze | grep PyQt5==)" == "PyQt5==$pyqt_rel" ]; then
 	echo "PyQt5-$pyqt_rel already installed. Passing."
 	exit 0
 fi
@@ -34,7 +32,7 @@ python-sirius configure.py --"qmake=/opt/Qt/$pyqt_rel/gcc_64/bin/qmake" \
                         --confirm-license \
                         --assume-shared \
 			--verbose
-make -j32
+make -j8
 sudo make install
 
 cd ..
