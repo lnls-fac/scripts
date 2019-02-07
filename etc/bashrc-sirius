@@ -1,35 +1,49 @@
 # FAC Group Paths
 # ===============
-if [ -z $ROOT_FAC ] ; then
+if [ -z $LNLS_FAC ] ; then
     if [ -d /home ] ; then
-        export ROOT_FAC=/home/fac_files
+        export LNLS_FAC=/home/fac
+        export LNLS_IMA=/home/ima
     elif [ -d /Users ] ; then
-        export ROOT_FAC=/Users/fac_files
+        export LNLS_FAC=/Users/fac
+        export LNLS_IMA=/Users/ima
     else
-        echo "ROOT_FAC not defined!"
+        echo "LNLS_FAC not defined!"
     fi
 fi
-export FAC_CODE=$ROOT_FAC/lnls-fac
-export FAC_DATA=$ROOT_FAC/data
 
 
-# Definition of ROOT_GROUP
+# Definition of LNLS_GROUP
 # ========================
-export ROOT_GROUP=$ROOT_FAC
+export LNLS_SIRIUS=/home/sirius
+export LNLS_GROUP=$LNLS_FAC
 
 
-# Definition of Github organizations repos paths
-# ================================================
-export LNLS_SIRIUS=$ROOT_GROUP/lnls-sirius
-export LNLS_FAC=$ROOT_GROUP/lnls-fac
-export LNLS_IMA=$ROOT_GROUP/lnls-ima
+# IPs of IOCS
+# ===========
+
+IP_BPM="\
+10.128.1.255 10.128.1.230 10.128.1.231 10.128.1.232 10.128.1.233\
+10.128.150.255 10.128.150.58 10.128.150.55 10.128.150.64 10.128.201.50\
+10.128.201.51 10.128.202.50 10.128.202.51 10.128.203.52 10.128.204.52\
+10.128.205.50 10.128.206.50 10.128.207.52 10.128.208.50 10.128.209.50\
+10.128.210.52 10.128.211.50 10.128.211.51 10.128.212.50 10.128.212.51\
+10.128.213.50 10.128.213.51 10.128.214.51 10.128.215.50 10.128.216.51\
+10.128.217.50 10.128.218.50 10.128.219.50 10.128.220.51 10.128.221.51\
+10.128.150.86 10.128.150.78 10.128.150.79\
+"
+IP_BBB_TB="\
+10.128.121.101 10.128.121.103 10.128.121.104 10.128.121.102\
+"
+IP_BROADCAST_CROOM_NET="\
+10.128.254.255\
+"
 
 
 # EPICS
 # =====
 
 EPICS_DIR=/opt/epics
-export EPICS_CA_MAX_ARRAY_BYTES=1048576
 
 if [ -z $EPICS_BASE ] ; then
     export EPICS_BASE=$EPICS_DIR/base
@@ -47,6 +61,12 @@ if [ -z $EPICS_EXTENSIONS ] ; then
     export EPICS_EXTENSIONS=$EPICS_DIR/extensions
 fi
 
+export LC_NUMERIC="en_US.UTF-8"
+export EPICS_CA_AUTO_ADDR_LIST=NO
+export EPICS_CA_MAX_ARRAY_BYTES=1048576
+export EPICS_CA_ADDR_LIST="$IP_BPM $IP_BBB_TB $IP_BROADCAST_CROOM_NET"
+
+
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EPICS_BASE/lib/$EPICS_HOST_ARCH
 export PVDATABASE=$EV4_BASE/pvDatabaseCPP
 export PVASRV=$EV4_BASE/pvaSrv
@@ -58,7 +78,10 @@ export PATH=$PATH:$EPICS_BASE/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$PVACCESS/bin/$EPICS_HOST_ARCH
 export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 
-# for EDM to work
+
+# EDM
+# ===
+
 export EDMPVOBJECTS=$EPICS_EXTENSIONS/src/edm/setup
 export EDMOBJECTS=$EPICS_EXTENSIONS/src/edm/setup
 export EDMHELPFILES=$EPICS_EXTENSIONS/src/edm/helpFiles
@@ -67,12 +90,12 @@ export EDMLIBS=$EPICS_EXTENSIONS/lib/$EPICS_HOST_ARCH
 export PATH=$PATH:$EPICS_EXTENSIONS/bin/$EPICS_HOST_ARCH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$EDMLIBS
 
+
 # EPICS Support Application Machines
 # ==================================
 
 #export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers
 export VACA_PREFIX=
-
 export SIRIUS_URL_RBAC_AUTH=https://sirius-rbac-auth.lnls.br
 export SIRIUS_URL_RBAC=https://rbac:8445
 export SIRIUS_URL_NS=http://naming-service-wildfly:8089
@@ -85,10 +108,11 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 
 # Python
 # ======
-export PYTHONPATH=$PYTHONPATH:$FAC_CODE/job_manager/src
-export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
-export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:/home/fac_files/lnls-sirius/hla/pyqt-apps
-export PYEPICS_LIBCA=/opt/epics/base/lib/linux-x86_64/libca.so
+export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/job_manager/src
+#export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:$ROOT_SIRIUS/hla/pyqt-apps
+export PYEPICS_LIBCA=$EPICS_DIR/base/lib/linux-x86_64/libca.so
+
 
 # PyDM
 # ====
@@ -102,6 +126,7 @@ export LC_NUMERIC=en_US.UTF-8
 export PATH=$PATH:$LNLS_FAC/job_manager/apps
 export PATH=$PATH:$LNLS_FAC/scripts/fieldmap_analysis
 
+
 # Completion for JobManager functions
 # ===================================
 complete -W "--description --exec --inputFiles --workingDirectory --priority --possibleHosts --help"                                    pyjob_qsub.py
@@ -113,6 +138,7 @@ complete -W "--sure --help"                                                     
 complete -W "--jobs --status --user --description --runninghost --explicate --choose --summary --help"                                  pyjob_qstat.py
 complete -W "--jobs --status --user --description --runninghost --signal --priority --possibleHosts --help"                             pyjob_qsig.py
 complete -W "--check --wake --startVBox --stopVBox --statusVBox --help"                                                                 manage_hosts_subnet.py
+
 
 # Completion for FieldMap analysis functions
 # ==========================================
@@ -126,9 +152,11 @@ complete -W "as-ma-launcher as-ps-cycle as-ps-launcher as-ti-control \
              tb-ap-control tb-ap-posang tb-ma-control \
              ts-ap-control ts-ap-posang ts-ma-control" sirius-hla-docker.sh
 
+
 # Completion for VA
 # =================
 complete -W "stop start list vaca si_current si_lifetime si_bpms si_ps si_tune topup"  sirius-va
+
 
 # Completion for binary trackcpp
 # ==============================
@@ -136,20 +164,22 @@ complete -W "help dynap_xy dynap_ex dynap_ma dynap_pxa dynap_pya dynap_xyfmap \
                   dynap_exfmap track_linepass tests" trackcpp
 complete -W "--path --save --help"  trackcpp-da-ma-results.py
 
+
 # Completion for sirius-lnls-gitall
 # =================================
 complete -W "--help --complement pull status commit branch checkout log fetch \
                                  push clone all lnls-sirius lnls-fac lnls-ima \
                     --repos --orgs" sirius-lnls-gitall.py
 
+
 # Aliases
 # =======
 
-alias g-root='cd $ROOT_GROUP'
+alias g-root='cd /home'
 
 alias g-epics-base='cd $EPICS_DIR'
-alias g-data-fac='cd $ROOT_GROUP/data'
-alias g-beamdynamics-data='cd $ROOT_GROUP/data/sirius/beam_dynamics'
+alias g-data-fac='cd $LNLS_FAC/data'
+alias g-beamdynamics-data='cd $LNLS_FAC/data/sirius/beam_dynamics'
 
 # --- organizations aliases ----
 alias g-sirius-lnls='cd $LNLS_SIRIUS'
@@ -190,7 +220,7 @@ alias g-fieldmaptrack-code-fac-lnls='cd $LNLS_FAC/fieldmaptrack'
 alias g-tb-dipoles-ima-lnls='cd $LNLS_IMA/tb-dipoles'
 alias g-bo-correctors-ima-lnls='cd $LNLS_IMA/bo-correctors'
 alias g-bo-dipoles-ima-lnls='cd $LNLS_IMA/bo-dipoles'
-alias g-bo-qd-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qd'
+alias g-bo-qd-quadrupoles-ima-lnls='cd   $LNLS_IMA/bo-quadrupoles-qd'
 alias g-bo-qf-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qf'
 alias g-bo-qs-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qs'
 alias g-bo-sextupoles-ima-lnls='cd $LNLS_IMA/bo-sextupoles'

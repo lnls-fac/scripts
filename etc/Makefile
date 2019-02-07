@@ -19,6 +19,10 @@ install-bbb: uninstall $(SCRIPTS)
 	cp $(SCRIPTS) $(DEST_DIR)
 	ln -sf $(DEST_DIR)/bashrc-sirius-bbb-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
 
+install-local-bashrc:
+	mv ~/.bashrc ~/.bashrc-backup
+	cp ./bashrc-local ~/.bashrc
+
 uninstall:
 	-rm -rf $(FULLSCRIPTS)
 
