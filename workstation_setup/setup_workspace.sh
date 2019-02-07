@@ -28,7 +28,7 @@ fi
 
 execute 2_install_git.sh
 
-sudo ./3_fac_directories.sh
+execute 3_fac_directories.sh
 execute 4_install_bashrc.sh
 execute 5_install_python.sh
 execute 6_install_epics.sh

@@ -116,11 +116,11 @@ x desktop1
 10.128.254.218 lnls558-linux fac-murilo
 10.0.38.48     sirius-fac-murilo
 
-# --- lnls559-linux --- MAC
+# --- lnls559-linux --- MAC d0:94:66:ae:71:ef
 10.128.254.221 lnls559-linux fac-ana
 10.0.38.50     sirius-fac-ana
 
-# --- lnls560-linux --- MAC
+# --- lnls560-linux --- MAC d0:94:66:ae:7d:9b
 10.128.254.229 lnls560-linux fac-guilherme
 10.0.38.49     sirius-fac-guilherme
 
