@@ -17,6 +17,7 @@ sudo apt-get install -y libbz2-dev
 if [[ "$(python3 --version)" =~ ^Python\ 3\.6\.[0-9]$ ]]; then
 	sudo ln -sf /usr/bin/pip3 /usr/local/bin/pip-sirius
 	sudo ln -sf /usr/bin/python3.6 /usr/local/bin/python-sirius
+	sudo apt-get install -y python-dev python-pip
 else
 	# Download Python
 	if [ ! -f ./Python-3.6.7.tgz ]; then
