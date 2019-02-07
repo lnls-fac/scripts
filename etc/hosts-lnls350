@@ -32,8 +32,7 @@ ff02::2 ip6-allrouters
 # ===================
 
 # --- lnls449-linux --- MAC 0c:c4:7a:dc:0f:6a
-10.128.254.204 lnls449-linuln -sf $(DEST_DIR)/bashrc-facuser /home/fac/.bashrc; chown fac.fac /home/fac/.bashrc
-x desktop1
+10.128.254.204 lnls449-linux desktop1
 10.0.38.36     sirius-desktop1
 
 # --- lnls451-linux --- MAC 0c:c4:7a:dc:04:2f
@@ -59,8 +58,8 @@ x desktop1
 # --- linacopi2 --- MAC 40:a8:f0:5f:25:10
 10.128.1.36    linacopi2
 
-#10.0.38.20   lnls209-linux linac-ctrl  # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
-#10.0.38.24  lnls208-linux linac-qg    # HWaddr ac:16:2d:34:c8:f3 (in our qg)
+#10.0.38.20     lnls209-linux linac-ctrl  # HWaddr ac:16:2d:34:6a:43 (also in Linac control network)
+#10.0.38.24     lnls208-linux linac-qg    # HWaddr ac:16:2d:34:c8:f3 (in our qg)
 
 
 # EPICS support applications (temporary, while entries are not in DNS)
