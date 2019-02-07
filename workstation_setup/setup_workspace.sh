@@ -40,12 +40,15 @@ execute 9_install_sip.sh
 execute 10_install_pyqt.sh
 execute 11_install_fac_deps.sh
 
+execute '12_install_repository.sh' 'MML'
 execute '12_install_repository.sh' 'trackcpp'
 execute '12_install_repository.sh' 'mathphys'
+execute '12_install_repository.sh' 'fieldmaptrack'
 execute '12_install_repository.sh' 'control-system-constants'
 execute '12_install_repository.sh' 'dev-packages'
 execute '12_install_repository.sh' 'pydm'
 execute '12_install_repository.sh' 'hla'
 execute '12_install_repository.sh' 'machine-applications'
 execute '12_install_repository.sh' 'pruserial485'
+execute '12_install_repository.sh' 'sirius-scripts'
 execute '12_install_repository.sh' 'pyjob'
