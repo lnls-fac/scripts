@@ -11,6 +11,7 @@ if [ -z $1 ]; then
 	echo 'lnls'
 	echo 'mathphys'
 	echo 'trackcpp'
+	echo 'fieldmaptrack'
 	echo 'pyjob'
 	echo 'pyaccel'
 	echo 'pymodels'
@@ -20,6 +21,7 @@ if [ -z $1 ]; then
 	echo 'hla'
 	echo 'machine-applications'
 	echo 'va'
+	echo 'sirius-scripts'
 	echo 'pyjob'
 	exit 1
 fi
@@ -86,6 +88,10 @@ elif [ $repo == 'mathphys' ]; then
 	repo='mathphys'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
 	clone_and_develop $fac_home $repo $link
+elif [ $repo == 'fieldmaptrack' ]; then
+	repo='fieldmaptrack'
+	link="ssh://git@github.com/lnls-fac/$repo.git"
+	clone_and_develop $fac_home $repo $link
 elif [ $repo == 'trackcpp' ]; then
 	sudo apt-get install -y g++ libgsl0-dev swig liblapack-dev
 	if [ ! -d "$fac_home/trackcpp" ]; then
@@ -142,6 +148,11 @@ elif [ $repo == 'va' ]; then
 	repo='va'
 	link="ssh://git@github.com/lnls-fac/va.git"
 	clone_and_develop $fac_home $repo $link
+elif [ $repo == 'sirius-scripts' ]; then
+	change_directory '/home/sirius'
+	clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
+	change_directory '/home/sirius/scripts'
+	sudo make develop
 elif [ $repo == 'pyjob' ]; then
 	if [ ! -d "$fac_home/job_manager" ]; then
 		change_directory $fac_home
