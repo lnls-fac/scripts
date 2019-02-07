@@ -34,6 +34,7 @@ if [ -d $dir ]; then
 	sudo sed -i -e '8i \ \ \ \ source "$SIRIUSBASHRC"' ~/.bashrc
 	sudo sed -i -e '9i fi\n' ~/.bashrc
 
+	cd ..
 	sudo rm -rf "$dir/scripts"
 
 	echo 'sirius-bashrc install please source run the following command.'
