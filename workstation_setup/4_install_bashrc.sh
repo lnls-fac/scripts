@@ -23,19 +23,24 @@ dir=/home/fac
 if [ -d $dir ]; then
 	cd $dir
 	if [ ! -d $dir/scripts ]; then
-		git clone https://github.com/lnls-fac/scripts.git
+			git clone https://github.com/lnls-fac/scripts.git
 	fi
 	sudo apt-get install -y make
 	cd scripts
 	sudo make develop
-	sudo sed -i -e '5i #Sirius bashrc' ~/.bashrc
-	sudo sed -i -e '6i SIRIUSBASHRC=/usr/local/etc/bashrc-sirius' ~/.bashrc
-	sudo sed -i -e '7i if [ -f "$SIRIUSBASHRC" ] ; then' ~/.bashrc
-	sudo sed -i -e '8i \ \ \ \ source "$SIRIUSBASHRC"' ~/.bashrc
-	sudo sed -i -e '9i fi\n' ~/.bashrc
+
+	users=(fernando ximenes guilherme liulin ana alexandre murilo sirius fac)
+	for user in ${users[@]}; do
+		bash_path="/home/$user/.bashrc"
+		sudo sed -i -e '5i #Sirius bashrc' $bash_path
+		sudo sed -i -e '6i SIRIUSBASHRC=/usr/local/etc/bashrc-sirius' $bash_path
+		sudo sed -i -e '7i if [ -f "$SIRIUSBASHRC" ] ; then' $bash_path
+		sudo sed -i -e '8i \ \ \ \ source "$SIRIUSBASHRC"' $bash_path
+		sudo sed -i -e '9i fi\n' $bash_path
+	done
 
 	cd ..
-	sudo rm -rf "$dir/scripts"
+	# sudo rm -rf "$dir/scripts"
 
 	echo 'sirius-bashrc install please source run the following command.'
 	exit 0
