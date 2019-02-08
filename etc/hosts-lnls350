@@ -32,23 +32,23 @@ ff02::2 ip6-allrouters
 # ===================
 
 # --- lnls449-linux --- MAC 0c:c4:7a:dc:0f:6a
-#10.128.254.204 lnls449-linux desktop1
-#10.0.38.36     sirius-desktop1
+10.128.254.204 desktop1
+#10.0.38.36    sirius-desktop1
 
 # --- lnls451-linux --- MAC 0c:c4:7a:dc:04:2f
-#10.128.254.XXX lnls451-linux desktop2
+#10.128.254.XXX desktop2
 #10.0.38.XXX   sirius-desktop2
 
 # --- lnls452-linux --- MAC 0c:c4:7a:dc:04:73
-#10.128.254.203 lnls452-linux desktop3
-#10.0.38.29     sirius-desktop3
+10.128.254.203 desktop3
+#10.0.38.29    sirius-desktop3
 
 # --- lnls454-linux --- MAC 0c:c4:7a:d9:7f:70
-#10.128.254.205 lnls454-linux desktop4
-#10.0.38.38     sirius-dekstop4
+10.128.254.205 desktop4
+#10.0.38.38     sirius-desktop4
 
 # --- lnls455-linux --- MAC 0c:c4:7a:dc:0f:68
-#10.128.254.202 lnls455-linux desktop5
+10.128.254.202 desktop5
 #10.0.38.39     sirius-dekstop5
 
 # --- linacopi1 --- MAC 40:a8:f0:5f:25:06
@@ -104,33 +104,33 @@ ff02::2 ip6-allrouters
 # =====================
 
 # --- lnls556-linux --- MAC d0:94:66:ae:7d:58
-#10.128.254.230 lnls556-linux fac-fernando
+10.128.254.234 fac-fernando
 #10.0.38.47     sirius-fac-fernando
 
 # --- lnls557-linux --- MAC d0:94:66:ae:7d:98
-#10.128.254.224 lnls557-linux fac-liu
-#10.0.38.44     sirius-fac-liu
+10.128.254.224 lnls557-linux fac-liulin
+#10.0.38.44     sirius-fac-liulin
 
 # --- lnls558-linux --- MAC d0:94:66:ae:7d:bf
-#10.128.254.218 lnls558-linux fac-murilo
+10.128.254.228 lnls558-linux fac-murilo
 #10.0.38.48     sirius-fac-murilo
 
 # --- lnls559-linux --- MAC d0:94:66:ae:71:ef
-#10.128.254.221 lnls559-linux fac-ana
+10.128.254.221 lnls559-linux fac-ana
 #10.0.38.50     sirius-fac-ana
 
 # --- lnls560-linux --- MAC d0:94:66:ae:7d:9b
-#10.128.254.229 lnls560-linux fac-guilherme
+10.128.254.231 lnls560-linux fac-guilherme
 #10.0.38.49     sirius-fac-guilherme
 
 # --- lnls561-linux --- MAC d0:94:66:ae:7a:84
-#10.128.254.225 lnls561-linux fac-ximenes
+10.128.254.233 lnls561-linux fac-ximenes
 #10.0.38.51     sirius-fac-ximenes
 
 
 # FAC workstations
 # ================
-10.0.7.55    lnls350-linux.abtlus.org.br lnls350-linux # (static) HWaddr 00:25:90:e7:58:8b
+10.0.7.55    lnls350-linux.abtlus.org.br lnls350-linux # --- MAC 00:25:90:e7:58:8b
 10.0.21.219  lnls377-linux
 10.0.21.131  lnls116-virtual # Ricardo's computer virtual machine
 

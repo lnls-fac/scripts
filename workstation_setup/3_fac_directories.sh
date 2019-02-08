@@ -17,20 +17,26 @@
 set -e
 set -x
 
-if [ -d /home/fac ]; then
-    sudo setfacl -Rdm u::rwx,g:fac:rwx,o::r /home/fac
-    sudo setfacl -Rm u::rwx,g:fac:rwx,o::r /home/fac
-else
-    echo '/home/fac does not exist. Aborting.'
-    exit 1
-fi
-
-if [ -d /home/fac ]; then
-    sudo setfacl -Rdm u::rwx,g:fac:rwx,o::r /home/sirius
-    sudo setfacl -Rm u::rwx,g:fac:rwx,o::r /home/sirius
+# Sirius
+dir=/home/sirius
+if [ -d $dir ]; then
+    sudo setfacl -Rdm u::rwx,g:sirius:rwx,o::r $dir
+    sudo setfacl -Rm u::rwx,g:fac:rwx,o::r $dir
 else
     echo '/home/sirius does not exist. Aborting.'
     exit 1
 fi
+
+users=(fac ima)
+for user in ${users[@]}; do
+	dir="/home/$user"
+	if [ -d $dir ]; then
+		sudo setfacl -Rdm u::rwx,u:sirius:rwx,g:$user:rwx,o::r $dir
+		sudo setfacl -Rm u::rwx,u:sirius:rwx,g:$user:rwx,o::r $dir
+	else
+	    echo "/home/$user does not exist. Aborting."
+	    exit 1
+	fi
+done
 
 exit 0

@@ -25,13 +25,24 @@ cd "PyQt5_gpl-$pyqt_rel"/
 if [ ! d "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"]; then
 	mkdir "/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5"
 fi
+
+# Check python3.6m path
+if [ -d '/usr/include/python3.6m' ]; then
+	python_m='/usr/include/python3.6m'
+elif [ -d '/usr/local/include/python3.6m' ]; then
+	python_m='/usr/local/include/python3.6m'
+else
+	echo 'Python3.6m not found. Aborting.'
+	exit 1
+fi
 python-sirius configure.py --"qmake=/opt/Qt/$pyqt_rel/gcc_64/bin/qmake" \
-                        --sip-incdir=/usr/include/python3.6m \
+                        --sip-incdir="$python_m" \
                         --"designer-plugindir=/opt/Qt/$pyqt_rel/gcc_64/plugins/designer" \
                         --"qml-plugindir=/opt/Qt/$pyqt_rel/gcc_64/plugins/PyQt5" \
                         --confirm-license \
                         --assume-shared \
 			--verbose
+
 make -j8
 sudo make install
 
