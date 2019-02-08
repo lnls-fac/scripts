@@ -14,6 +14,12 @@ sudo apt-get install -y libgdbm-dev
 sudo apt-get install -y libc6-dev
 sudo apt-get install -y libbz2-dev 
 
+
+if [[ "$(python-sirius --version)" =~ ^Python\ 3\.6\.[0-9]$ ]]; then
+	echo "Python already installed. Passing."
+	exit 0
+fi
+
 if [[ "$(python3 --version)" =~ ^Python\ 3\.6\.[0-9]$ ]]; then
 	sudo ln -sf /usr/bin/pip3 /usr/local/bin/pip-sirius
 	sudo ln -sf /usr/bin/python3.6 /usr/local/bin/python-sirius
