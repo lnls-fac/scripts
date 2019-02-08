@@ -23,7 +23,7 @@ function user_exists {
 # 	echo "sirius:boo500mev" | sudo chpasswd
 # fi
 
-groups=(sirius fac)
+groups=(sirius fac ima)
 for user in ${groups[@]}; do
 	if [ $(user_exists $user) -eq 0 ]; then
 		echo $user' user already exists'
