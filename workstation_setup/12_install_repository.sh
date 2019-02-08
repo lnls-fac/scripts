@@ -130,7 +130,7 @@ elif [ $repo == 'hla' ]; then
 	fi
 	change_directory "$sirius_home/hla/pyqt-apps"
 	make install-resources
-	sudo make develop
+	sudo make $action
 elif [ $repo == 'pruserial485' ]; then
 	if [ ! -d "$sirius_home/pru-serial485" ]; then
 		change_directory $sirius_home
@@ -144,6 +144,8 @@ elif [ $repo == 'machine-applications' ]; then
 		change_directory $sirius_home
 		clone_repo ssh://git@github.com/lnls-sirius/machine-applications.git
 	fi
+	change_directory $sirius_home/machine-applications
+	sudo make $action
 elif [ $repo == 'va' ]; then
 	repo='va'
 	link="ssh://git@github.com/lnls-fac/va.git"
@@ -152,7 +154,7 @@ elif [ $repo == 'sirius-scripts' ]; then
 	change_directory '/home/sirius'
 	clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
 	change_directory '/home/sirius/scripts'
-	sudo make develop
+	sudo make $action
 elif [ $repo == 'pyjob' ]; then
 	if [ ! -d "$fac_home/job_manager" ]; then
 		change_directory $fac_home
