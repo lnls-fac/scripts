@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo '\n\nPlease use yours Github credentials.'
 read -p "Username:" username
 read -s -p "Password:" password
 
