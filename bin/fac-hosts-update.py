@@ -2,10 +2,11 @@
 
 import subprocess
 import os
+import getpass
 import sys
 
 
-fac_server_ip = '10.0.7.55' 
+fac_server_ip = '10.0.7.55'
 fac_server_name = 'lnls350-linux'
 
 
@@ -30,8 +31,10 @@ def get_hostname():
 
 def import_hosts():
 
+	login = os.getlogin()
 	hostname   = get_hostname()
-	output = subprocess.check_output(['ssh', '-X', fac_server_ip, 'cat /etc/hosts'])
+	userserver = login + '@' + fac_server_ip
+	output = subprocess.check_output(['ssh', '-X', userserver, 'cat /etc/hosts'])
 	text  = output.decode('utf-8')
 	lines = text.split('\n')
 	new_text = []
@@ -51,5 +54,13 @@ def save_hosts(text):
 	for line in text:
 		fp.write(line + '\n')
 
+def check_root():
+
+	user = getpass.getuser()
+	if user != 'root':
+		print('This script needs to be run as root!')
+		sys.exit(-1)
+
+check_root()
 hosts = import_hosts()
 save_hosts(hosts)
