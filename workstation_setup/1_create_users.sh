@@ -37,6 +37,9 @@ for user in ${groups[@]}; do
 	fi
 done
 
+usermod -aG sirius fac
+usermod -aG sirius ima
+
 users=(fernando ximenes guilherme liulin ana alexandre murilo)
 for user in ${users[@]}; do
 	if [ $(user_exists $user) -eq 0 ]; then
