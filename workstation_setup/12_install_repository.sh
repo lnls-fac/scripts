@@ -6,6 +6,32 @@
 set -e
 set -x
 
+function change_directory {
+	if [ -d $1 ]; then
+		cd $1
+	else
+		echo "$1 not found. Aborting"
+		exit 1
+	fi
+}
+
+function clone_repo {
+	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
+	./check_github_ssh_key.sh
+	git clone $1
+}
+
+function clone_and_develop {
+	dir="$1/$2"
+	if [ ! -d $dir ]; then
+		change_directory $1
+		clone_repo $3
+	fi
+	change_directory $dir
+	python-sirius setup.py build
+	sudo python-sirius setup.py $action
+}
+
 if [ -z $1 ]; then
 	echo 'Please select a repository:'
 	echo '## FAC ##'
@@ -36,34 +62,8 @@ fi
 action='develop'
 repo="$1"
 
-function change_directory {
-	if [ -d $1 ]; then
-		cd $1
-	else
-		echo "$1 not found. Aborting"
-		exit 1
-	fi
-}
-
-function clone_repo {
-	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
-	./check_github_ssh_key.sh
-	git clone $1
-}
-
-function clone_and_develop {
-	dir="$1/$2"
-	if [ ! -d $dir ]; then
-		change_directory $1
-		clone_repo $3
-	fi
-	change_directory $dir
-	python-sirius setup.py build
-	sudo python-sirius setup.py $action
-}
-
-fac_home='/home/facs'
-sirius_home='/home/sirius'
+fac_repos='/home/facs/repos'
+sirius_repos='/home/sirius/repos'
 
 
 #if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
@@ -73,8 +73,8 @@ sirius_home='/home/sirius'
 
 # FAC
 if [ $repo == 'MML' ]; then
-	if [ ! -d "$fac_home/trackcpp/MatlabMiddleLayer" ]; then
-		change_directory "$fac_home"
+	if [ ! -d "$fac_repos/trackcpp/MatlabMiddleLayer" ]; then
+		change_directory "$fac_repos"
 		clone_repo ssh://git@github.com/lnls-fac/MatlabMiddleLayer.git
 	fi
 	echo 'Repo clone. Please follow instructions:'
@@ -88,78 +88,78 @@ if [ $repo == 'MML' ]; then
 elif [ $repo == 'apsuite' ]; then
 	repo='apsuite'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'lnls' ]; then
 	repo='lnls'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'mathphys' ]; then
 	repo='mathphys'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'fieldmaptrack' ]; then
 	repo='fieldmaptrack'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'trackcpp' ]; then
 	sudo apt-get install -y g++ libgsl0-dev swig liblapack-dev
-	if [ ! -d "$fac_home/trackcpp" ]; then
-		change_directory $fac_home
+	if [ ! -d "$fac_repos/trackcpp" ]; then
+		change_directory $fac_repos
 		clone_repo ssh://git@github.com/lnls-fac/trackcpp.git
 	fi
-	change_directory "$fac_home/trackcpp"
+	change_directory "$fac_repos/trackcpp"
 	sudo make clean
 	sudo make -j8 PYTHON=python-sirius PYTHON_VERSION=python3.6
 	sudo make install PYTHON=python-sirius PYTHON_VERSION=python3.6
 elif [ $repo == 'pyaccel' ]; then
 	repo='pyaccel'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'pymodels' ]; then
 	repo='pymodels'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'va' ]; then
 	repo='va'
 	link="ssh://git@github.com/lnls-fac/va.git"
-	clone_and_develop $fac_home $repo $link
+	clone_and_develop $fac_repos $repo $link
 
 # SIRIUS
 elif [ $repo == 'control-system-constants' ]; then
 	if [ ! -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
-		change_directory $sirius_home
+		change_directory $sirius_repos
 		clone_repo ssh://git@github.com/lnls-sirius/control-system-constants.git
 	fi
 elif [ $repo == 'dev-packages' ]; then
 	repo='dev-packages/siriuspy/'
 	link="ssh://git@github.com/lnls-sirius/dev-packages.git"
-	clone_and_develop $sirius_home $repo $link
+	clone_and_develop $sirius_repos $repo $link
 elif [ $repo == 'pydm' ]; then
 	repo='pydm'
 	link="ssh://git@github.com/lnls-sirius/pydm.git"
-	clone_and_develop $sirius_home $repo $link
+	clone_and_develop $sirius_repos $repo $link
 elif [ $repo == 'hla' ]; then
-	if [ ! -d "$sirius_home/hla" ]; then
-		change_directory $sirius_home
+	if [ ! -d "$sirius_repos/hla" ]; then
+		change_directory $sirius_repos
 		clone_repo ssh://git@github.com/lnls-sirius/hla.git
 	fi
-	change_directory "$sirius_home/hla/pyqt-apps"
+	change_directory "$sirius_repos/hla/pyqt-apps"
 	make install-resources
 	sudo make $action
 elif [ $repo == 'pruserial485' ]; then
-	if [ ! -d "$sirius_home/pru-serial485" ]; then
-		change_directory $sirius_home
+	if [ ! -d "$sirius_repos/pru-serial485" ]; then
+		change_directory $sirius_repos
 		clone_repo ssh://git@github.com:/lnls-sirius/pru-serial485.git
 	fi
-	change_directory "$sirius_home/pru-serial485/src"
+	change_directory "$sirius_repos/pru-serial485/src"
 	sudo ./library_build.sh
 	sudo ./overlay.sh
 elif [ $repo == 'machine-applications' ]; then
-	if [ ! -d "$sirius_home/machine-applications" ]; then
-		change_directory $sirius_home
+	if [ ! -d "$sirius_repos/machine-applications" ]; then
+		change_directory $sirius_repos
 		clone_repo ssh://git@github.com/lnls-sirius/machine-applications.git
 	fi
-	change_directory $sirius_home/machine-applications
+	change_directory $sirius_repos/machine-applications
 	sudo make $action
 elif [ $repo == 'sirius-scripts' ]; then
 	change_directory '/home/sirius'
@@ -183,11 +183,11 @@ elif [ $repo == 'cs-studio' ]; then
 	sudo ln -sf /opt/cs-studio/ESS\ CS-Studio /usr/local/bin/cs-studio
 	sudo rm -rf $file
 elif [ $repo == 'pyjob' ]; then
-	if [ ! -d "$fac_home/job_manager" ]; then
-		change_directory $fac_home
+	if [ ! -d "$fac_repos/job_manager" ]; then
+		change_directory $fac_repos
 		clone_repo ssh://git@github.com/lnls-fac/job_manager.git
 	fi
-	change_directory "$fac_home/job_manager/apps"
+	change_directory "$fac_repos/job_manager/apps"
 	sudo make install
 	cd ..
 	sudo ./install_services.py
