@@ -1,12 +1,12 @@
 #!/bin/bash
-# Create users.
+# Create users and set permission.
 
 function user_exists {
 	id -u $1 >/dev/null 2>&1
 	echo $?
 }
 
-groups=(sirius fac ima)
+groups=(sirius facs imas)
 for user in ${groups[@]}; do
 	if [ $(user_exists $user) -eq 0 ]; then
 		echo $user' user already exists'
@@ -19,15 +19,15 @@ for user in ${groups[@]}; do
 	fi
 done
 
-sudo usermod -aG sirius fac
-sudo usermod -aG sirius ima
+sudo usermod -aG sirius facs
+sudo usermod -aG sirius imas
 
 users=(fernando ximenes guilherme liulin ana alexandre murilo)
 for user in ${users[@]}; do
 	if [ $(user_exists $user) -eq 0 ]; then
 		echo $user' user already exists'
 	else
-		sudo adduser $user --ingroup fac --gecos '' --disabled-password
+		sudo adduser $user --ingroup facs --gecos '' --disabled-password
 		sudo usermod -aG sudo $user
 		sudo usermod -aG sirius $user
 		echo "$user:boo500mev" | sudo chpasswd
@@ -38,7 +38,7 @@ done
 users_ima=(fernando ximenes)
 for user in ${users_ima[@]}; do
 	echo $user
-	sudo usermod -aG ima $user
+	sudo usermod -aG imas $user
 done
 
 exit 0
