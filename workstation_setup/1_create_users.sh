@@ -34,4 +34,11 @@ for user in ${users[@]}; do
 	fi
 done
 
+# add fac users in group ima
+users_ima=(fernando ximenes)
+for user in ${users_ima[@]}; do
+	echo $user
+	sudo usermod -aG ima $user
+done
+
 exit 0
