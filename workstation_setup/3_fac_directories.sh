@@ -17,9 +17,16 @@
 set -e
 set -x
 
+function create_repo_dir {
+	if [ ! -d $1/repos ]; then
+		mkdir $1/repos
+	fi
+}
+
 # Sirius
 dir=/home/sirius
 if [ -d $dir ]; then
+	create_repo_dir $dir
     sudo setfacl -Rdm u::rwx,g:sirius:rwx,o::rx $dir
     sudo setfacl -Rm u::rwx,g:fac:rwx,o::rx $dir
 else
@@ -31,6 +38,7 @@ users=(fac ima)
 for user in ${users[@]}; do
 	dir="/home/$user"
 	if [ -d $dir ]; then
+		create_repo_dir $dir
 		sudo setfacl -Rdm u::rwx,u:sirius:rwx,g:$user:rwx,o::rx $dir
 		sudo setfacl -Rm u::rwx,u:sirius:rwx,g:$user:rwx,o::rx $dir
 	else
