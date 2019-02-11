@@ -19,8 +19,8 @@ for user in ${groups[@]}; do
 	fi
 done
 
-usermod -aG sirius fac
-usermod -aG sirius ima
+sudo usermod -aG sirius fac
+sudo usermod -aG sirius ima
 
 users=(fernando ximenes guilherme liulin ana alexandre murilo)
 for user in ${users[@]}; do
