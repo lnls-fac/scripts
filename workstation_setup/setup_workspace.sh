@@ -29,30 +29,6 @@ execute 8_install_qt.sh
 execute 9_install_sip.sh
 execute 10_install_pyqt.sh
 execute 11_install_fac_deps.sh
-
-# Check ssh key and prompt user for action
-if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-	echo 'In order to continue you need an ssh-key configured to yout GitHub account.'
-	read -p "Copy from existing host[y/N]:" answer
-	if [ $answer == 'y' ] ; then
-		echo '\n\nEnter host information'
-		read -p "User:" user
-		read -p "Host:" host
-		scp -r $user@$host:/home/$user/.ssh /home/$(whoami)/
-	else
-		read -p "Create one[y/N]:" answer
-		if [ $answer == 'y' ] ; then
-			ssh-keygen
-			./set_ssh_key_github.sh
-		fi
-	fi
-fi
-# Check ssh key
-if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-	echo 'No SSH key found. Aborting.'
-	exit 1
-fi
-
 execute '12_install_repository.sh' 'MML'
 execute '12_install_repository.sh' 'trackcpp'
 execute '12_install_repository.sh' 'mathphys'
@@ -65,4 +41,5 @@ execute '12_install_repository.sh' 'machine-applications'
 execute '12_install_repository.sh' 'pruserial485'
 execute '12_install_repository.sh' 'sirius-scripts'
 execute '12_install_repository.sh' 'pyjob'
+execute '12_install_repository.sh' 'cs-studio'
 
