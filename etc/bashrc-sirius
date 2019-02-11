@@ -118,9 +118,9 @@ export SIRIUS_URL_LOGBOOK=http://sirius-logbook.lnls.br:8080/Olog
 
 # Python
 # ======
-export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/job_manager/src
-#export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/hla/plot/src
-export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:$ROOT_SIRIUS/hla/pyqt-apps
+export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/repos/job_manager/src
+#export PYTHONPATH=$PYTHONPATH:$ROOT_FAC/repos/hla/plot/src
+export PYQTDESIGNERPATH=$PYQTDESIGNERPATH:$ROOT_SIRIUS/repos/hla/pyqt-apps
 export PYEPICS_LIBCA=$EPICS_DIR/base/lib/linux-x86_64/libca.so
 
 
@@ -133,8 +133,8 @@ export LC_NUMERIC=en_US.UTF-8
 
 # FAC scripts
 # ===========
-export PATH=$PATH:$LNLS_FAC/job_manager/apps
-export PATH=$PATH:$LNLS_FAC/scripts/fieldmap_analysis
+export PATH=$PATH:$LNLS_FAC/repos/job_manager/apps
+export PATH=$PATH:$LNLS_FAC/repos/scripts/fieldmap_analysis
 
 
 # Completion for JobManager functions
@@ -192,52 +192,52 @@ alias g-data-fac='cd $LNLS_FAC/data'
 alias g-beamdynamics-data='cd $LNLS_FAC/data/sirius/beam_dynamics'
 
 # --- organizations aliases ----
-alias g-sirius-lnls='cd $LNLS_SIRIUS'
-alias g-fac-lnls='cd $LNLS_FAC'
-alias g-ima-lnls='cd $LNLS_IMA'
+alias g-sirius-lnls='cd $LNLS_SIRIUS/repos'
+alias g-fac-lnls='cd $LNLS_FAC/repos'
+alias g-ima-lnls='cd $LNLS_IMA/repos'
 
 # --- lnls-sirius repo aliases ---
-alias g-csslnls-sirius-lnls='cd $LNLS_SIRIUS/org.csstudio.product'
-alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
-alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/control-system-constants'
-alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/dev-packages'
-alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/hla'
-alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/pydm'
-alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriuspy'
-alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/dev-packages/siriusdm'
-alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/machine-applications'
-alias g-epics-dev='cd $LNLS_SIRIUS/epics-dev'
-alias g-ps-tests='cd $LNLS_SIRIUS/ps-tests'
-alias g-pru-serial485='cd $LNLS_SIRIUS/pru-serial485'
-alias g-matlab-middle-layer='cd $LNLS_SIRIUS/matlab-middle-layer'
+#alias g-csslnls-sirius-lnls='cd $LNLS_SIRIUS/org.csstudio.product'
+#alias g-discs-sirius-lnls='cd $LNLS_SIRIUS/discs-management'
+#alias g-ps-tests='cd $LNLS_SIRIUS/repos/ps-tests'
+#alias g-siriusdm-sirius-lnls='cd $LNLS_SIRIUS/repos/dev-packages/siriusdm'
+#alias g-matlab-middle-layer='cd $LNLS_SIRIUS/matlab-middle-layer'
+alias g-csconstants-sirius-lnls='cd $LNLS_SIRIUS/repos/control-system-constants'
+alias g-dev-packages-sirius-lnls='cd $LNLS_SIRIUS/repos/dev-packages'
+alias g-hla-sirius-lnls='cd $LNLS_SIRIUS/repos/hla'
+alias g-pydm-sirius-lnls='cd $LNLS_SIRIUS/repos/pydm'
+alias g-siriuspy-sirius-lnls='cd $LNLS_SIRIUS/repos/dev-packages/siriuspy'
+alias g-machine-applications-sirius-lnls='cd $LNLS_SIRIUS/repos/machine-applications'
+alias g-epics-dev='cd $LNLS_SIRIUS/repos/epics-dev'
+alias g-pru-serial485='cd $LNLS_SIRIUS/repos/pru-serial485'
 alias g-linac-opi='cd $LNLS_SIRIUS/linac-opi'
 
 # --- lnls-fac repos ---
-alias g-apsuite-fac-lnls='cd $LNLS_FAC/apsuite'
-alias g-va-fac-lnls='cd $LNLS_FAC/va'
-alias g-lnls-fac-lnls='cd $LNLS_FAC/lnls'
-alias g-pymodels-fac-lnls='cd $LNLS_FAC/pymodels'
-alias g-trackcpp-fac-lnls='cd $LNLS_FAC/trackcpp'
-alias g-mathphys-fac-lnls='cd $LNLS_FAC/mathphys'
-alias g-scripts-fac-lnls='cd $LNLS_FAC/scripts'
-alias g-pyjob-fac-lnls='cd $LNLS_FAC/job_manager'
-alias g-mml-fac-lnls='cd $LNLS_FAC/MatlabMiddleLayer/Release'
-alias g-pyaccel-fac-lnls='cd $LNLS_FAC/pyaccel'
-alias g-pymodels-fac-lnls='cd $LNLS_FAC/pymodels'
-alias g-fieldmaptrack-code-fac-lnls='cd $LNLS_FAC/fieldmaptrack'
+alias g-apsuite-fac-lnls='cd $LNLS_FAC/repos/apsuite'
+alias g-va-fac-lnls='cd $LNLS_FAC/repos/va'
+alias g-lnls-fac-lnls='cd $LNLS_FAC/repos/lnls'
+alias g-pymodels-fac-lnls='cd $LNLS_FAC/repos/pymodels'
+alias g-trackcpp-fac-lnls='cd $LNLS_FAC/repos/trackcpp'
+alias g-mathphys-fac-lnls='cd $LNLS_FAC/repos/mathphys'
+alias g-scripts-fac-lnls='cd $LNLS_FAC/repos/scripts'
+alias g-pyjob-fac-lnls='cd $LNLS_FAC/repos/job_manager'
+alias g-mml-fac-lnls='cd $LNLS_FAC/repos/MatlabMiddleLayer/Release'
+alias g-pyaccel-fac-lnls='cd $LNLS_FAC/repos/pyaccel'
+alias g-pymodels-fac-lnls='cd $LNLS_FAC/repos/pymodels'
+alias g-fieldmaptrack-code-fac-lnls='cd $LNLS_FAC/repos/fieldmaptrack'
 
 # --- lnls-ima repos ---
-alias g-tb-dipoles-ima-lnls='cd $LNLS_IMA/tb-dipoles'
-alias g-bo-correctors-ima-lnls='cd $LNLS_IMA/bo-correctors'
-alias g-bo-dipoles-ima-lnls='cd $LNLS_IMA/bo-dipoles'
-alias g-bo-qd-quadrupoles-ima-lnls='cd   $LNLS_IMA/bo-quadrupoles-qd'
-alias g-bo-qf-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qf'
-alias g-bo-qs-quadrupoles-ima-lnls='cd $LNLS_IMA/bo-quadrupoles-qs'
-alias g-bo-sextupoles-ima-lnls='cd $LNLS_IMA/bo-sextupoles'
-alias g-si-b1-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b1'
-alias g-si-b2-dipoles-ima-lnls='cd $LNLS_IMA/si-dipoles-b2'
-alias g-si-fast-correctors-ima-lnls='cd $LNLS_IMA/si-fast-correctors'
-alias g-si-q14-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q14'
-alias g-si-q20-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q20'
-alias g-si-q30-quadrupoles-ima-lnls='cd $LNLS_IMA/si-quadrupoles-q30'
-alias g-si-s15-sextupoles-ima-lnls='cd $LNLS_IMA/si-sextupoles-s15'
+alias g-tb-dipoles-ima-lnls='cd $LNLS_IMA/repos/tb-dipoles'
+alias g-bo-correctors-ima-lnls='cd $LNLS_IMA/repos/bo-correctors'
+alias g-bo-dipoles-ima-lnls='cd $LNLS_IMA/repos/bo-dipoles'
+alias g-bo-qd-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/bo-quadrupoles-qd'
+alias g-bo-qf-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/bo-quadrupoles-qf'
+alias g-bo-qs-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/bo-quadrupoles-qs'
+alias g-bo-sextupoles-ima-lnls='cd $LNLS_IMA/repos/bo-sextupoles'
+alias g-si-b1-dipoles-ima-lnls='cd $LNLS_IMA/repos/si-dipoles-b1'
+alias g-si-b2-dipoles-ima-lnls='cd $LNLS_IMA/repos/si-dipoles-b2'
+alias g-si-fast-correctors-ima-lnls='cd $LNLS_IMA/repos/si-fast-correctors'
+alias g-si-q14-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/si-quadrupoles-q14'
+alias g-si-q20-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/si-quadrupoles-q20'
+alias g-si-q30-quadrupoles-ima-lnls='cd $LNLS_IMA/repos/si-quadrupoles-q30'
+alias g-si-s15-sextupoles-ima-lnls='cd $LNLS_IMA/repos/si-sextupoles-s15'
