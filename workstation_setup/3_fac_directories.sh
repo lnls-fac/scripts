@@ -20,8 +20,8 @@ set -x
 # Sirius
 dir=/home/sirius
 if [ -d $dir ]; then
-    sudo setfacl -Rdm u::rwx,g:sirius:rwx,o::r $dir
-    sudo setfacl -Rm u::rwx,g:fac:rwx,o::r $dir
+    sudo setfacl -Rdm u::rwx,g:sirius:rwx,o::rx $dir
+    sudo setfacl -Rm u::rwx,g:fac:rwx,o::rx $dir
 else
     echo '/home/sirius does not exist. Aborting.'
     exit 1
@@ -31,8 +31,8 @@ users=(fac ima)
 for user in ${users[@]}; do
 	dir="/home/$user"
 	if [ -d $dir ]; then
-		sudo setfacl -Rdm u::rwx,u:sirius:rwx,g:$user:rwx,o::r $dir
-		sudo setfacl -Rm u::rwx,u:sirius:rwx,g:$user:rwx,o::r $dir
+		sudo setfacl -Rdm u::rwx,u:sirius:rwx,g:$user:rwx,o::rx $dir
+		sudo setfacl -Rm u::rwx,u:sirius:rwx,g:$user:rwx,o::rx $dir
 	else
 	    echo "/home/$user does not exist. Aborting."
 	    exit 1
