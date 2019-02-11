@@ -3,9 +3,12 @@
 # Install selected repository
 
 # --- Run with sudo -HE ---
+set -e
+set -x
 
 if [ -z $1 ]; then
 	echo 'Please select a repository:'
+	echo '## FAC ##'
 	echo 'MML'
 	echo 'apsuite'
 	echo 'lnls'
@@ -15,14 +18,18 @@ if [ -z $1 ]; then
 	echo 'pyjob'
 	echo 'pyaccel'
 	echo 'pymodels'
+	echo 'va'
+	echo '## SIRIUS ##'
 	echo 'control-system-constants'
 	echo 'dev-packages'
 	echo 'pydm'
 	echo 'hla'
+	echo 'pruserial485'
 	echo 'machine-applications'
-	echo 'va'
 	echo 'sirius-scripts'
+	echo '## MISC ##'
 	echo 'pyjob'
+	echo 'cs-studio'
 	exit 1
 fi
 
@@ -40,6 +47,7 @@ function change_directory {
 
 function clone_repo {
 	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
+	./check_github_ssh_key.sh
 	git clone $1
 }
 
@@ -54,15 +62,16 @@ function clone_and_develop {
 	sudo python-sirius setup.py $action
 }
 
-fac_home='/home/fac'
+fac_home='/home/facs'
 sirius_home='/home/sirius'
 
 
-if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
-	echo 'No ssh key found. Please create one using ssh-keygen and add it to your github account.'
-	exit 1
-fi
+#if [ ! -f $HOME/.ssh/id_rsa.pub ]; then
+#	echo 'No ssh key found. Please create one using ssh-keygen and add it to your github account.'
+#	exit 1
+#fi
 
+# FAC
 if [ $repo == 'MML' ]; then
 	if [ ! -d "$fac_home/trackcpp/MatlabMiddleLayer" ]; then
 		change_directory "$fac_home"
@@ -74,8 +83,8 @@ if [ $repo == 'MML' ]; then
 	echo '3 - Close matlab and open matlab in user mode: matlab'
 	echo '4 - Compile the .mex files in matlab: '
 	echo '	>> sirius;
-			>> atmexall;
-          	>> naff_cc;'
+		>> atmexall;
+		>> naff_cc;'
 elif [ $repo == 'apsuite' ]; then
 	repo='apsuite'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
@@ -110,6 +119,12 @@ elif [ $repo == 'pymodels' ]; then
 	repo='pymodels'
 	link="ssh://git@github.com/lnls-fac/$repo.git"
 	clone_and_develop $fac_home $repo $link
+elif [ $repo == 'va' ]; then
+	repo='va'
+	link="ssh://git@github.com/lnls-fac/va.git"
+	clone_and_develop $fac_home $repo $link
+
+# SIRIUS
 elif [ $repo == 'control-system-constants' ]; then
 	if [ ! -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
 		change_directory $sirius_home
@@ -146,15 +161,27 @@ elif [ $repo == 'machine-applications' ]; then
 	fi
 	change_directory $sirius_home/machine-applications
 	sudo make $action
-elif [ $repo == 'va' ]; then
-	repo='va'
-	link="ssh://git@github.com/lnls-fac/va.git"
-	clone_and_develop $fac_home $repo $link
 elif [ $repo == 'sirius-scripts' ]; then
 	change_directory '/home/sirius'
 	clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
 	change_directory '/home/sirius/scripts'
 	sudo make $action
+
+# MISC
+elif [ $repo == 'cs-studio' ]; then
+	version='4.6.1.12'
+	file="cs-studio-ess-$version-linux.gtk.x86_64.tar.gz"
+	if [ -d '/opt/cs-studio' ]; then 
+		echo 'CS Studio installed. Passing.'
+		exit 0
+	fi
+	if [ ! -f ./$file ]; then
+		wget "https://artifactory.esss.lu.se/artifactory/CS-Studio/production/$version/$file"
+	fi
+	sudo tar xzvf $file
+	sudo mv ./cs-studio /opt/cs-studio
+	sudo ln -sf /opt/cs-studio/ESS\ CS-Studio /usr/local/bin/cs-studio
+	sudo rm -rf $file
 elif [ $repo == 'pyjob' ]; then
 	if [ ! -d "$fac_home/job_manager" ]; then
 		change_directory $fac_home
