@@ -34,7 +34,9 @@ def import_hosts():
 	login = os.getlogin()
 	hostname   = get_hostname()
 	userserver = login + '@' + fac_server_ip
-	output = subprocess.check_output(['ssh', '-X', userserver, 'cat /etc/hosts'])
+	args = ['ssh', '-X', userserver, 'cat /etc/hosts']
+	print('Running: "{}"'.format(' '.join(args)))
+	output = subprocess.check_output(args)
 	text  = output.decode('utf-8')
 	lines = text.split('\n')
 	new_text = []
