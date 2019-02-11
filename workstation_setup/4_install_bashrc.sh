@@ -18,6 +18,8 @@ if [ -f '/usr/local/etc/bashrc-sirius' ]; then
 	exit 0
 fi
 
+sudo apt-get install -y make
+
 # dir=/home/fac_files/lnls-fac
 dir=/home/fac
 if [ -d $dir ]; then
@@ -25,11 +27,10 @@ if [ -d $dir ]; then
 	if [ ! -d $dir/scripts ]; then
 			git clone https://github.com/lnls-fac/scripts.git
 	fi
-	sudo apt-get install -y make
 	cd scripts
 	sudo make develop
 
-	users=(fernando ximenes guilherme liulin ana alexandre murilo sirius fac)
+	users=(fernando ximenes guilherme liulin ana alexandre murilo sirius facs)
 	for user in ${users[@]}; do
 		bash_path="/home/$user/.bashrc"
 		sudo sed -i -e '5i #Sirius bashrc' $bash_path
@@ -42,7 +43,6 @@ if [ -d $dir ]; then
 	cd ..
 	# sudo rm -rf "$dir/scripts"
 
-	echo 'sirius-bashrc install please source run the following command.'
 	exit 0
 else
 	echo "$dir not found please run fac_directories.sh. Aborting."
