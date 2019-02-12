@@ -18,28 +18,28 @@ if [ ! -w ./ ]; then
 	exit 1
 fi
 
-execute 1_create_users.sh
-execute 2_install_git.sh
-execute 3_fac_directories.sh
-execute 4_install_bashrc.sh
-execute 5_install_python.sh
-execute 6_install_epics.sh
-execute 7_install_python_deps.sh
-execute 8_install_qt.sh
-execute 9_install_sip.sh
-execute 10_install_pyqt.sh
-execute 11_install_fac_deps.sh
-execute '12_install_repository.sh' 'MML'
-execute '12_install_repository.sh' 'trackcpp'
-execute '12_install_repository.sh' 'mathphys'
-execute '12_install_repository.sh' 'fieldmaptrack'
-execute '12_install_repository.sh' 'control-system-constants'
-execute '12_install_repository.sh' 'dev-packages'
-execute '12_install_repository.sh' 'pydm'
-execute '12_install_repository.sh' 'hla'
-execute '12_install_repository.sh' 'machine-applications'
-execute '12_install_repository.sh' 'pruserial485'
-execute '12_install_repository.sh' 'sirius-scripts'
-execute '12_install_repository.sh' 'pyjob'
-execute '12_install_repository.sh' 'cs-studio'
+execute create_users.sh
+execute install_git.sh
+execute fac_directories.sh
+execute install_bashrc.sh
+execute install_python.sh
+execute install_epics.sh
+execute install_python_deps.sh
+execute install_qt.sh
+execute install_sip.sh
+execute install_pyqt.sh
+execute install_fac_deps.sh
+execute 'install_repository.sh' 'MML'
+execute 'install_repository.sh' 'trackcpp'
+execute 'install_repository.sh' 'mathphys'
+execute 'install_repository.sh' 'fieldmaptrack'
+execute 'install_repository.sh' 'control-system-constants'
+execute 'install_repository.sh' 'dev-packages'
+execute 'install_repository.sh' 'pydm'
+execute 'install_repository.sh' 'hla'
+execute 'install_repository.sh' 'machine-applications'
+execute 'install_repository.sh' 'pruserial485'
+execute 'install_repository.sh' 'sirius-scripts'
+execute 'install_repository.sh' 'pyjob'
+execute 'install_repository.sh' 'cs-studio'
 
