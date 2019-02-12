@@ -22,7 +22,7 @@ export ROOT_GROUP=$ROOT_FAC
 # ================================================
 export LNLS_SIRIUS=$ROOT_GROUP/lnls-sirius
 export LNLS_FAC=$ROOT_GROUP/lnls-fac
-export LNLS_IMA=$ROOT_GROUP/lnls-minmax
+export LNLS_IMA=$ROOT_GROUP/lnls-ima
 
 # IPs of IOCS
 # ===========
