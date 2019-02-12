@@ -16,4 +16,8 @@ function install_code {
     sudo apt-get install -y code
 }
 
+sudo apt-get install -y htop
+sudo apt-get install -y vim
+
 install_atom
+install_code
