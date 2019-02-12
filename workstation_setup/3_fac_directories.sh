@@ -34,7 +34,7 @@ else
     exit 1
 fi
 
-users=(fac ima)
+users=(facs imas)
 for user in ${users[@]}; do
 	dir="/home/$user"
 	if [ -d $dir ]; then
