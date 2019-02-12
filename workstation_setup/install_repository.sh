@@ -59,8 +59,11 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
-action='develop'
-repo="$1"
+repo=$1
+action=$2
+if [ -z $action ]; then
+	action=develop
+fi
 
 fac_repos='/home/facs/repos'
 sirius_repos='/home/sirius/repos'
@@ -166,6 +169,18 @@ elif [ $repo == 'sirius-scripts' ]; then
 	clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
 	change_directory '/home/sirius/scripts'
 	sudo make $action
+
+	users=(fernando ximenes guilherme liulin ana alexandre murilo sirius facs)
+	for user in ${users[@]}; do
+		if [ -d "/home/$user" ]; then
+			bash_path="/home/$user/.bashrc"
+			sudo sed -i -e '5i #Sirius bashrc' $bash_path
+			sudo sed -i -e '6i SIRIUSBASHRC=/usr/local/etc/bashrc-sirius' $bash_path
+			sudo sed -i -e '7i if [ -f "$SIRIUSBASHRC" ] ; then' $bash_path
+			sudo sed -i -e '8i \ \ \ \ source "$SIRIUSBASHRC"' $bash_path
+			sudo sed -i -e '9i fi\n' $bash_path
+		fi
+	done
 
 # MISC
 elif [ $repo == 'cs-studio' ]; then
