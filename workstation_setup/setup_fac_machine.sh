@@ -46,9 +46,10 @@ execute install_repository.sh pydm develop
 execute install_repository.sh hla develop
 execute install_repository.sh machine-applications develop
 execute install_repository.sh pruserial485 develop
-execute install_repository.sh sirius-scripts develop
 execute install_repository.sh pyjob develop
 execute install_repository.sh cs-studio
 
 execute misc_applications.sh
 
+# Execute some scripts
+fac-hosts-update.py
