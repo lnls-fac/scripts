@@ -17,7 +17,7 @@ function change_directory {
 
 function clone_repo {
 	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
-	./check_github_ssh_key.sh
+	# ./check_github_ssh_key.sh
 	git clone $1
 }
 
@@ -129,7 +129,7 @@ elif [ $repo == 'va' ]; then
 
 # SIRIUS
 elif [ $repo == 'control-system-constants' ]; then
-	if [ ! -d '/home/fac_files/lnls-sirius/control-system-constants' ]; then
+	if [ ! -d "$sirius_repos/control-system-constants" ]; then
 		change_directory $sirius_repos
 		clone_repo ssh://git@github.com/lnls-sirius/control-system-constants.git
 	fi
@@ -165,9 +165,11 @@ elif [ $repo == 'machine-applications' ]; then
 	change_directory $sirius_repos/machine-applications
 	sudo make $action
 elif [ $repo == 'sirius-scripts' ]; then
-	change_directory '/home/sirius'
-	clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
-	change_directory '/home/sirius/scripts'
+	if [ ! -d $sirius_repos/scripts ]; then
+		change_directory $sirius_repos
+		clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
+	fi
+	change_directory $sirius_repos/scripts
 	sudo make $action
 
 	users=(fernando ximenes guilherme liulin ana alexandre murilo sirius facs)
