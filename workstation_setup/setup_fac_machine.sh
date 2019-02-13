@@ -35,6 +35,8 @@ execute install_pyqt.sh
 
 execute install_fac_deps.sh
 
+execute check_github_ssh_key.sh
+
 execute install_repository.sh MML develop
 execute install_repository.sh trackcpp develop
 execute install_repository.sh mathphys develop

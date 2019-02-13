@@ -39,6 +39,8 @@ execute install_pyqt.sh
 
 execute install_fac_deps.sh
 
+execute check_github_ssh_key.sh
+
 execute install_repository.sh mathphys install
 execute install_repository.sh sirius-scripts install
 execute install_repository.sh control-system-constants install
