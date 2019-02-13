@@ -15,7 +15,7 @@ for user in ${groups[@]}; do
 			sudo adduser $user --ingroup $user --gecos '' --disabled-password
 		fi 
 		sudo usermod -aG sudo $user
-		echo "$user:boo500mev" | sudo chpasswd
+		echo "$user:sirius3gev" | sudo chpasswd
 	fi
 done
 sudo usermod -aG sirius facs
