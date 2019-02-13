@@ -5,7 +5,7 @@ set -x
 
 function execute {
     echo "Executing $1"
-    if "./$1" $2; then
+    if "./$1" $2 $3; then
         echo "Finished $1 with sucess."
     else
         echo "$1 failed. Aborting."
