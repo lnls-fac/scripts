@@ -49,5 +49,5 @@ execute install_repository.sh pydm install
 execute install_repository.sh hla install
 execute install_repository.sh machine-applications install
 execute install_repository.sh pruserial485 install
-execute install_repository.sh pyjob install
+# execute install_repository.sh pyjob install
 execute install_repository.sh cs-studio install
