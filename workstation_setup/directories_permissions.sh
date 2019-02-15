@@ -19,8 +19,8 @@ set -x
 
 function create_repo_dir {
 	if [ ! -d $1/repos ]; then
-		mkdir $1/repos
-		chown -R $2:$2 $1/repos
+		sudo mkdir $1/repos
+		sudo chown -R $2:$2 $1/repos
 	fi
 }
 
