@@ -176,7 +176,7 @@ elif [ $repo == 'sirius-scripts' ]; then
 	for user in ${users[@]}; do
 		if [ -d "/home/$user" ]; then
 			bash_path="/home/$user/.bashrc"
-			cp -a /etc/skel/.bashrc $bash_path
+			sudo cp -a /etc/skel/.bashrc $bash_path
 			sudo sed -i -e '5i # --- Sirius bashrc ---' $bash_path
 			sudo sed -i -e '6i SIRIUSBASHRC=/usr/local/etc/bashrc-sirius' $bash_path
 			sudo sed -i -e '7i if [ -f "$SIRIUSBASHRC" ] ; then' $bash_path
