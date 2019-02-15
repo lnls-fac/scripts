@@ -176,11 +176,17 @@ elif [ $repo == 'sirius-scripts' ]; then
 	for user in ${users[@]}; do
 		if [ -d "/home/$user" ]; then
 			bash_path="/home/$user/.bashrc"
-			sudo sed -i -e '5i #Sirius bashrc' $bash_path
+			cp -a /etc/skel/.bashrc $bash_path
+			sudo sed -i -e '5i # --- Sirius bashrc ---' $bash_path
 			sudo sed -i -e '6i SIRIUSBASHRC=/usr/local/etc/bashrc-sirius' $bash_path
 			sudo sed -i -e '7i if [ -f "$SIRIUSBASHRC" ] ; then' $bash_path
 			sudo sed -i -e '8i \ \ \ \ source "$SIRIUSBASHRC"' $bash_path
 			sudo sed -i -e '9i fi\n' $bash_path
+			sudo sed -i -e "10i bind '\"\\\e[A\": history-search-backward'" $bash_path
+			sudo sed -i -e "11i bind '\"\\\e[B\": history-search-forward'" $bash_path
+			if [ "$user" != "sirius" ]; then
+				sudo sed -i -e '12i export VACA_PREFIX=$(whoami)-$(hostname)- # This line should be commented when in sirius computers' $bash_path
+			fi
 		fi
 	done
 
@@ -188,7 +194,7 @@ elif [ $repo == 'sirius-scripts' ]; then
 elif [ $repo == 'cs-studio' ]; then
 	version='4.6.1.12'
 	file="cs-studio-ess-$version-linux.gtk.x86_64.tar.gz"
-	if [ -d '/opt/cs-studio' ]; then 
+	if [ -d '/opt/cs-studio' ]; then
 		echo 'CS Studio installed. Passing.'
 		exit 0
 	fi
