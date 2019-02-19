@@ -19,7 +19,7 @@ function clone_repo {
 	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
 	if [ $protocol == 'http' ]; then
 		git clone "https://github.com/$1"
-	elif [ $protocol == 'ssh']; then
+	elif [ $protocol == 'ssh' ]; then
 		git clone "ssh://git@github.com/$1"
 	fi
 }
