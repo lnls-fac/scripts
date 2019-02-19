@@ -39,15 +39,15 @@ execute install_pyqt.sh
 
 execute install_fac_deps.sh
 
-execute check_github_ssh_key.sh
+# execute check_github_ssh_key.sh
 
-execute install_repository.sh mathphys install
-execute install_repository.sh sirius-scripts install
-execute install_repository.sh control-system-constants install
-execute install_repository.sh dev-packages install
-execute install_repository.sh pydm install
-execute install_repository.sh hla install
-execute install_repository.sh machine-applications install
-execute install_repository.sh pruserial485 install
-# execute install_repository.sh pyjob install
-execute install_repository.sh cs-studio install
+execute install_repository.sh mathphys install http
+execute install_repository.sh sirius-scripts install http
+execute install_repository.sh control-system-constants install http
+execute install_repository.sh dev-packages install http
+execute install_repository.sh pydm install http
+execute install_repository.sh hla install http
+execute install_repository.sh machine-applications install http
+execute install_repository.sh pruserial485 install http
+# execute install_repository.sh pyjob install http
+execute install_repository.sh cs-studio install http
