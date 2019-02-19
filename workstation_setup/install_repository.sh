@@ -17,8 +17,11 @@ function change_directory {
 
 function clone_repo {
 	command -v git >/dev/null 2>&1 || { echo >&2 "Git not found. Aborting."; exit 1; }
-	# ./check_github_ssh_key.sh
-	git clone $1
+	if [ $protocol == 'http' ]; then
+		git clone "https://github.com/$1"
+	elif [ $protocol == 'ssh']; then
+		git clone "ssh://git@github.com/$1"
+	fi
 }
 
 function clone_and_develop {
@@ -60,9 +63,13 @@ if [ -z $1 ]; then
 fi
 
 repo=$1
-action=$2
+action=$2  # install or develop
 if [ -z $action ]; then
 	action=develop
+fi
+protocol=$3  # http or ssh
+if [ -z $protocol ]; then
+	protocol='http'
 fi
 
 fac_repos='/home/facs/repos'
@@ -78,7 +85,7 @@ sirius_repos='/home/sirius/repos'
 if [ $repo == 'MML' ]; then
 	if [ ! -d "$fac_repos/trackcpp/MatlabMiddleLayer" ]; then
 		change_directory "$fac_repos"
-		clone_repo ssh://git@github.com/lnls-fac/MatlabMiddleLayer.git
+		clone_repo lnls-fac/MatlabMiddleLayer.git
 	fi
 	echo 'Repo clone. Please follow instructions:'
 	echo '1 - open matlab as root: sudo matlab'
@@ -90,25 +97,25 @@ if [ $repo == 'MML' ]; then
 		>> naff_cc;'
 elif [ $repo == 'apsuite' ]; then
 	repo='apsuite'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'lnls' ]; then
 	repo='lnls'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'mathphys' ]; then
 	repo='mathphys'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'fieldmaptrack' ]; then
 	repo='fieldmaptrack'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'trackcpp' ]; then
 	sudo apt-get install -y g++ libgsl0-dev swig liblapack-dev
 	if [ ! -d "$fac_repos/trackcpp" ]; then
 		change_directory $fac_repos
-		clone_repo ssh://git@github.com/lnls-fac/trackcpp.git
+		clone_repo lnls-fac/trackcpp.git
 	fi
 	change_directory "$fac_repos/trackcpp"
 	sudo make clean
@@ -116,35 +123,35 @@ elif [ $repo == 'trackcpp' ]; then
 	sudo make install PYTHON=python-sirius PYTHON_VERSION=python3.6
 elif [ $repo == 'pyaccel' ]; then
 	repo='pyaccel'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'pymodels' ]; then
 	repo='pymodels'
-	link="ssh://git@github.com/lnls-fac/$repo.git"
+	link="lnls-fac/$repo.git"
 	clone_and_develop $fac_repos $repo $link
 elif [ $repo == 'va' ]; then
 	repo='va'
-	link="ssh://git@github.com/lnls-fac/va.git"
+	link="lnls-fac/va.git"
 	clone_and_develop $fac_repos $repo $link
 
 # SIRIUS
 elif [ $repo == 'control-system-constants' ]; then
 	if [ ! -d "$sirius_repos/control-system-constants" ]; then
 		change_directory $sirius_repos
-		clone_repo ssh://git@github.com/lnls-sirius/control-system-constants.git
+		clone_repo lnls-sirius/control-system-constants.git
 	fi
 elif [ $repo == 'dev-packages' ]; then
 	repo='dev-packages/siriuspy/'
-	link="ssh://git@github.com/lnls-sirius/dev-packages.git"
+	link="lnls-sirius/dev-packages.git"
 	clone_and_develop $sirius_repos $repo $link
 elif [ $repo == 'pydm' ]; then
 	repo='pydm'
-	link="ssh://git@github.com/lnls-sirius/pydm.git"
+	link="lnls-sirius/pydm.git"
 	clone_and_develop $sirius_repos $repo $link
 elif [ $repo == 'hla' ]; then
 	if [ ! -d "$sirius_repos/hla" ]; then
 		change_directory $sirius_repos
-		clone_repo ssh://git@github.com/lnls-sirius/hla.git
+		clone_repo lnls-sirius/hla.git
 	fi
 	change_directory "$sirius_repos/hla/pyqt-apps"
 	make install-resources
@@ -152,7 +159,7 @@ elif [ $repo == 'hla' ]; then
 elif [ $repo == 'pruserial485' ]; then
 	if [ ! -d "$sirius_repos/pru-serial485" ]; then
 		change_directory $sirius_repos
-		clone_repo ssh://git@github.com:/lnls-sirius/pru-serial485.git
+		clone_repo /lnls-sirius/pru-serial485.git
 	fi
 	change_directory "$sirius_repos/pru-serial485/src"
 	sudo ./library_build.sh
@@ -160,14 +167,14 @@ elif [ $repo == 'pruserial485' ]; then
 elif [ $repo == 'machine-applications' ]; then
 	if [ ! -d "$sirius_repos/machine-applications" ]; then
 		change_directory $sirius_repos
-		clone_repo ssh://git@github.com/lnls-sirius/machine-applications.git
+		clone_repo lnls-sirius/machine-applications.git
 	fi
 	change_directory $sirius_repos/machine-applications
 	sudo make $action
 elif [ $repo == 'sirius-scripts' ]; then
 	if [ ! -d $sirius_repos/scripts ]; then
 		change_directory $sirius_repos
-		clone_repo "ssh://git@github.com/lnls-sirius/scripts.git"
+		clone_repo "lnls-sirius/scripts.git"
 	fi
 	change_directory $sirius_repos/scripts
 	sudo make $action
@@ -208,7 +215,7 @@ elif [ $repo == 'cs-studio' ]; then
 elif [ $repo == 'pyjob' ]; then
 	if [ ! -d "$fac_repos/job_manager" ]; then
 		change_directory $fac_repos
-		clone_repo ssh://git@github.com/lnls-fac/job_manager.git
+		clone_repo lnls-fac/job_manager.git
 	fi
 	change_directory "$fac_repos/job_manager/apps"
 	sudo make install
