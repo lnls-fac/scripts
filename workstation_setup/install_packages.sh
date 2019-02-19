@@ -4,6 +4,7 @@
 sudo apt-get install -y make
 sudo apt-get install -y swig
 sudo apt-get install -y git
+sudo apt-get install -y remmina
 
 # Python dependencies
 sudo apt-get install -y build-essential 

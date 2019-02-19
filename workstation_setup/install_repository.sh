@@ -199,6 +199,7 @@ elif [ $repo == 'sirius-scripts' ]; then
 
 # MISC
 elif [ $repo == 'cs-studio' ]; then
+	sudo apt-get install -y openjfx
 	version='4.6.1.12'
 	file="cs-studio-ess-$version-linux.gtk.x86_64.tar.gz"
 	if [ -d '/opt/cs-studio' ]; then
