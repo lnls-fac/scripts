@@ -159,7 +159,7 @@ elif [ $repo == 'hla' ]; then
 elif [ $repo == 'pruserial485' ]; then
 	if [ ! -d "$sirius_repos/pru-serial485" ]; then
 		change_directory $sirius_repos
-		clone_repo /lnls-sirius/pru-serial485.git
+		clone_repo lnls-sirius/pru-serial485.git
 	fi
 	change_directory "$sirius_repos/pru-serial485/src"
 	sudo ./library_build.sh
