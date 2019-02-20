@@ -59,6 +59,7 @@ if [ -z $1 ]; then
 	echo '## MISC ##'
 	echo 'pyjob'
 	echo 'cs-studio'
+	echo 'remmina'
 	exit 1
 fi
 
@@ -223,6 +224,14 @@ elif [ $repo == 'pyjob' ]; then
 	cd ..
 	sudo ./install_services.py
 	sudo systemctl start pyjob_run.service
+elif [ $repo == 'remmina' ]; then
+	if [ $(lsb_release -is) = 'Debian' ]; then
+		echo 'deb http://ftp.debian.org/debian stretch-backports main' | sudo tee --append /etc/apt/sources.list.d/stretch-backports.list >> /dev/null
+		sudo apt update
+		sudo apt install -y -t stretch-backports remmina remmina-plugin-rdp remmina-plugin-secret
+	else
+		echo "No instruction for $(lsb_release -is)"
+	fi
 else
 	echo "Repository $repo not found"
 fi
