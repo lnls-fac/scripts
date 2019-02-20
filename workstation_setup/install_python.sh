@@ -42,6 +42,8 @@ else
 	# Create sym links
 	sudo ln -sf /usr/local/bin/pip3.6 /usr/local/bin/pip-sirius
 	sudo ln -sf /usr/local/bin/python3.6 /usr/local/bin/python-sirius
+	cd ..
+	sudo rm -rf Python-3.6.7.tgz Python-3.6.7
 fi
 
 exit 0
