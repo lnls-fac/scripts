@@ -15,6 +15,7 @@ function install_code {
     sudo apt-get update
     sudo apt-get install -y apt-transport-https
     sudo apt-get install -y code
+    sudo rm microsoft.gpg
 }
 
 sudo apt-get install -y htop
