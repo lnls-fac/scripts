@@ -6,4 +6,4 @@ if [ ! -d /var/log/fac-data-gitall ]; then
 fi
 
 # Put the name of the user you want to use here:
-su -c "fac-data-gitall.py -e" fernando > /var/log/fac-data-gitall/extended_log 2>&1
+su -c "/home/facs/repos/scripts/bin/fac-data-gitall.py -e" fernando > /var/log/fac-data-gitall/extended_log 2>&1
