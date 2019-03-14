@@ -162,7 +162,7 @@ def run_git_cmd(cmd,args, complement):
 def run():
     parser = argparse.ArgumentParser(description="Run git commands for sets of repositories")
     parser.add_argument('action', help='Which git command to perform on repositories',
-                         choices=('clone','status','pull','commit','fetch','branch','checkout','log','push', 'stash'))
+                         choices=('clone','status','pull','commit','fetch','branch','checkout','log','push', 'stash', 'merge'))
     parser.add_argument('--complement','-c', help='Complement of git command to perform on repositories',default="")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--repos", nargs='+', help="List of repositories to perform 'action'",default=[])
