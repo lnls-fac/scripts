@@ -15,7 +15,7 @@ GENERALSCRIPTS = \
 		trackcpp-da-ma-results.py\
 		sshsudo\
 		virtual-accelerator.py\
-                sirius-bbb-setup.sh
+        sirius-bbb-setup.sh
 
 FACSCRIPTS = $(shell ls fac-*)
 

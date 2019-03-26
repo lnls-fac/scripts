@@ -109,7 +109,7 @@ def run_git_cmd(cmd,args, complement):
                         if arg.lower() == org:
                             found = True
                             for repo in _envars.repo_names[org]:
-                                path = os.path.join(folder,repo)
+                                path = os.path.join(folder, 'repos', repo)
                                 if os.path.exists(path):
                                     repos[org].append(repo)
                                 else:
@@ -118,7 +118,7 @@ def run_git_cmd(cmd,args, complement):
                             for repo in _envars.repo_names[org]:
                                 if arg.lower() == repo:
                                     found = True
-                                    path = os.path.join(folder,repo)
+                                    path = os.path.join(folder, 'repos', repo)
                                     if os.path.exists(path):
                                         repos[org].append(repo)
                                     else:
@@ -130,7 +130,7 @@ def run_git_cmd(cmd,args, complement):
     repos = get_repos(args)
     for org, repo_list in repos.items():
         for repo in repo_list:
-            path = os.path.join(_envars.org_folders[org], repo)
+            path = os.path.join(_envars.org_folders[org], 'repos', repo)
             print('\n' + 70*'#')
             print('['+repo+']')
             if cmd == 'commit':
@@ -162,7 +162,7 @@ def run_git_cmd(cmd,args, complement):
 def run():
     parser = argparse.ArgumentParser(description="Run git commands for sets of repositories")
     parser.add_argument('action', help='Which git command to perform on repositories',
-                         choices=('clone','status','pull','commit','fetch','branch','checkout','log','push'))
+                         choices=('clone','status','pull','commit','fetch','branch','checkout','log','push', 'stash', 'merge'))
     parser.add_argument('--complement','-c', help='Complement of git command to perform on repositories',default="")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--repos", nargs='+', help="List of repositories to perform 'action'",default=[])

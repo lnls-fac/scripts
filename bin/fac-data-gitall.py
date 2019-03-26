@@ -6,7 +6,7 @@ import argparse
 import logging as _log
 import sys as _sys
 
-folder_data = '/home/fac_files/data'
+folder_data = '/home/facs/data'
 file_name = '/var/log/fac-data-gitall/sync_log'
 
 
