@@ -11,11 +11,9 @@ GENERALSCRIPTS = \
 		run_in_clients.sh\
 		savestate_vbox.sh\
 		start_vbox.sh\
-		update_ip_on_workstation.sh\
 		trackcpp-da-ma-results.py\
 		sshsudo\
-		virtual-accelerator.py\
-        sirius-bbb-setup.sh
+		virtual-accelerator.py
 
 FACSCRIPTS = $(shell ls fac-*)
 
