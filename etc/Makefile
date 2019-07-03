@@ -3,7 +3,6 @@ DEST_DIR = /usr/local/etc
 
 GENERALSCRIPTS = \
                 bashrc-facuser \
-                bashrc-sirius-bbb-facuser
 
 SCRIPTS = $(GENERALSCRIPTS)
 
