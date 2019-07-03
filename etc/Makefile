@@ -2,7 +2,6 @@
 DEST_DIR = /usr/local/etc
 
 GENERALSCRIPTS = \
-		bashrc-sirius \
                 bashrc-facuser \
                 bashrc-sirius-bbb-facuser
 

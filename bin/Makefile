@@ -12,8 +12,7 @@ GENERALSCRIPTS = \
 		savestate_vbox.sh\
 		start_vbox.sh\
 		trackcpp-da-ma-results.py\
-		sshsudo\
-		virtual-accelerator.py
+		sshsudo
 
 FACSCRIPTS = $(shell ls fac-*)
 
